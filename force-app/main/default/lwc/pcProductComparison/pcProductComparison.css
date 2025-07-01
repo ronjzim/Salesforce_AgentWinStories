@@ -1,0 +1,71 @@
+body{
+	font-family: Salesforce Sans;
+}
+
+
+.slds-accordion__summary-action-icon {
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    -webkit-transform: rotate(-90deg);
+    transform: rotate(-90deg);
+}
+
+.slds-is-open>.slds-accordion__summary .slds-accordion__summary-action-icon {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+}
+.slds-table td {
+    padding: 1rem;
+    font-size: 14px;
+      width: 28%;
+}
+
+
+.slds-accordion__summary-action:hover{
+    color: black;
+    text-decoration:none;
+    
+}
+tr:hover>td{
+    background-color: white!important ;
+
+}
+tr:hover>th{
+    background-color: white!important ;
+
+}
+.icon {
+    background: #000;
+    border-radius: 50%;
+    display: inline-block;
+ border: 1px solid #c4c4c4;
+    height: 22px;
+    width: 22px;
+   
+    transition: all .25s ease-in-out;
+  
+}
+.bikeImg{
+    height: 200px;
+}
+
+.slds-button:focus, .slds-button:hover{
+    color:black;
+    text-decoration: none;
+}
+.slds-table th {
+   
+      width: 15%;
+}
+.slds-table_bordered tbody tr:hover>th{
+    box-shadow: none;
+
+}
+.slds-table_bordered tbody tr:hover>td{
+    box-shadow: none;
+
+}
+
+.slds-truncate{
+    white-space: normal !important;
+}

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>48.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Parallax Effect</masterLabel>
+    <targets>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property name="backgroundImage" label="Image Background" type="String" default="surfsUp" description="The name of your static resource"/>
+            <property name="imageHeight" label="Image Height" type="String" default="450"/>
+            <property name="mainTitle" label="Main Text" type="String" default="Your Text Here"/>
+            <property name="fontSize" label="Text Size" type="Integer" default="36"/>
+            <property name="fontColor" label="Text Colour" type="Color" default="rgb(251, 255, 255)"/>
+            <property name="overlayColor" label="Image Overlay Colour" type="Color" default="rgba(0,0,0,0.3)"/>
+            <property name="fullWidth" label="Full Width" type="Boolean" default="false" />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

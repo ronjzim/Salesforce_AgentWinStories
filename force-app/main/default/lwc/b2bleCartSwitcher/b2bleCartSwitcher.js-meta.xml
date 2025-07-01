@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>57.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>B2B Cart Switcher</masterLabel>
+    <targets>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+        <target>lightning__AppPage</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property name="effectiveAccountId" type="String" label="Effective Account Id" description="The ID of the account under which the user is acting (BETA)" default="{!CurrentUser.effectiveAccountId}"/>
+            <property name="cartTypes" type="String" label="Cart Types" description="Comma-separated list of order type values that are showed to the customer while creating a new cart"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

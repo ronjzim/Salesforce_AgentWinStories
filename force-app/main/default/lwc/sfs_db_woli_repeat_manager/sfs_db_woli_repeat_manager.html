@@ -1,0 +1,25 @@
+<template>
+<lightning-card title="Work Order Line Items" icon-name="standard:work_order_item">
+    <div class="container slds-is-relative">
+        <template for:each={woliResults} for:item="woliRec">
+
+            <div key={woliRec.Id} style="border-bottom:3px solid #ccc">
+
+                <div class="slds-p-around_x-small slds-m-bottom_x-small " if:true={showWOLIInfo}>
+                    <div class="slds-p-around_x-small slds-text-heading_small"><strong> Item Details - {woliRec.Subject}</strong></div>
+                    <c-sfs_db_woli_viewer woli-id={woliRec.Id}></c-sfs_db_woli_viewer>
+                </div>
+                <div class="slds-p-around_x-small slds-m-bottom_x-small " if:true={showProductsConsumed}>
+                    <c-sfs_db_products_consumed_viewer products-consumed={woliRec.ProductsConsumed}></c-sfs_db_products_consumed_viewer>
+                </div>
+                <div class="slds-p-around_x-small slds-m-bottom_x-small " if:true={showWorkPlans}>
+                    <c-sfs_db_workplan_viewer record-id={woliRec.Id}></c-sfs_db_workplan_viewer>
+                </div>
+                <div class="slds-p-around_x-small slds-m-bottom_x-small" if:true={showFiles}>
+                    <c-sfs_db_woli_images_viewer record-id={woliRec.Id} show-image-description={showImageDescription}></c-sfs_db_woli_images_viewer>
+                </div>
+            </div>
+        </template>
+    </div>
+</lightning-card>
+</template>

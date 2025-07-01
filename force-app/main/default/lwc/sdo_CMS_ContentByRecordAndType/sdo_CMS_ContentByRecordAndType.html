@@ -1,0 +1,94 @@
+<template>
+    <template if:true={content}>
+        <!-- Card View -->
+        <template if:true={isCardDisplayStyle}>
+            <div class="cms-content-block">
+                <template if:true={items}>
+                    <lightning-layout style={gridSize} class="card-container" multiple-rows>
+                        <template for:each={items} for:item="item">
+                            <lightning-layout-item class="cms-card" key={item.managedContentId}>
+                                <template if:true={item.contentNodes.bannerImage}>
+                                    <div class="cms-card-image">
+                                        <img src={item.contentNodes.bannerImage.url} style={imageStyle} />
+                                    </div>
+                                </template>
+                                <div class="cms-card-body"> 
+                                    <a href={item.contentUrlName}>
+                                        <div class="content-title"> {item.contentNodes.title.value} </div>
+                                    </a>
+                                    <div class="content-description">
+                                        <lightning-formatted-rich-text key={item.managedContentId}
+                                            value={item.contentNodes.excerpt.value}></lightning-formatted-rich-text>
+                                    </div>
+
+                                </div>
+                                <div class="cms-card-footer">
+                                    <template if:true={item.associations}>
+                                        <p>Topics:</p>
+                                        <template for:each={item.associations.topics} for:item="topic">
+                                            <p key={topic.id}>{topic.name}</p>
+                                        </template>
+                                    </template>
+                                </div>
+
+                            </lightning-layout-item>
+                        </template>
+                    </lightning-layout>
+                </template>
+            </div>
+        </template>
+        <template if:true={isGalleryDisplayStyle}>
+            <div class="cms-gallery-controls">
+                <lightning-button-icon icon-name="utility:chevronleft" variant="bare" class="sliderBttn slideLeft"
+                    onclick={slideLeft} size="large" title="Scroll Left"></lightning-button-icon>
+                <div class="cms-gallery-block">
+
+                    <template if:true={items}>
+                        <template for:each={items} for:item="item">
+
+                            <div class="cms-card" key={item.managedContentId}>
+                                <template if:true={item.contentNodes.bannerImage}>
+                                    <div class="cms-card-image">
+                                        <img src={item.contentNodes.bannerImage.url} style={imageStyle} />
+                                    </div>
+                                </template>
+                                <template if:false={item.contentNodes.bannerImage}>
+                                   
+                                </template>
+                                <div class="cms-card-body">
+
+                                    <a href={item.contentUrlName}>
+                                        <div class="content-title"> {item.contentNodes.title.value} </div>
+                                    </a>
+                                    <template if:true={item.contentNodes.excerpt}>
+
+                                        <lightning-formatted-rich-text key={item.managedContentId}
+                                            value={item.contentNodes.excerpt.value}></lightning-formatted-rich-text>
+                                    </template>
+                                </div>
+                                <div class="cms-card-footer">
+                                    <template if:true={item.associations}>
+                                        <p>Topics:</p>
+                                        <template for:each={item.associations.topics} for:item="topic">
+                                            <p key={topic.id}>{topic.name}</p>
+                                        </template>
+                                    </template>
+                                </div>
+                            </div>
+
+                        </template>
+                    </template>
+
+                </div>
+                <lightning-button-icon icon-name="utility:chevronright" variant="bare" class="sliderBttn slideRight"
+                    onclick={slideRight} size="large" title="Scroll Right"></lightning-button-icon>
+            </div>
+        </template>
+    </template>
+    <template if:true={error}>
+        <div>
+            <p>{error}</p>
+        </div>
+    </template>
+
+</template>

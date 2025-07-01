@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+	<apiVersion>57.0</apiVersion>
+	<isExposed>true</isExposed>
+	<masterLabel>SDO SCOM OOA Register User</masterLabel>
+	<targets>
+		<target>lightningCommunity__Page</target>
+		<target>lightningCommunity__Default</target>
+	</targets>
+	<targetConfigs>
+		<targetConfig targets="lightningCommunity__Default">
+			<property name="formTitle" type="String" label="Form Title"
+				default="Get Access to the Portal"></property>
+		</targetConfig>
+	</targetConfigs>
+</LightningComponentBundle>

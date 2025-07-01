@@ -1,0 +1,220 @@
+/****************************/
+/* Sidebar CSS Start */
+/****************************/
+.wrapper {
+  visibility: hidden;
+  background-color: var(--lwc-colorBackgroundAlt);
+  border: 1px solid var(--lwc-colorBorder);
+  width: var(--lwc-sizeLarge);
+  height: 100%;
+  z-index: 98;
+  left: 100%;
+  transition: left 0.2s, width 0.2s, visibility 0.2s;
+}
+
+.wrapper.opened {
+  visibility: visible;
+  box-shadow: 0 0 10px #969492;
+  left: calc(100% - var(--lwc-sizeLarge));
+}
+
+.wrapper.opened.expanded {
+    left: calc(100% - 676px);
+    width: 676px;
+}
+
+.contentContainer {
+  /* display: flex; */
+  flex-grow: 1;
+  position: relative;
+  overflow: auto;
+}
+/****************************/
+/* Sidebar CSS End */
+/****************************/
+
+/****************************/
+/* Content CSS Start */
+/****************************/
+
+.thp-due-date, .thp-progress-summary__container {
+    color: rgb(68, 68, 68);;
+}
+
+.thp-item-card__container .thp-item-card__description {
+    font-size: 0.75rem;
+}
+
+.thp-item-card__container .thp-item-card__title {
+    margin-bottom: 0.25rem;
+    font-weight: 700;
+    font-size: 0.875rem;
+  }
+  
+  .thp-item-card__container .thp-item-card__footer {
+    margin-top: 0.25rem;
+  }
+  
+  .thp-item-list__container .thp-item-list__item {
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: rgb(229, 229, 229) solid 1px;
+  }
+  
+  .thp-item-list__container .thp-item-list__item:last-child {
+    border: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+  
+  .thp-milestone__progress-ring {
+    display: block;
+    min-width: 42px;
+    text-align: center;
+  }
+  
+  .thp-item-card__container .thp-item-card__image {
+    margin-right: 12px;
+  }
+  
+  .truncate__content--clamp:not(.truncate__content--expanded) {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: var(--clamp-size);
+  }
+  
+  .truncate__content:not(.truncate__content--expanded) {
+    overflow: hidden;
+  }
+  
+  .truncate__content {
+    position: relative;
+  }
+
+  .thp-content-icon__container .thp-content-icon__checkmark {
+    border-width: 2px;
+}
+
+.thp-content-icon__checkmark {
+    display: inline-flex;
+    align-items: center;
+    text-align: center;
+    border: 3px solid #fff;
+    border-radius: 50%;
+    top: -5px;
+    right: -8px;
+    box-sizing: content-box;
+    width: 20px;
+    height: 20px;
+}
+
+.thp-content-icon__check-icon {
+    display: block;
+    margin-top: -6%;
+}
+
+.thp-content-icon__main {
+    min-width: 42px;
+    width: 42px;
+    height: 42px;
+}
+  
+  .greenCheckIcon {
+    --slds-c-icon-color-background: #45c65a;
+    width: 32px;
+    height: 32px;
+    margin: 5px;
+  }
+
+  .sectionCheckIcon {
+        width: 24px;
+    height: 24px;
+    position: relative;
+    --slds-c-icon-color-background: #2d844a;
+  }
+
+  .section-body {
+  display: none;
+}
+
+.section-header.is-open .section-body{
+  display: block;
+}
+
+.section-header .dropdown {
+  transform: rotate(270deg);
+}
+
+.section-header.is-open .dropdown {
+  transform: rotate(0deg);
+}
+
+.section-body >div:not(:last-child) {
+      border-bottom: 1px solid rgb(229, 229, 229);
+}
+.helptext{
+  display: inline-flex;
+  vertical-align: bottom;
+}
+.truncate__content .description{
+  --clamp-size: 2; 
+  --max-height: 32px
+}
+
+/****************************/
+/* Content CSS End */
+/****************************/
+
+/****************************/
+/* Program List CSS Start */
+/****************************/
+.allProgramsView .thp-content-icon__main {
+  min-width: 50px;
+  width: 50px;
+  height: 50px;
+}
+
+.allProgramsView .thp-item-card__container:not(:first-child) {
+  margin-top: var(--lwc-spacingSmall, 0.75rem);
+}
+
+.allProgramsView .thp-item-card__container {
+  border-radius: var(--lwc-borderRadiusMedium);
+  border-style: solid;
+  border-width: var(--lwc-borderWidthThin);
+  border-color: var(--lwc-colorBorder);
+  padding: var(--lwc-spacingMedium);
+}
+
+.allProgramsView .thp-item-card__image {
+  margin-right: var(--lwc-spacingMedium);
+}
+
+.allProgramsView .thp-item-card__title {
+  font-size: 1rem;
+  margin-bottom: var(--lwc-spacingXSmall);
+}
+
+.allProgramsView .thp-item-card__description {
+  font-size: 0.8125rem;
+}
+
+.allProgramsView .thp-item-card__footer {
+  margin-top: var(--lwc-spacingXSmall);
+}
+
+.allProgramsView .thp-progress-summary__container {
+  display: inline;
+}
+
+.allProgramsView .thp-progress__bar {
+  min-width: 4.5rem;
+}
+
+.allProgramsView .thp-item-card__footer {
+  margin-top: var(--lwc-spacingXSmall);
+}
+
+/****************************/
+/* Program List CSS End */
+/****************************/

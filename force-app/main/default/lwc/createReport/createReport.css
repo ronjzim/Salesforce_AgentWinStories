@@ -1,0 +1,41 @@
+.diagramContainer h1, .diagramContainer p {
+    display: inline;
+}
+.fakeDataTable {
+    table-layout: fixed;
+}
+.secondaryRow + .primaryRow {
+    padding-top: 1em;
+}
+.checkboxColumn {
+    width: 2em;
+}
+.actionsColumn {
+    width: 5em;
+}
+.subgrouprow td:nth-child(1), .subgrouprow td:nth-child(2) {
+    padding-left: 3em;
+}
+td {
+    border: 0px solid blue;
+}
+.primaryRow .deleteButton, .secondaryRow .deleteButton {
+    display: none;
+}
+.primaryRow:hover .deleteButton, .secondaryRow:hover .deleteButton {
+    display: inline;
+    transition-property: display;
+    transition-duration: 0.3s;
+}
+.rowCheckbox {
+    display: none;
+}
+.introBullets {
+    font-size: 125%;
+    line-height: 1.5;
+    width: 75%;
+    margin: auto;
+}
+li + li  {
+    padding-top: 0.5em;
+}

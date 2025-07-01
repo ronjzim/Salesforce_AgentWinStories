@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+	<apiVersion>57.0</apiVersion>
+	<isExposed>true</isExposed>
+	<masterLabel>SFS Quick Setup Home Screen</masterLabel>
+	<targets>
+		<target>lightning__FlowScreen</target>
+	</targets>
+	<targetConfigs>
+        <targetConfig targets="lightning__FlowScreen">
+            <property name="buttonCheck" type="Boolean"  /> 
+			<property name="title" type="String"  /> 
+            <property name="description" type="String"  /> 
+            <property name="buttonLabel1" type="String"  /> 
+            <property name="cardIcon" type="String"  /> 
+
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

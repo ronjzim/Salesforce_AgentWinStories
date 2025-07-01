@@ -1,0 +1,20 @@
+<template>
+    <!-- Copied over from lightning/treegrid/treegrid.html -->
+    <c-sdo_scom_shoppable_related_list_data_table
+        columns={normalizedColumns}
+        data={normalizedData}
+        key-field={keyField}
+        hide-checkbox-column={hideCheckboxColumn}
+        max-column-width={maxColumnWidth}
+        min-column-width={minColumnWidth}
+        resize-column-disabled={resizeColumnDisabled}
+        row-number-offset={rowNumberOffset}
+        selected-rows={selectedRows}
+        show-row-number-column={showRowNumberColumn}
+        onrowselection={handleRowSelection}
+        onheaderaction={handleHeaderAction}
+        onrowaction={handleRowAction}
+        is-loading={isLoading}
+        aria-label={ariaLabel}
+    ></c-sdo_scom_shoppable_related_list_data_table>
+</template>

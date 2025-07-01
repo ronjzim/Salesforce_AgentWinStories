@@ -1,0 +1,26 @@
+<template>
+<lightning-card   >
+         <h3 slot="title">
+            <lightning-icon icon-name="utility:einstein" size="small"></lightning-icon>
+             <span style='margin-left:5px;'>Asset Service Prediction</span>
+        </h3>
+        <template if:true={showActions}>
+          <div slot="footer" style="text-align:right">
+            <lightning-button-group>
+                <lightning-button label="Find Out More"></lightning-button>
+                <lightning-button label="Add Plan Step" onclick={addPlan} variant="brand"></lightning-button>
+            </lightning-button-group>
+        </div>
+        </template>
+        <div class="slds-p-horizontal_small">
+        <h3 class="slds-m-bottom_small">
+            <lightning-icon icon-name="utility:warning" variant='warning' size="small"></lightning-icon>
+            <span style="font-weight:600; margin-left:5px;">Predicted Malfunction</span>
+        </h3>
+          <lightning-formatted-rich-text
+        value={predictionMsg}
+    ></lightning-formatted-rich-text>
+        </div>
+      
+    </lightning-card>
+</template>

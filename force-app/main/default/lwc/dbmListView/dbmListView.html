@@ -1,0 +1,120 @@
+<template>
+    <!--  class="slds-grid slds-wrap listViewContainer" -->
+    <section>
+        <!-- <template lwc:if={showSpinner}>
+            <lightning-spinner></lightning-spinner>
+            Loading Dashboard Magic report datasets...
+        </template> -->
+        <!-- <template lwc:else> -->
+        <!-- <template lwc:if={tableRows.length}> -->
+        <div class="tableActions slds-grid slds-p-vertical_small">
+            <div class="slds-col">
+                <lightning-button label="New Dataset" onclick={handleNewDatasetClick}
+                    class="slds-p-horizontal_xx-small"></lightning-button>
+                <template for:each={updatedActions} for:item="action">
+                    <lightning-button-icon icon-name={action.iconName} class="slds-p-horizontal_xxx-small"
+                        disabled={action.isDisabled} tooltip={action.tooltip} alternative-text={action.title}
+                        title={action.title} key={action.name} onclick={action.onclick}></lightning-button-icon>
+                </template>
+            </div>
+            <div class="slds-col">
+                <div class="slds-float_right slds-grid">
+                    <lightning-button-icon icon-name="utility:refresh" tooltip="Refresh List"
+                        alternative-text="Refresh List" title="Refresh"
+                        onclick={handleRefreshRecordsClick}></lightning-button-icon>
+                    <lightning-input type="search" placeholder="Type to filter list" class="slds-p-horizontal_xx-small"
+                        variant="label-hidden" onchange={handleSearchChange}></lightning-input>
+                </div>
+            </div>
+        </div>
+        <table class="slds-table slds-table_cell-buffer slds-table_bordered"
+            aria-labelledby="element-with-table-label other-element-with-table-label">
+            <thead>
+                <tr class="slds-line-height_reset">
+                    <th class="slds-text-align_right slds-cell_action-mode" scope="col" style="width:3.25rem">
+                        <lightning-input type="checkbox" checked={allRowsSelected}
+                            onchange={handleSelectAllChange}></lightning-input>
+                    </th>
+                    <template for:each={columns} for:item="col">
+                        <th scope="col" key={col.fieldName} data-is-sorted-by={col.isSortedBy} class="columnHeader"
+                            data-field-name={col.fieldName} onclick={handleColumnSortClick}>
+                            <a class="slds-th__action slds-text-link_reset" href="#" role="button" tabindex="0">
+                                <span class="slds-assistive-text">Sort by: </span>
+                                <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                                    <span class="slds-truncate slds-p-vertical_xxx-small" title={col.label}>
+                                        {col.label}
+                                    </span>
+                                    <span class="slds-icon_container slds-p-left_xxx-small sortIcon">
+                                        <lightning-icon icon-name={sortIcon} size="xx-small"></lightning-icon>
+                                    </span>
+                                </div>
+                            </a>
+                        </th>
+                    </template>
+                    <th style="width:3.25rem">
+                        <!-- Space for row action menu -->
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <template for:each={tableRows} for:item="row" for:index="rowIndex">
+                    <template lwc:if={row.isHidden}></template>
+                    <template lwc:else>
+                        <tr class="slds-hint-parent" key={row.id}>
+                            <td class="slds-text-align_right slds-cell_action-mode" role="gridcell">
+                                <lightning-input type="checkbox" checked={row.isSelected}
+                                    onchange={handleRowSelectChange} data-row-index={rowIndex}></lightning-input>
+                            </td>
+                            <template for:each={row.fields} for:item="field">
+                                <template lwc:if={field.isFirst}>
+                                    <th data-label={field.label} scope="row" key={field.fieldName}>
+                                        <div class="slds-truncate" title={field.value}>
+                                            <a href="#" data-row-index={rowIndex} data-row-id={row.id}
+                                                onclick={handleRecordNameClick}>{field.value}</a>
+                                        </div>
+                                    </th>
+                                </template>
+                                <template lwc:else>
+                                    <td data-label={field.label} key={field.fieldName}>
+                                        <div class="slds-truncate" title={field.value}>
+                                            <template lwc:if={field.isdate}>
+                                                <lightning-formatted-date-time value={field.value} month="numeric"
+                                                    day="numeric" year="numeric" hour="numeric"
+                                                    minute="2-digit"></lightning-formatted-date-time>
+                                            </template>
+                                            <template lwc:else>
+                                                {field.value}
+                                            </template>
+                                        </div>
+                                    </td>
+                                </template>
+                            </template>
+                            <td class="rowActionMenu">
+                                <lightning-button-menu icon-size="small" menu-alignment="auto"
+                                    onselect={handleRowActionMenuSelect} data-row-index={rowIndex}>
+                                    <template for:each={rowActions} for:item="action">
+                                        <lightning-menu-item value={action.name} label={action.tooltip}
+                                            key={action.name} prefix-icon-name={action.iconName}></lightning-menu-item>
+                                    </template>
+                                </lightning-button-menu>
+                            </td>
+                        </tr>
+                    </template>
+                </template>
+            </tbody>
+        </table>
+        <template lwc:if={allAreHidden}>
+            <p class="slds-p-around_small">No results match the search term.</p>
+        </template>
+        <template lwc:if={tableRows.length}></template>
+        <template lwc:else>
+            <c-dbm-illustration onnew={handleNewDatasetClick}></c-dbm-illustration>
+        </template>
+
+        <!-- </template>
+        <template lwc:else>
+            No report records exist yet
+        </template> -->
+        <!-- </template> -->
+    </section>
+</template>

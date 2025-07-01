@@ -1,0 +1,223 @@
+<template>
+	<div class="slds-page-header slds-page-header_record-home" style="font-family: Salesforce Sans;border-radius:0px">
+		<div class="slds-page-header__row">
+			<div class="slds-page-header__col-title">
+				<div class="slds-media">
+					<div class="slds-media__figure">
+						<span class="slds-icon_container slds-icon-standard-opportunity">
+							<lightning-icon icon-name={pageIcon} size="medium"></lightning-icon>
+						</span>
+
+					</div>
+					<div class="slds-media__body">
+						<div class="slds-page-header__name">
+							<div class="slds-page-header__name-title slds-text-title_bold slds-text-color_weak">
+								<h1>
+									<span>{pageTitle}</span>
+									<span
+										class="slds-page-header__title slds-truncate slds-text-title_bold slds-text-color_weak "
+										title={pageSubTitle} style="font-size:20px">{pageSubTitle}</span>
+								</h1>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="slds-page-header__col-actions">
+				<div class="slds-page-header__controls">
+					<div class="slds-page-header__control">
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<article class="slds-card" style="    background: rgb(243, 243, 243);
+    border-radius: 0px;
+    border-left: 0px;
+    border-right: 0px; font-family: Salesforce Sans;">
+		<div class="slds-card__body slds-card__body_inner">
+			<lightning-spinner alternative-text="Loading" variant="brand" size="large" if:true={isLoading}>
+			</lightning-spinner>
+			<table class="slds-table  slds-table_bordered slds-table_col-bordered" style="border-top:0px;">
+				<tbody>
+					<tr class="slds-hint-parent">
+						<th data-label="Opportunity Name" scope="row">
+							<div class="slds-truncate slds-text-title_bold">
+								{comparingFieldLabel}
+							</div>
+						</th>
+						<td data-label="Account Name">
+							<div>
+								<div class="slds-form-element">
+
+									<div class="slds-form-element__control">
+										<!-- <div class="slds-select_container">
+											<select class="slds-select" name="product1field"  data-productnumber="product1"  onchange={handleDataSelection}>
+												<template for:each={productList} for:item="product">
+													<option key={product.Id} value={product.Id} selected={product.selected}>{product.Name}</option>
+												</template>
+											</select>
+										</div> -->
+										<c-pc-search-product ondeselectedrecord={handleProductDeselected}
+											onselectedrecord={handleProductSelected} data-prodindex="1"
+											comparing-field={comparingField} order-by={orderBy} object-api={objectAPI}
+											query-fields={queryFieldsVal} comparing-image-field={comparingImageField}
+											meta-field={metaField}></c-pc-search-product>
+										<template if:true={product1quantity}>
+											<input onchange={updateQuantity} type="number" min="1" max="10"
+												placeholder="Quantity" required class="slds-input"
+												data-prodindex="1"></input><br><br>
+											<button class="slds-button slds-button_neutral"
+												onclick={handleAddProductToCart} data-prodindex="1">Add to Cart</button>
+										</template>
+									</div>
+								</div>
+							</div>
+						</td>
+						<td data-label="Close Date">
+							<div>
+								<div class="slds-form-element">
+									<div class="slds-form-element__control">
+										<c-pc-search-product ondeselectedrecord={handleProductDeselected}
+											onselectedrecord={handleProductSelected} data-prodindex="2"
+											comparing-field={comparingField} order-by={orderBy} object-api={objectAPI}
+											query-fields={queryFieldsVal} comparing-image-field={comparingImageField}
+											meta-field={metaField}></c-pc-search-product>
+										<template if:true={product2quantity}>
+											<input onchange={updateQuantity} type="number" min="1" max="10"
+												placeholder="Quantity" required class="slds-input"
+												data-prodindex="2"></input><br><br>
+											<button class="slds-button slds-button_neutral"
+												onclick={handleAddProductToCart} data-prodindex="2">Add to Cart</button>
+										</template>
+									</div>
+								</div>
+							</div>
+						</td>
+						<td data-label="Prospecting" if:false={isThirdProductNotAvailable}>
+							<div>
+								<div class="slds-form-element">
+									<div class="slds-form-element__control">
+										<c-pc-search-product ondeselectedrecord={handleProductDeselected}
+											onselectedrecord={handleProductSelected} data-prodindex="3"
+											comparing-field={comparingField} order-by={orderBy} object-api={objectAPI}
+											query-fields={queryFieldsVal} comparing-image-field={comparingImageField}
+											meta-field={metaField}></c-pc-search-product>
+										<template if:true={product3quantity}>
+											<input onchange={updateQuantity} type="number" min="1" max="10"
+												placeholder="Quantity" required class="slds-input"
+												data-prodindex="3"></input><br><br>
+											<button class="slds-button slds-button_neutral"
+												onclick={handleAddProductToCart} data-prodindex="3">Add to Cart</button>
+										</template>
+									</div>
+								</div>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<div style="margin: 16px 0px;background:white">
+				<div class="slds-grid slds-wrap">
+					<div class="slds-col slds-size_1-of-1">
+						<ul class="slds-accordion">
+							<template for:each={sections} for:item="sec">
+								<li key={sec.headerName} class="slds-accordion__list-item">
+									<section class="slds-accordion__section slds-is-open" onclick={handleToggleClick}
+										style="padding-left: 0px;padding-right: 0px;">
+										<div class="slds-accordion__summary" style="margin: 0px;">
+											<h2 class="slds-accordion__summary-heading">
+												<button
+													class="slds-button slds-button_reset slds-accordion__summary-action"
+													aria-controls="referenceId-36" aria-expanded="true"
+													title="Accordion summary">
+													<span class="slds-p-right_small slds-p-left_small">
+														<lightning-icon size="small"
+															class="slds-accordion__summary-action-icon "
+															icon-name="utility:switch" alternative-text="switch"
+															title="switch"></lightning-icon>
+													</span>
+													<span class="slds-accordion__summary-content">{sec.headerLabel}
+													</span>
+												</button>
+											</h2>
+										</div>
+										<div>
+											
+										</div>
+										<div class="slds-accordion__content slds-p-around_small">
+											<table class="slds-table  slds-table_bordered slds-table_col-bordered"
+												style="border-top:0px; border-bottom:0px ">
+												<tbody>
+													<template for:each={sec.fields} for:item="field">
+														<tr class="slds-hint-parent" key={field.fieldName}>
+															<th data-label="Opportunity Name" scope="row">
+																<div class="slds-truncate slds-text-title_bold">
+																	{field.fieldLabel}
+																</div>
+															</th>
+															<td data-label="Account Name">
+																<div if:true={field.isImage} class="slds-truncate">
+																	<img class="bikeImg" src={field.product1Val}>
+																</div>
+																<div if:true={field.isText} class="slds-truncate">
+																	{field.product1Val}
+																</div>
+																<div if:true={field.isColor} class="slds-truncate">
+																	<template for:each={field.product1Val}
+																		for:item="color">
+																		<span key={color} class="icon"
+																			style={color}></span>
+																	</template>
+																</div>
+															</td>
+															<td data-label="Close Date">
+																<div if:true={field.isImage} class="slds-truncate">
+																	<img class="bikeImg" src={field.product2Val}>
+																</div>
+																<div if:true={field.isText} class="slds-truncate">
+																	{field.product2Val}
+																</div>
+																<div if:true={field.isColor} class="slds-truncate">
+																	<template for:each={field.product2Val}
+																		for:item="color">
+																		<span key={color} class="icon"
+																			style={color}></span>
+																	</template>
+																</div>
+															</td>
+															<td data-label="Prospecting"
+																if:false={isThirdProductNotAvailable}>
+																<div if:true={field.isImage} class="slds-truncate">
+																	<img class="bikeImg" src={field.product3Val}>
+																</div>
+																<div if:true={field.isText} class="slds-truncate">
+																	{field.product3Val}
+																</div>
+																<div if:true={field.isColor} class="slds-truncate">
+																	<template for:each={field.product3Val}
+																		for:item="color">
+																		<span key={color} class="icon"
+																			style={color}></span>
+																	</template>
+																</div>
+															</td>
+
+														</tr>
+													</template>
+												</tbody>
+											</table>
+										</div>
+									</section>
+								</li>
+							</template>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</article>
+
+</template>

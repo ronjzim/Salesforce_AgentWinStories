@@ -1,0 +1,117 @@
+:host {
+    --panel-width: 320px;
+  }
+
+.lightning-spinner {
+    z-index: 999 !important;
+}
+  
+.fullPage {
+    position: absolute;
+    overflow-x: hidden;
+    overflow-y: auto;
+    bottom: 0;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 1;
+}
+
+.appContainer, .datasetBuilderContainer, .activePanel {
+    position: relative;
+    height: 100%;
+}
+
+.activePanel {
+    transition-duration: 0.3s;
+    transition-timing-function: ease-in-out;
+    top: 0;
+    /* width: calc(100% - var(--panel-width)); */
+    /* margin-left: var(--panel-width); */
+}
+
+.appBody {
+    position: relative;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.appToolbar {
+    width: 100%;
+}
+
+.slds-nav-vertical {
+    position: sticky;
+    top: 0;
+}
+
+.menuPanel {
+    position: absolute;
+    width: var(--panel-width);
+    top: 0;
+    left: 0;
+    height: 100%;
+    /* transform: translateX(0); */
+    transition-duration: 0.3s;
+    transition-timing-function: ease-in-out;
+}
+
+.panelCollapsed .menuPanel {
+    transform: translateX(-110%);
+    /* left: calc(var(--panel-width) * -1.1); */
+    /* width: 0; */
+}
+
+.panelCollapsed .activePanel {
+    /* width: 100%;
+    top: 0; */
+    margin-left: 0;
+    width: 100%;
+}
+
+.magicIcon {
+	animation-name: backgroundColorPalette;
+	animation-duration: 5s;
+	animation-iteration-count: infinite;
+	animation-direction: alternate;
+	animation-timing-function: linear; 
+}
+
+@keyframes backgroundColorPalette {
+	0% {
+		--sds-c-icon-color-foreground-default: #2ba755;
+	}
+	9% {
+		--sds-c-icon-color-foreground-default: #06a59a;
+	}
+	18% {
+		--sds-c-icon-color-foreground-default: #0d9dda;
+	}
+	27% {
+		--sds-c-icon-color-foreground-default: #1b96ff;
+	}
+	36% {
+		--sds-c-icon-color-foreground-default: #7f8ced;
+	}
+    45% {
+		--sds-c-icon-color-foreground-default: #ad7bee;
+	}    
+    54% {
+		--sds-c-icon-color-foreground-default: #cb65ff;
+	}    
+    63% {
+		--sds-c-icon-color-foreground-default: #df43a7;
+	}    
+    72% {
+		--sds-c-icon-color-foreground-default: #fe5c4c;
+	} 
+	81% {
+		--sds-c-icon-color-foreground-default: #ff5d2d;
+	}
+	90% {
+		--sds-c-icon-color-foreground-default: #dd7a01;
+	}
+	100% {
+		--sds-c-icon-color-foreground-default: #ca8501;
+	}
+}

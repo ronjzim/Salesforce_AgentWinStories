@@ -1,0 +1,64 @@
+<template>
+  <lightning-spinner variant="brand" size="large" class="spinnerContainer" lwc:if={isLoading}> </lightning-spinner>
+  <div class="slds-p-horizontal_medium slds-m-bottom_medium" lwc:if={showCheckout}>
+    <div class="slds-m-top_small slds-box exceptionContainer" lwc:if={hasExceptions}>
+      <div class={exceptionTitle.cssClass}>{exceptionTitle.message}</div>
+      <ul class="slds-has-dividers_bottom-space slds-m-top_small">
+        <li class="slds-item" lwc:if={isBudgetExceded}>
+          This order exceeds your available credit limit of&nbsp;
+          <lightning-formatted-number
+            value={currentUserDetails.Contact.SDO_SCOM_OOA_Budget_Limit__c}
+            format-style="currency"
+            maximum-fraction-digits="2"></lightning-formatted-number>
+          <span
+            lwc:if={cartApprovalStatus.SDO_SCOM_OOA_Credit_Override_Status__c}
+            data-aprvstatus={cartApprovalStatus.SDO_SCOM_OOA_Credit_Override_Status__c}
+            class="slds-m-left_small slds-badge"
+            >{cartApprovalStatus.SDO_SCOM_OOA_Credit_Override_Status__c}</span
+          >
+        </li>
+        <li class="slds-item" lwc:if={hasProductExceptions}>
+          Product/Quantity Info
+          <span
+            lwc:if={cartApprovalStatus.SDO_SCOM_OOA_Products_Override_Status__c}
+            data-aprvstatus={cartApprovalStatus.SDO_SCOM_OOA_Products_Override_Status__c}
+            class="slds-m-left_small slds-badge"
+            >{cartApprovalStatus.SDO_SCOM_OOA_Products_Override_Status__c}</span
+          >
+          <ul class="slds-list_dotted slds-is-nested">
+            <template for:each={productExceptions} for:item="prodException" for:index="index">
+              <li key={prodException.productId}>{prodException.message}</li>
+            </template>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <div class="slds-m-top_medium commerce_cart-checkoutButton_checkoutButton">
+      <button
+        class="
+          commerce_cart-checkoutButton_checkoutButton
+          slds-button
+          slds-align_absolute-center
+          slds-button_brand slds-button_stretch
+        "
+        onclick={handleCheckout}
+        disabled={isCheckoutDisabled}>
+        Checkout
+      </button>
+    </div>
+
+    <div class="slds-m-top_medium commerce_cart-checkoutButton_checkoutButton" lwc:if={showRequestForApproval}>
+      <button
+        class="
+          commerce_cart-checkoutButton_checkoutButton
+          slds-button
+          slds-align_absolute-center
+          slds-button_brand slds-button_stretch
+        "
+        disabled={isApprovalRequested}
+        onclick={handleRequestCreditOverride}>
+        Request Approval
+      </button>
+    </div>
+  </div>
+</template>

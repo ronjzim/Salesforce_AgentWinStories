@@ -1,0 +1,69 @@
+<template>
+    <!--Main Container-->
+    <div if:true={showComponent} class="spiff_container">
+        <!--Show the band data if it exist-->
+        <!--Band Heading-->
+        <span class="spiff_amount-label">This plan has a<strong style="color:black"> {commission.quota.currency_code} <lightning-formatted-number value={commission.quota.sce_amount} maximum-fraction-digits="2"></lightning-formatted-number> </strong> {label.quotaLabel} with <strong style="color:black"> {commission.quota.currency_code} <lightning-formatted-number value={commission.quota.sce_remaining_attainment_amount} maximum-fraction-digits="2"></lightning-formatted-number> </strong> remaining to close.</span>
+        <div class="spiff_section-break-large"></div>
+        
+        <!-- Show Next Tier Bar-->
+        <span if:true={commission.hasCurrentTier} class="spiff_current-tier"><span><strong style="color:black">{commission.quota.sce_current_tier_percent}% </strong></span><span style='color:grey;font-weight:400'>Current Tier</span></span>
+        <span if:true={commission.hasNextTier} class="spiff_next-tier"><span><strong style="color:black">{commission.quota.sce_next_tier_percent}% </strong></span><span style='color:grey;font-weight:400'>Next Tier</span></span>
+        <div data-id="nextTier" class="spiff_next-tier-band">
+            <section class="spiff_next-tier-color" style={nextTierCSS}></section>
+        </div>
+        <div class="spiff_section-break-medium"></div>
+
+        <!--Show Achieved percentage-->
+        <div class="spiff_achieved-quota-header">
+            <div style={quotaBarCSS}><strong class="spiff_bold"><lightning-formatted-number value={commission.achievedPercentage} maximum-fraction-digits="0"></lightning-formatted-number>% </strong> <span class="spiff_achieved-quota"> of the {label.quotaLabel} achieved </span></div>
+        </div>
+        <div class="spiff_section-break-xsmall"></div>
+        <!--Show Quota Bar-->
+        <div if:true={commission.hasIfClosedPercent} data-id="quotaBar" style={quotaBarCSS} class="spiff_quota-bar"></div>
+        <div class="spiff_section-break-small"></div>
+        
+        <!--Show Band item-->
+        <div style = {bandWindowCSS} class="spiff_band-window"></div>
+        <div data-id="bandList" class="spiff_band-list">
+
+            <div data-id="ifClosedSeperator" if:true={commission.hasIfClosedPercent} style={ifClosedSeperatorCSS} class="spiff_ifClosedSeperator"></div>
+
+            <div data-id="closedSeperator" if:true={commission.hasClosedPercent} style={closedSeperatorCSS} class="spiff_closedSeperator"></div>
+
+            <div data-id="seperator" style={seperatorCSS} class="spiff_seperator"></div>
+            
+            <template for:each={bandDataList} for:item="band">
+                <div key={band.index} class="spiff_band-base"  style={band.widthCSS}>
+                    <section class="spiff_band-color" style={band.styleCSS}></section>
+                </div>
+            </template>
+
+            <div class="spiff_section-break-medium"></div>
+            <div data-id="quota-amount-text" if:true={commission.hasClosedPercent} style={closedSeperatorTextCSS} class="spiff_closedSeperator-text">
+                <lightning-formatted-number value={commission.quota.sce_year_to_date_attainment} format-style="currency" currency-display-as="code" currency-code={commission.quota.currency_code} maximum-fraction-digits="2"></lightning-formatted-number>
+            </div>
+            <div data-id="quota-amount-text" if:true={commission.hasIfClosedPercent} style={ifClosedSeperatorTextCSS} class="spiff_ifClosedSeperator-text">
+                <lightning-formatted-number value={commission.quota.sce_attainment_if_deal_closes} format-style="currency" currency-display-as="code" currency-code={commission.quota.currency_code} maximum-fraction-digits="2"></lightning-formatted-number>
+            </div>
+        </div>
+        <div class="spiff_section-break-large"></div>
+        <div class="spiff_section-break-medium"></div>
+
+        <!--Show Legend item-->
+        <div class="spiff_legend-list">
+            <template for:each={bandDataList} for:item="legend">
+                <div class="spiff_legend-container" if:true={legend.showLegend} key={legend.index}>
+                    <div class="spiff_legend" style={legend.colorCSS}></div>
+                    <div class="spiff_legend-text">{legend.label}</div>
+                    <div class="spiff_space"></div>
+                </div>
+            </template>
+        </div>
+    </div>
+
+    <!--Section Break-->
+    <div if:true={commission.isLast} class = "spiff_section-mobile-footer"></div>
+    <div class = "spiff_section-break-large"></div>
+    
+</template>

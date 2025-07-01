@@ -1,0 +1,57 @@
+<!--
+ * Copyright (c) 2020, salesforce.com, inc.
+ * All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause
+ * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+ -->
+
+
+<!--
+     @author        Paul Lucas
+     @company       Salesforce
+     @description   XdoToolTrackingEventTestHarness
+     @date          14/2/2024
+
+     TODO:
+ -->
+
+<!-- Xdo Tool Tracking Event Test Harness -->
+<template>
+    <header
+            data-tracking="true"
+            data-tracking-id={NANOID}
+            data-tracking-dom-event="load"
+            data-tracking-version={VERSION}
+            data-tracking-source="https://github.com/sfdc-qbranch-emu/QBrix-1-xDO-DataCloudMockComponents-Base"
+            data-tracking-event="conversion"
+            data-tracking-action="Test harness loaded"
+            data-tracking-delay="10"
+            data-tracking-minutes-saved="5"
+            data-tracking-value={message}
+            data-tracking-condition={shouldTrackEvent}
+            data-tracking-once="true">
+        Header
+    </header>
+    <section>
+        <lightning-button lwc:ref="buttonDeclarative" class="buttonDeclarative" label="Fire tracking event via data attributes"
+                          data-tracking="true"
+                          data-tracking-id={NANOID}
+                          data-tracking-dom-event="click"
+                          data-tracking-version={VERSION}
+                          data-tracking-source="https://github.com/sfdc-qbranch-emu/DemoBrix-2-xDO-Tool-EventTracking/"
+                          data-tracking-event="conversion"
+                          data-tracking-action="Test harness button clicked declaratively"
+                          data-tracking-delay="10"
+                          data-tracking-minutes-saved=".5"
+                          data-tracking-value={value}
+                          data-tracking-condition={shouldTrackEvent}>
+        </lightning-button>
+    </section>
+    <section>
+        <lightning-button lwc:ref="buttonImperative" label="Fire tracking event imperatively" onclick={handleButtonClick}>
+        </lightning-button>
+    </section>
+    <footer>
+        Footer
+    </footer>
+</template>

@@ -1,0 +1,61 @@
+<template>
+    <div class="slds-form-element">
+        <div class="slds-form-element__control">
+            <div class="slds-combobox_container">
+                <div class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click ">
+                    <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right" role="none">
+                        <template if:false={isSelected}>
+                            <input type="text" class="slds-input slds-combobox__input" id="combobox-id-2"
+                                aria-autocomplete="list" aria-controls="listbox-id-2" aria-expanded="true"
+                                aria-haspopup="listbox" autocomplete="off" role="combobox" placeholder="Search..."
+                                onkeyup={handleProductSearch} />
+                            <span
+                                class="slds-icon_container slds-icon-utility-search slds-input__icon slds-input__icon_right">
+                                <lightning-icon class="slds-icon slds-icon slds-icon_x-small slds-icon-text-default" icon-name="utility:search" alternative-text="search" title="search" size="x-small" if:false={isLoading}></lightning-icon>
+                                <lightning-spinner variant="brand" class="slds-icon slds-icon slds-icon_x-small slds-icon-text-default" alternative-text="Loading" size="small" if:true={isLoading}></lightning-spinner>
+                            </span>
+                        </template>
+                        <template if:true={isSelected}>
+                           
+                            <button type="button" class="slds-input_faux slds-combobox__input slds-combobox__input-value"
+                                aria-labelledby="combobox-label-id-33 combobox-id-5-selected-value"
+                                id="combobox-id-5-selected-value" aria-controls="listbox-id-5" aria-expanded="false"
+                                aria-haspopup="listbox">
+                                <span class="slds-truncate" id="combobox-value-id-20">{selectedValue.compareField}</span>
+                            </button>
+                            <button class="slds-button slds-button_icon slds-input__icon slds-input__icon_right"
+                                title="Remove selected option" onclick={handleDeselect}>
+                                <lightning-button-icon class="slds-button__icon" icon-name="utility:close"  variant="bare" alternative-text="Settings" title="Settings" ></lightning-button-icon>
+                            </button>
+                        </template>
+                    </div>
+                    <div id="listbox-id-2" class="slds-dropdown slds-dropdown_length-with-icon-7 slds-dropdown_fluid"
+                        role="listbox">
+                        <ul class="slds-listbox slds-listbox_vertical" role="presentation">
+                            <template for:each={objectData} for:item="objectRec" for:index="index">
+                                <li role="presentation" class="slds-listbox__item" key={objectRec.Id} data-index={index} onclick={handleSelectedRecord}>
+                                    <div class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta "
+                                        role="option">
+                                       
+                                        <span class="slds-media__body slds-m-left_small ">
+                                            <span class="slds-listbox__option-text slds-listbox__option-text_entity slds-text-heading_small" style="font-weight:700">
+                                                {objectRec.compareField}
+                                            </span>
+                                            <span
+                                                class="slds-listbox__option-meta slds-listbox__option-meta_entity slds-m-top_small slds-text-heading_small">{objectRec.metaField}</span>
+                                        </span>
+                                         <span class="slds-media__figure slds-listbox__option-icon" style="width:25%">
+                                            <span class="slds-icon_container slds-icon-standard-account">
+                                                <img src={objectRec.comparingImageField} />
+                                            </span>
+                                        </span>
+                                    </div>
+                                </li>
+                            </template>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

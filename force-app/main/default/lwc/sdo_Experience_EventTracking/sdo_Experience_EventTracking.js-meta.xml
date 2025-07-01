@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>61.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>SDO Experience - Event Tracking</masterLabel>
+    <description>Event Tracking for Experience Cloud pages. Place this component on pages to track page views with the data sent to MixPanel</description>
+    <targets>
+        <target>lightning__RecordPage</target>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property label="Experience Site Brix" name="experienceSite" type="String" default="DemoBrix-99-xDO-ExperienceSite"></property>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

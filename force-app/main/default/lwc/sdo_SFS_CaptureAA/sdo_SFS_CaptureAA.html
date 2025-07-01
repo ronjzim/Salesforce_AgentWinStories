@@ -1,0 +1,44 @@
+<template>
+    <lightning-card icon-name="standard:asset_audit" title="Capture Asset Attributes">
+        <div slot="actions">     
+        </div>
+        <template for:each={changedRecords} for:item="record" for:index="recordIndex">
+            <div key={record.Id}>
+                <template if:true={isShowDetails}>
+                    <div class="slds-m-around_medium">
+                            <lightning-input label={record.AttributeName} value={record.AttributeValue} type={record.dataType} onchange={handleInputChange} data-key={record.Id} data-field="Value" required={record.IsRequired} checked={record.AttributeValue} disabled></lightning-input>
+                    </div>
+                </template>
+                <template if:false={isShowDetails}>
+                <div class="slds-m-around_medium">
+                    <template lwc:if={record.isNotPicklist}>
+                        <lightning-input label={record.AttributeName}  type={record.dataType} onchange={handleInputChange} data-key={record.Id} data-field="Value" required={record.IsRequired} checked={record.AttributeValue}></lightning-input>
+                    </template>
+                    <template lwc:else>
+                        <lightning-combobox
+                            name="pO"
+                            label={record.AttributeName}
+                            placeholder="Select Value"
+                            options={record.pickListOptions}
+                            onchange={handleInputChange}
+                            data-key={record.Id} 
+                            data-field="Value"
+                            required={record.IsRequired}
+                        >
+                        </lightning-combobox>
+                    </template>
+                </div>
+                
+                </template>
+            </div>
+        </template>
+        <div slot="footer">
+            <template if:true={isShowDetails}>
+                <lightning-button label="Update" variant="brand" onclick={updateAttributes}></lightning-button>
+            </template>
+            <template if:false={isShowDetails}>
+                <lightning-button label="Save" variant="brand" onclick={updateAllRecords}></lightning-button>
+            </template>
+        </div>
+    </lightning-card>
+</template>

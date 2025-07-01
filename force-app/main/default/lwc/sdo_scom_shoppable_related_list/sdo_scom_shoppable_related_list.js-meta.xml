@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>59.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Shoppable Related List</masterLabel>
+    <targets>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property name="assetId" type="String" label="Asset Id" required="true" description="Automatically bind the page's record id to the component variable" default="{!recordId}"/>
+            <property name="assetName" type="String" label="Asset Name" default="{!Item.Name}"/>
+            <property name="hideImageColumn" label="Hide Product Image column" type="Boolean" default="false"/>
+            <property name="hideProductNameColumn" label="Hide Product Name column" type="Boolean" default="false"/>
+            <property name="hidePriceColumn" label="Hide Price column" type="Boolean" default="false"/>
+            <property name="hideAddToCartColumn" label="Hide Add to Cart column" type="Boolean" default="false"/>
+            <property name="noOfRowsForPage" label="Number of Items for Row" required="true" type="Integer" default="10"/>
+            <property name="relatedListTitle" type="String" label="Related list title label" default="Replacement Parts" />
+            <property name="noItemsMessage" type="String" label="Items error message" default="No items are configured or No items found with given search string." />
+            <property name="addToCartLabel" type="String" label="Add to Cart Button Label" default="Add to Cart"/>
+            <property name="addToCartSuccesMessage" type="String" label="Add to Cart Succuess Message" default="Product is added to cart successfully!"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

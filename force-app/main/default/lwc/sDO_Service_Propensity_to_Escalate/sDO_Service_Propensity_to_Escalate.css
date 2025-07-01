@@ -1,0 +1,16 @@
+.low-bg {
+    background-color: #3BA755;
+}
+
+.moderate-bg {
+    background-color: #FCC003;
+}
+
+.high-bg {
+    background-color: #BA0517;
+    color: white;
+}
+
+.bold {
+    font-weight: bold;
+}

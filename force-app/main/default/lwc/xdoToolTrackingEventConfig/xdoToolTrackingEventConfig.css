@@ -1,0 +1,56 @@
+/*
+ * Copyright (c) 2020, salesforce.com, inc.
+ * All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause
+ * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+ */
+
+
+/**
+     @author        Paul Lucas
+     @company       Salesforce
+     @description   XdoToolTrackingEventConfig
+     @date          4/4/2024
+
+    TODO:
+    - https://www.lightningdesignsystem.com/design-tokens/
+    - https://www.lightningdesignsystem.com/platforms/lightning/styling-hooks/
+
+ */
+:host {
+    --lwc-colorBackground: #8747f5;
+    --lwc-paletteTeal: #c5a3d7;
+
+    /*--slds-card: */
+
+    --slds-c-badge-color-background: var(--lwc-colorBackground);
+}
+
+.outer {
+    margin: var(--lwc-varSpacingXSmall, 0.5rem);
+}
+
+.spinner-container {
+    width: 100%;
+    /*position: absolute;*/
+}
+
+.page-header {
+    min-width: 100vw;
+}
+
+.fire {
+    --slds-c-button-brand-color-background: var(--lwc-paletteTeal);
+    /*--slds-c-button-brand-color-background-hover: var(--lwc-palettePurple30);*/
+    /*--slds-c-button-brand-color-border: var(--lwc-palettePurple50);*/
+    /*--slds-c-button-brand-color-border-hover: var(--lwc-palettePurple30);*/
+    /*--slds-c-button-brand-text-color: var(--lwc-paletteNeutral100);*/
+}
+
+.output-content {
+    display: inline-flex;
+}
+
+code {
+    white-space: pre-wrap;
+}

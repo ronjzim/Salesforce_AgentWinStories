@@ -1,0 +1,78 @@
+<template>
+
+	<!-- Hide the display, but not the component itself.  This allows the parent component to call the method to recalc the cart summary -->
+	<template if:false={hideCartSummarySection}>
+
+		<legend class="slds-text-title_caps slds-var-p-around_x-small spcHeader">
+			{labels.component.checkoutSummary}
+		</legend>
+
+		<div class="slds-box slds-var-m-bottom_medium">
+			<div class="slds-var-m-vertical_xx-small">
+				{labels.component.subtotal}
+				<lightning-formatted-number
+					value={subtotal}
+					format-style="currency"
+					currency-code={currency}
+					class="slds-float_right"
+				></lightning-formatted-number>
+			</div>
+
+			<div class="slds-var-m-vertical_xx-small">
+				{labels.component.promotions}
+				<lightning-formatted-number
+					value={totalPromoAmount}
+					format-style="currency"
+					currency-code={currency}
+					class="slds-float_right"
+				></lightning-formatted-number>
+			</div>
+
+			<div class="slds-var-m-vertical_xx-small">
+				{labels.component.netTotal}
+				<lightning-formatted-number
+					value={totalAfterAdjustment}
+					format-style="currency"
+					currency-code={currency}
+					class="slds-float_right"
+				></lightning-formatted-number>
+			</div>
+
+			<div class="slds-var-m-vertical_xx-small">
+				{labels.component.estimatedShipping}
+				<lightning-formatted-number
+					value={estShipping}
+					format-style="currency"
+					currency-code={currency}
+					class="slds-float_right"
+				></lightning-formatted-number>
+			</div>
+
+			<div class="slds-var-m-vertical_xx-small">
+				{labels.component.estimatedTax}
+				<lightning-formatted-number
+					value={estTax}
+					format-style="currency"
+					currency-code={currency}
+					class="slds-float_right"
+				></lightning-formatted-number>
+			</div>
+
+			<div
+				class="slds-var-m-vertical_xx-small slds-var-p-vertical_x-small slds-border_top"
+			>
+				<h2 class="slds-text-heading_small">
+					{labels.component.total}
+					<lightning-formatted-number
+						value={total}
+						format-style="currency"
+						currency-code={currency}
+						class="slds-float_right"
+					></lightning-formatted-number>
+				</h2>
+			</div>
+		</div>
+
+	</template>
+
+</template>

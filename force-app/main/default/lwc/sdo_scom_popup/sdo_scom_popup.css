@@ -1,0 +1,59 @@
+.pop-up-container {
+    display: flex;
+}
+
+.popup-title {
+    font-size: xx-large;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    margin-left: 30px;
+    margin-top: 30px;
+    margin-right: 10px;
+}
+
+.popup-description {
+    font-size: large;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    margin-left: 30px;
+    margin-top: 5px;
+    margin-right: 10px;
+}
+
+.pop-up-checkbox {
+    margin-left: 30px;
+    margin-top: 5px;
+    margin-right: 10px;
+    width: 80%;
+    -webkit-text-fill-color: grey;
+}
+
+.pop-up-email-input {
+    margin-left: 30px;
+    margin-top: 20px;
+    margin-right: 10px;
+    width: 80%;
+}
+
+.pop-up-submit {
+    margin-left: 30px;
+    margin-right: 10px;
+    margin-bottom: 20px;
+    width: 80%;
+}
+
+.pop-up-form {
+    width: 55%;
+    float: left;
+}
+.pop-up-image {
+    width: 44%;
+    float: right;
+}
+
+img {
+    object-fit: cover;
+    font-size: larger;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: bolder;
+}

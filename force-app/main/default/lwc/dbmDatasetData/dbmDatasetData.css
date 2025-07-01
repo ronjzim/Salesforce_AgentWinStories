@@ -1,0 +1,78 @@
+:host {
+    --table-column-width: 10em;
+    --highlighted-color: #D8E6FE;
+    --selected-background-color: #57A3FD;
+    --selected-text-color: white;    
+}
+
+.dataContainer {
+    position: relative;
+    max-width: 100% !important;
+}
+
+.tableContainer {
+    max-width: 100%;
+    overflow-x: scroll;
+}
+
+table {
+    table-layout: fixed;
+    width: calc(var(--table-column-width) * 2);
+}
+
+th {
+    width: var(--table-column-width);
+    max-width: var(--table-column-width);
+}
+
+.rowHeader, .columnHeader {
+    height: 2em;
+    transition: background-color 0.2s;
+    background-color: #eee;
+}
+
+
+.blankCell {
+    background-color: white;
+    position: relative;
+}
+
+.blankCell * {
+    position: relative;
+    left: 50%;
+    transform: translateY(-100%);
+}
+
+/* tr th:first-of-type { */
+th:first-of-type {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+}
+
+th:hover .buttonContainer, .highlightedHeaderCell .buttonContainer {
+    opacity: 1;
+}
+
+.highlightedHeaderCell, th.highlighted {
+    background-color: var(--highlighted-color) !important;
+}
+
+th.selected {    
+    background-color: var(--selected-background-color) !important; 
+    color: var(--selected-text-color) !important;   
+}
+
+lightning-input.highlightedTableCell, lightning-input.highlighted {
+    --slds-c-input-color-background: var(--highlighted-color) !important;
+}
+
+lightning-input.selectedTableCell, lightning-input.selected {    
+    --slds-c-input-color-background: var(--selected-background-color) !important;
+    --slds-c-input-text-color: var(--selected-text-color) !important;
+    --slds-c-input-text-color-focus: var(--selected-text-color) !important;
+}
+
+.toggleContainer {
+    width: fit-content;
+}

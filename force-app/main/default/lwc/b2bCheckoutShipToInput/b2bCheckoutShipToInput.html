@@ -1,0 +1,177 @@
+<template>
+
+	<template if:true={displayShipToSection}>
+
+		<legend class="slds-text-title_caps slds-var-p-around_x-small spcHeader">
+			<abbr class="slds-required" title="required">*</abbr> {labels.component.shipToSectionHeader}
+		</legend>
+
+		<div class="slds-box slds-var-m-bottom_medium">
+			<div class="slds-grid slds-gutters slds-wrap">
+
+				<!-- radio button selection -->
+				<div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+					<div class="slds-var-m-bottom_medium">
+						<lightning-radio-group
+							name="addressType"
+							label="Select your address input method"
+							variant="label-hidden"
+							options={addressInputMethods}
+							value={addressInputType}
+							type="radio"
+							onchange={handleAddressInputTypeChange}
+						>
+						</lightning-radio-group>
+					</div>
+				</div>
+
+				<div
+					class="slds-col slds-size_1-of-1 slds-medium-size_3-of-4 slds-border_left columnPaymentForm"
+				>
+
+					<div class="slds-grid slds-gutters slds-wrap">
+
+						<template if:true={isSelect}>
+
+							<div class="slds-col slds-size_1-of-1">
+								<lightning-radio-group
+									name="radioGroup"
+									label="Ship To"
+									variant="label-hidden"
+									options={options}
+									value={selectedAddress}
+									onchange={handleAddressChange}
+									type="radio"
+									required
+								></lightning-radio-group>
+							</div>
+
+						</template>
+
+						<template if:true={isManual}>
+
+							<div class="slds-col slds-size_1-of-1">
+
+								<!-- MODAL TOGGLE BUTTON -->
+								<button class="slds-button slds-button_brand slds-var-p-vertical_xx-small slds-var-p-horizontal_medium"
+									onclick={handleShowModal}>
+									{labels.component.enterAddress}
+								</button>
+
+								<template if:true={hasStreetAddress1}>
+									<div>
+										{companyName} <br/>
+										{streetAddress1} <br/>
+										{city}, {stateProvince} <br/>
+										{postalCode} {country} <br/>
+									</div>
+								</template>
+
+							</div>
+
+						</template>
+
+					</div>
+
+				</div>
+
+			</div>
+
+		</div>
+
+	</template>
+
+    <legend class="slds-text-title_caps slds-var-p-around_x-small spcHeader">
+        {labels.component.shipToRequestedDate}
+    </legend>
+
+    <div class="slds-var-m-bottom_medium">
+        <lightning-input type="date" name="inputRDD" placeholder={labels.component.requestedDatePlaceholder} onchange={handleRequestDate}></lightning-input>
+    </div>
+
+	<template if:true={displayDeliveryInstructions}>
+
+		<legend class="slds-text-title_caps slds-var-p-around_x-small spcHeader">
+			{labels.component.shipToDeliveryInstructions}
+		</legend>
+
+		<lightning-textarea
+			name="shippingInstructions"
+			label="Delivery Instructions"
+			variant="label-hidden"
+			class="slds-var-m-bottom_medium"
+			value={shippingInstructions}
+			onchange={handleShippingInstructionsChange}
+			placeholder={labels.component.deliveryInstructionsPlaceholder}
+		></lightning-textarea>
+
+	</template>
+
+	<!-- MODAL -->
+	<template if:true={showModal}>
+
+		<section role="dialog" tabindex="-1" class="slds-modal slds-modal_medium slds-fade-in-open"
+			aria-labelledby="modal-heading-promotionDetails" aria-modal="true"
+			aria-describedby="modal-content-promotionDetails">
+
+			<div class="slds-modal__container">
+
+				<header class="slds-modal__header slds-modal__header_empty">
+
+					<button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+						title="Close" onclick={handleCloseModal}>
+						<svg class="slds-button__icon slds-button__icon_large" aria-hidden="true">
+							<use xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#close">
+							</use>
+						</svg>
+						<span class="slds-assistive-text">Close</span>
+					</button>
+
+				</header>
+
+				<div class="slds-modal__content slds-var-p-around_medium" id="modal-content-promotionDetails">
+					
+					<c-b2b-checkout-edit-address
+					
+						company-name={companyName}
+						street-address1={streetAddress1}
+						country={country}
+						city={city}
+						state-province={stateProvince}
+						postal-code={postalCode}
+				
+						onmanualaddresschange={handleCompanyNameChange}
+					
+					>
+					</c-b2b-checkout-edit-address>
+
+				</div>
+
+				<footer class="slds-modal__footer">
+					<div class="slds-grid">
+						<div class="slds-col"></div>
+
+						<div class="slds-col slds-size_1-of-10 slds-p-right_small">
+
+							<lightning-button label={labels.component.cancelAddressDialog} onclick={handleCloseModal}>
+                            </lightning-button>
+						</div>
+
+						<div class="slds-col slds-size_1-of-10">
+
+							<lightning-button label={labels.component.saveAddressDialog} onclick={handleSaveModal}>
+                            </lightning-button>
+						</div>
+					</div>
+				</footer>
+
+			</div>
+
+		</section>
+
+		<div class="slds-backdrop slds-backdrop_open"></div>
+
+	</template>
+
+
+</template>

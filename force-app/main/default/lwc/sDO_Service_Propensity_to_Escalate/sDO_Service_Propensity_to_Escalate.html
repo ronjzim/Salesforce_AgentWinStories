@@ -1,0 +1,144 @@
+<template>
+    <lightning-card title="Propensity to Escalate" icon-name="utility:einstein">
+        <div if:true={myCase}>
+            <div class="slds-p-bottom_small">
+                <!-- <div class="slds-media slds-media_center slds-m-bottom_medium">
+                    <div class="slds-media__figure">
+                        <lightning-icon icon-name="utility:einstein" title="Einstein"></lightning-icon>
+                    </div>
+                    <div class="slds-media__body">
+                        <p class="slds-text-heading_medium">Propensity to Escalate</p>
+                    </div>
+                </div> -->
+                <!-- <template lwc:if={myCase.SDO_Service_Propensity_to_Escalate__c}>
+                    <p class="slds-text-title_bold">Yes</p>
+                </template>
+                <template lwc:else>
+                    <p class="slds-text-title_bold">No</p>
+                </template> -->
+                <template lwc:if={myCase.SDO_Service_Propensity_Percentage__c}>
+                    <div class="slds-grid slds-grid_vertical-align-center slds-p-vertical_small">
+                            <h1 class="slds-text-heading_large slds-col_bump-right bold">{myCase.SDO_Service_Propensity_Percentage__c}%</h1>
+                        <template lwc:if={scoreIsHigh}>
+                            <lightning-badge label="High" class="high-bg slds-m-left_small"></lightning-badge>
+                        </template>
+                        <template lwc:elseif={scoreIsModerate}>
+                            <lightning-badge label="Moderate" class="moderate-bg slds-m-left_small"></lightning-badge>
+                        </template>
+                        <template lwc:else>
+                            <lightning-badge label="Low" class="low-bg slds-m-left_small"></lightning-badge>
+                        </template>
+                    </div>
+                </template>
+                <!-- <template lwc:if={myCase.SDO_Service_Percent_vs_Last_Change__c}>
+                    <p>
+                        <template lwc:if={changeDirectionUp}>
+                            <lightning-dynamic-icon
+                                class="slds-m-right_xx-small" 
+                                type="trend" 
+                                option="up" 
+                                alternative-text="Trending">
+                            </lightning-dynamic-icon>
+                        </template>
+                        <template lwc:else>
+                            <lightning-dynamic-icon
+                                class="slds-m-right_xx-small" 
+                                type="trend" 
+                                option="down" 
+                                alternative-text="Trending">
+                            </lightning-dynamic-icon>
+                        </template>
+                        <template lwc:if={changeVal}>
+                            <span class="slds-text-color_error slds-text-heading_small bold">{myCase.SDO_Service_Percent_vs_Last_Change__c}%</span>
+                        </template>
+                        <template lwc:else>
+                            <span class="slds-text-color_success slds-text-heading_small bold">{myCase.SDO_Service_Percent_vs_Last_Change__c}%</span>
+                        </template>
+                        <span> vs last change</span>
+                    </p>
+                </template> -->
+            </div>
+            <div class="slds-border_top slds-p-vertical_small">
+                <p class="slds-text-title_bold">Top Predictors</p>
+                <template lwc:if={myCase.SDO_Service_Propensity_Predictor_1_Value__c}>
+                    <div class="slds-m-top_medium slds-grid slds-grid_vertical-align-top">
+                        <div>
+                            <p class="slds-p-right_large">{myCase.SDO_Service_Propensity_Predictor_1__c}</p>
+                        </div>
+                        <div class="slds-col_bump-left">
+                            <template lwc:if={predictorVal1}>
+                                <p class="slds-text-title_bold slds-text-color_error">+{myCase.SDO_Service_Propensity_Predictor_1_Value__c}%</p>
+                            </template>
+                            <template lwc:else>
+                                <p class="slds-text-title_bold slds-text-color_success">{myCase.SDO_Service_Propensity_Predictor_1_Value__c}%</p>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+                <template lwc:if={myCase.SDO_Service_Propensity_Predictor_2_Value__c}>
+                    <div class="slds-m-top_medium slds-grid slds-grid_vertical-align-top">
+                        <div>
+                            <p class="slds-p-right_large">{myCase.SDO_Service_Propensity_Predictor_2__c}</p>
+                        </div>
+                        <div class="slds-col_bump-left">
+                            <template lwc:if={predictorVal2}>
+                                <p class="slds-text-title_bold slds-text-color_error">+{myCase.SDO_Service_Propensity_Predictor_2_Value__c}%</p>
+                            </template>
+                            <template lwc:else>
+                                <p class="slds-text-title_bold slds-text-color_success">{myCase.SDO_Service_Propensity_Predictor_2_Value__c}%</p>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+                <template lwc:if={myCase.SDO_Service_Propensity_Predictor_3_Value__c}>
+                    <div class="slds-m-top_medium slds-grid slds-grid_vertical-align-top">
+                        <div>
+                            <p class="slds-p-right_large">{myCase.SDO_Service_Propensity_Predictor_3__c}</p>
+                        </div>
+                        <div class="slds-col_bump-left">
+                            <template lwc:if={predictorVal3}>
+                                <p class="slds-text-title_bold slds-text-color_error">+{myCase.SDO_Service_Propensity_Predictor_3_Value__c}%</p>
+                            </template>
+                            <template lwc:else>
+                                <p class="slds-text-title_bold slds-text-color_success">{myCase.SDO_Service_Propensity_Predictor_3_Value__c}%</p>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+            </div>
+            <div class="slds-border_top slds-p-vertical_small">
+                <p class="slds-text-title_bold">How To Improve This Outcome</p>
+                <template lwc:if={myCase.SDO_Service_Propensity_Improvement_1_Val__c}>
+                    <div class="slds-m-top_medium slds-grid slds-grid_vertical-align-top">
+                        <div>
+                            <p class="slds-p-right_large">{myCase.SDO_Service_Propensity_Improvement_1__c}</p>
+                        </div>
+                        <div class="slds-col_bump-left">
+                            <template lwc:if={improvementVal1}>
+                                <p class="slds-text-title_bold slds-text-color_error">+{myCase.SDO_Service_Propensity_Improvement_1_Val__c}%</p>
+                            </template>
+                            <template lwc:else>
+                                <p class="slds-text-title_bold slds-text-color_success">{myCase.SDO_Service_Propensity_Improvement_1_Val__c}%</p>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+                <template lwc:if={myCase.SDO_Service_Propensity_Improvement_2_Val__c}>
+                    <div class="slds-m-top_medium slds-grid slds-grid_vertical-align-top">
+                        <div>
+                            <p class="slds-p-right_large">{myCase.SDO_Service_Propensity_Improvement_2__c}</p>
+                        </div>
+                        <div class="slds-col_bump-left">
+                            <template lwc:if={improvementVal2}>
+                                <p class="slds-text-title_bold slds-text-color_error">+{myCase.SDO_Service_Propensity_Improvement_2_Val__c}%</p>
+                            </template>
+                            <template lwc:else>
+                                <p class="slds-text-title_bold slds-text-color_success">{myCase.SDO_Service_Propensity_Improvement_2_Val__c}%</p>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </lightning-card>
+</template>

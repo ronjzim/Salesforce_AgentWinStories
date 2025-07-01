@@ -1,0 +1,17 @@
+<template>
+    <lightning-card title="SDO Pop Up Preview" icon-name="custom:custom19">
+        <div class="slds-var-m-around_medium">
+            <a href="javascript:void(0);" onmouseover={handleShowModal}>Hover me</a>
+            <c-sdo_scom_popup
+                pop-up-title={popUpTitle}
+                input-label={inputLabel}
+                button-label={buttonLabel}
+                pop-up-description={popUpDescription}
+                input-placeholder={inputPlaceholder}
+                product-content-id={productContentId}
+                thank-you-image-content-id={thankYouImageContentId}
+                alt-text={altText}>
+            </c-sdo_scom_popup>       
+        </div>
+    </lightning-card>
+</template>

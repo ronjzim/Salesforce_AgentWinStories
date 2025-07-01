@@ -1,0 +1,79 @@
+<template>
+    <lightning-card  icon-name="standard:related_list" title={relatedListTitle}>
+        <div class="slds-grid" slot="actions">
+            <lightning-input
+                name="enter-search"
+                label="Search replacment parts"
+                placeholder="Search"
+                type="search"
+                variant="label-hidden"
+                oncommit={handleSearch}
+                class="slds-m-left_xx-small slds-m-bottom_none"
+                value={searchTerm}
+            ></lightning-input>
+            <lightning-button-icon
+                icon-name="utility:download"
+                alternative-text="Download"
+                title="Download"
+                onclick={handleDownload}
+                class="slds-m-left_xx-small"
+            ></lightning-button-icon>
+            <lightning-button-icon
+                icon-name="utility:refresh"
+                alternative-text="Refresh"
+                title="Refresh"
+                class="slds-m-left_xx-small"
+                onclick={handleRefresh}
+            ></lightning-button-icon>
+        </div>
+        <div class="slds-is-relative card-body">
+            <lightning-spinner
+                if:true={isLoading}
+                alternative-text="Loading"
+                size="small"
+            ></lightning-spinner>
+            <c-sdo_scom_shoppable_related_list_tree_grid
+                key-field="id"
+                data={currentPageShoppableAssets}
+                columns={columns}
+                expanded-rows={expandedRows}
+                hide-checkbox-column
+                is-loading={isLoading}
+                min-column-width="25"
+                max-column-width="2000"
+                show-row-number-column
+                row-number-offset={rowNumberOffset}
+                onrowaction={handleRowAction}
+                ontoggle={handleRowToggle}
+            ></c-sdo_scom_shoppable_related_list_tree_grid>
+            <template lwc:if={currentPageShoppableAssets.length}>
+                <div class="slds-text-align_right slds-p-horizontal_small slds-p-top_small">
+                    <lightning-button
+                        variant="base"
+                        label="< Previous"
+                        title="Previous Page"
+                        onclick={handlePreviousClick}
+                        class="slds-m-right_x-small"
+                        disabled={disablePrevious}
+                    ></lightning-button>
+                    <span>{currentPage}/{totalPages}</span>
+                    <lightning-button
+                        variant="base"
+                        label="Next >"
+                        title="Next Page"
+                        onclick={handleNextClick}
+                        class="slds-m-left_x-small"
+                        disabled={disableNext}
+                    ></lightning-button>
+                </div>
+            </template>
+            <template lwc:else>
+                <c-sdo_scom_shoppable_related_list_no_data
+                    if:false={isLoading}
+                    message={noItemsMessage}
+                ></c-sdo_scom_shoppable_related_list_no_data>
+            </template>
+            <a class="download-link slds-hide">download</a>
+        </div>
+    </lightning-card>
+</template>

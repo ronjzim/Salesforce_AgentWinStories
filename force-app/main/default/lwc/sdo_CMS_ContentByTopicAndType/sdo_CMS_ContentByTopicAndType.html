@@ -1,0 +1,22 @@
+<template>
+    <template if:true={topicMode}> 
+        <c-sdo_-c-m-s_-content-by-record-and-type
+            record-id={topicId}
+            content-type={contentType}
+            number-content-items={numberContentItems}
+            path-attribute={pathAttribute}
+            title-attribute={titleAttribute}
+            body-attribute={bodyAttribute}
+            image-attribute={imageAttribute}
+            image-height={imageHeight}
+            image-position={imagePosition}
+            link-attribute={linkAttribute}
+            content-display-style={contentDisplayStyle}
+            grid-columns={gridColumns}
+            topic-mode={topicMode}
+        ></c-sdo_-c-m-s_-content-by-record-and-type>
+    </template>
+    <template if:false={topicMode}>
+        Topic mode disabled.
+    </template>
+</template>

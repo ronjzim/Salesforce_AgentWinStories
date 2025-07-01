@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>54.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__RecordPage</target>
+        <target>lightning__AppPage</target>
+        <target>lightning__HomePage</target> 
+        <target>lightning__FlowScreen</target> 
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__AppPage,lightningCommunity__Default">
+            <!-- Page Header Design resources -->
+            <property name="pageTitle" description="Page Header." type="String" default="Products" />
+            <property name="pageSubTitle" description="Page Subtitle." type="String" default="Compare Products" />
+            <property name="pageIcon" description="Page Icon." type="String" default="custom:custom93" />
+            <!-- Page Header Design resources -->
+
+            <!-- Product Comparison fields configuration -->
+            <property name="comparingField" description="Field which will be used to select the records in order to compare them." type="String" default="Name"  />
+            <property name="metaField" description="Add Field API which will provide additional detail for your search dropdown and it should be one of the fields present in the Field sets." type="String" default="ProductCode" />
+            <property name="comparingImageField" description="Add Image field API to which will be shown in search dropdown." type="String" default="Image_URL__c" />
+            <property name="imageFields" description="Comma seperate values of field API which has URL of an image." type="String" default="Image_URL__c" />
+            <property name="colorFields" description="Comma seperates values of field API which has color palattes in them." type="String" />
+            <property name="isThirdProductNotAvailable" description="Pass true if you only want to compare two products at a time." type="Boolean" default="false" />
+            <!-- Product Comparison fields configuration -->
+            
+            <!-- Object related information -->
+            <property name="objectAPI" description="Object for which data will be fetched." type="String" default="Product2" />
+            <property name="fieldSetList"  description="Comma seperated fieldsets API name for the above objects."  type="String" default="Product_Information" />
+            <property name="orderBy" description="Field to order data." type="String" default="Name" />
+            <!-- Object related information -->
+        
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

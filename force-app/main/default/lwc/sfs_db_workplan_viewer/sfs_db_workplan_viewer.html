@@ -1,0 +1,17 @@
+<template>
+	<template if:true={showWorkPlans}>
+	<lightning-card title="Work Summary" icon-name="standard:work_summary">
+		<template for:each={workPlanSteps} for:item="woPlan">
+			<div class="slds-grid" key={woPlan.Id}>
+				<lightning-card title={woPlan.Name} icon-name="standard:work_plan">
+					<div class="container slds-is-relative  slds-p-around_small " key={woPlan.Id}>
+						<template for:each={woPlan.WorkSteps} for:item="woStep">
+							<c-sfs_db_workstep_viewer key={woStep.Id} wo-step={woStep}></c-sfs_db_workstep_viewer>
+						</template>
+					</div>
+				</lightning-card>
+			</div>
+		</template>
+	</lightning-card>
+	</template>
+</template>

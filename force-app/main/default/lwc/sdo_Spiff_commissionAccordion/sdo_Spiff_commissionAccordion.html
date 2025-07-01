@@ -1,0 +1,70 @@
+<template>
+
+  <!--Spiff Commission Details-->
+  <div class="spiff_commission">
+    
+    <!--Commission Bidy-->
+    <div class="spiff_commission-body">
+
+      <!--Commission Accordion-->
+        <ul class="slds-accordion">
+
+          <li class="slds-accordion__list-item">
+            <section class="slds-accordion__section spiff_no-border spiff_bold slds-is-open spiff_accordion-section" data-id="accordion-section">
+              
+             <div class="slds-accordion__summary spiff_accordion-summary" data-id="accordion-header">
+
+                <lightning-layout>
+                   <!--Commission Accordion Header--> 
+                  <lightning-layout-item size="6" small-device-size="6" medium-device-size="6" large-device-size="6">
+                    <h2 class="slds-accordion__summary-heading">
+                      <lightning-icon icon-name="utility:chevronright" size="x-small" onclick={changeState} data-id="iconRight" if:false={open}></lightning-icon>
+                      <lightning-icon icon-name="utility:chevrondown" size="x-small" onclick={changeState} data-id="iconDown" if:true={open}></lightning-icon>
+                      <div class="spiff_heading"><a class="spiff_header-link" title={commission.name}  data-id="link" onclick={changeState}>{commission.name}</a></div>
+                    </h2>
+                </lightning-layout-item>
+                
+                  <!--Commission Total Currency-->
+                  <lightning-layout-item size="6" small-device-size="6" medium-device-size="6" large-device-size="6">
+                    <div class="slds-accordion__summary spiff_total-plan-commission spiff_align-right">
+                      <span if:true={commission.hasPlanAmount}>{commission.currencyCode}&nbsp;<lightning-formatted-number value={commission.planAmount}></lightning-formatted-number></span>
+                      <span if:false={commission.hasPlanAmount}>N/A</span>
+                    </div>
+                  </lightning-layout-item>
+                </lightning-layout>
+                
+              </div>
+
+              <!--Commission Data-->
+              <div class="slds-accordion__content" id={commission.id} if:true={open}>
+                  
+                  <div class="spiff_commission-details">
+                      <template if:true={commission.hasPlanException} for:each={commission.errors} for:item="error">
+                        <div key={error.id} class="spiff_commission-message">{error.message}</div>
+                      </template>
+                        <ol class="slds-list_ordered">
+                          <template if:true={commission.hasMultiplePlanException} for:each={commission.errors} for:item="error">
+                            <li key={error.id}>{error.message}</li>
+                          </template>    
+                        </ol>                      
+                      <table if:false={commission.hasPlanException}>
+                          <template for:each={commission.payout_rules} for:item="payoutRule">
+                              <tr key={payoutRule.id}>
+                                  <td class="spiff_payout-rule">{payoutRule.name}</td>
+                                  <td class="spiff_align-right spiff_payout-rule">{payoutRule.currency_code}&nbsp;<lightning-formatted-number value={payoutRule.amount} maximum-fraction-digits="2"></lightning-formatted-number></td>
+                              </tr>
+                          </template>
+                      </table>
+                  </div>
+
+              </div>
+            </section>
+          </li>
+      
+        </ul>
+        
+    </div>
+  
+  </div>
+
+</template>

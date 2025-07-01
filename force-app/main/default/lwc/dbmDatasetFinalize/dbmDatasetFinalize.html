@@ -1,0 +1,21 @@
+<template>
+    <c-fsc_combobox label="Select Folder to Save Report In" options={folderOptions} name="folderDeveloperName"
+        value={reportDetails.folderDeveloperName} onchange={handleReportDetailChange} required></c-fsc_combobox>
+    <!--
+    <div class="summaryContainer slds-p-vertical_small">
+        <p>Report Name: {reportDetails.reportName}</p>
+        <p>Report Metric Label: {reportDetails.metricLabel}</p>
+        <p>Report Metric Type: {reportDetails.metricType}</p>
+        <p>Number of Groupings: {reportDetails.numGroupings}</p>
+
+        <template for:each={reportDetails.groupings} for:item="grouping">
+            <template lwc:if={grouping.isDisabled}></template>
+            <template lwc:else>
+                <div class="slds-p-vertical_x-small" key={grouping.name}>
+                    <p>Grouping #{grouping.groupingNumber}</p>
+                </div>
+            </template>
+        </template>
+    </div>
+    -->
+</template>

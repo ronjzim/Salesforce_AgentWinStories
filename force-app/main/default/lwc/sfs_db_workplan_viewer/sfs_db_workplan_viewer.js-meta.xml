@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+	<apiVersion>62.0</apiVersion>
+	<isExposed>true</isExposed>
+	<masterLabel>Work Plan Viewer</masterLabel>
+	<targets>
+		<target>lightning__ServiceDocument</target>
+	</targets>
+
+</LightningComponentBundle>

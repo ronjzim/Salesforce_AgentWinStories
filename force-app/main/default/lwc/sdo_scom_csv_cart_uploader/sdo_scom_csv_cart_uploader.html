@@ -1,0 +1,51 @@
+<template>
+    <div class="slds-is-relative">
+        <lightning-spinner
+            if:true={showSpinner}
+            class="slds-align_absolute-center slds-m-around_large"
+            alternative-text="Adding Items to Cart..."
+            size="medium"
+            variant="brand"
+        ></lightning-spinner>
+        <lightning-card title={title} icon-name={iconName}>
+            <div slot="actions">
+                <lightning-button
+                    icon-name="action:download"
+                    title="Download Template"
+                    label="Download Template"
+                    variant="neutral"
+                    onclick={handleDownloadTemplate}
+                ></lightning-button>
+            </div>
+            <div class="slds-m-horizontal_medium">
+                <lightning-input
+                    class="input-file slds-m-bottom_none"
+                    type="file"
+                    label="Select CSV File"
+                    name="cartCsvFile"
+                    onchange={handleFilesChange}
+                    accept={acceptedFormats}
+                    variant="label-hidden"
+                ></lightning-input>
+                <ul class="slds-m-top_xx-small" if:true={selectedFiles.length}>
+                    <template for:each={selectedFiles} for:item="file">
+                        <li class="slds-truncate" title={file.name} key={file.name}>{file.name}</li>
+                    </template>
+                </ul>
+            </div>
+            <div slot="footer" class="slds-text-align_right">
+                <lightning-button
+                    class="slds-m-right_x-small"
+                    label={addToCartLabel}
+                    variant="brand" 
+                    onclick={handleAddItemsToCart}
+                    disabled={disableAddToCart}
+                ></lightning-button>
+                <lightning-button
+                    label={resetLabel}
+                    onclick={handleReset}
+                ></lightning-button>
+            </div>
+        </lightning-card>
+    </div>          
+</template>

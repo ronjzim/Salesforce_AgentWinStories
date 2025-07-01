@@ -1,0 +1,36 @@
+<template>
+    <!-- <template lwc:if={showModal}> -->
+    <section role="dialog" tabindex="-1" aria-modal="true" onkeydown={handleModalKeyDown}
+        class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+            <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                onclick={handleCancelClick}>
+                <lightning-icon icon-name="utility:close" size="small"></lightning-icon>
+                <span class="slds-assistive-text">Cancel and close</span>
+            </button>
+            <template lwc:if={header}>
+                <div class="modalHeader slds-modal__header">
+                    <h1 class="slds-modal__title slds-hyphenate">{header}</h1>
+                </div>
+            </template>
+            <template lwc:else>
+                <slot name="header"></slot>
+            </template>
+            <div class="slds-modal__content slds-p-around_medium">
+                <slot></slot>
+            </div>
+            <div class="slds-modal__footer">
+                <slot name="footer">
+                    <button class="slds-button slds-button_neutral" aria-label="Cancel and close"
+                        onclick={handleCancelClick}>{cancelLabel}</button>
+                    <template lwc:if={showConfirmButton}>
+                        <button class="slds-button slds-button_brand"
+                            onclick={handleConfirmClick}>{confirmLabel}</button>
+                    </template>
+                </slot>
+            </div>
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+    <!-- </template> -->
+</template>

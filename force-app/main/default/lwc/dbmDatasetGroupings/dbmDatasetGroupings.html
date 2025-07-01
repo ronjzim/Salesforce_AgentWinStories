@@ -1,0 +1,143 @@
+<template>
+    <div class="groupingsContainer slds-grid">
+        <template for:each={reportDetails.groupings} for:item="grouping" for:index="groupingIndex">
+            <template lwc:if={grouping.isDisabled}></template>
+            <template lwc:else>
+                <div class={grouping.classString} key={grouping.groupingName}>
+                    <h2 class="slds-text-heading_small slds-p-vertical_x-small">{grouping.name}</h2>
+                    <lightning-button-group class="slds-p-bottom_xx-small">
+                        <lightning-button-icon icon-name="utility:add" tooltip="Add Entry" title="Add"
+                            onclick={handleAddEntryClick} data-index={groupingIndex}></lightning-button-icon>
+                        <!-- Lazy way of only showing the Bulk Add button if the data source is a text type -->
+                        <template lwc:if={grouping.dataSourceIs.sobject}></template>
+                        <template lwc:elseif={grouping.dataSourceIs.user}></template>
+                        <template lwc:else>
+                            <lightning-button-icon icon-name="utility:justify_text" tooltip="Bulk Add Entries"
+                                title="Bulk Add" class="bulkAddEntriesButton" onclick={handleBulkAddClick}
+                                data-index={groupingIndex}></lightning-button-icon>
+                            <!-- Putting this feature on ice for now, too many edge cases to deal with
+                            <lightning-button-icon icon-name="utility:richtextnumberedlist" tooltip="Number Entries"
+                                title="Number Entries" alternative-text="Number Entries" data-grouping-index={groupingIndex}
+                                onclick={handleGroupingNumberClick}
+                                variant={grouping.enumerateClass}></lightning-button-icon>
+                            -->
+                        </template>
+                        <!-- <lightning-button-icon icon-name="utility:check"></lightning-button-icon>
+                        <c-dbm-button icon-name="utility:check"></c-dbm-button>
+                        <c-dbm-button icon-name="utility:check" label="Check!"></c-dbm-button> -->
+                    </lightning-button-group>
+                    <div class="entriesContainer slds-grid slds-wrap slds-is-relative">
+                        <div class="dragIndicator" data-grouping-index={groupingIndex}></div>
+                        <template for:each={grouping.entries} for:item="entry" for:index="entryIndex">
+                            <div class="entryRow slds-m-vertical_xx-small slds-col slds-size_1-of-1 slds-grid slds-m-horizontal_none slds-p-horizontal_none"
+                                key={entry.index} data-entry-index={entryIndex} data-grouping-index={groupingIndex}
+                                ondragover={handleEntryDragOver} ondragleave={handleEntryDragLeave}>
+                                <div
+                                    class="entryInput slds-col slds-p-left_none slds-grid slds-grid_vertical-align-center">
+                                    <!-- <template lwc:if={grouping.enumerate}>
+                                        <span class="slds-p-right_xxx-small">
+                                            {entry.letter}
+                                        </span>
+                                    </template> -->
+                                    <div class="slds-col">
+                                        <template lwc:if={grouping.dataSourceIs.sobject}>
+                                            <c-fsc_lookup class="inputElement" object-name={grouping.objectName}
+                                                label="" data-grouping-index={groupingIndex}
+                                                data-entry-index={entryIndex} value={entry.recordId}
+                                                onrecordchange={handleEntryRecordChange} required></c-fsc_lookup>
+                                        </template>
+                                        <template lwc:elseif={grouping.dataSourceIs.user}>
+                                            <c-fsc_lookup class="inputElement" object-name="User" label=""
+                                                data-grouping-index={groupingIndex} data-entry-index={entryIndex}
+                                                value={entry.recordId} onrecordchange={handleEntryRecordChange}
+                                                required></c-fsc_lookup>
+                                        </template>
+                                        <template lwc:else>
+                                            <lightning-input class="inputElement" variant="label-hidden"
+                                                data-grouping-index={groupingIndex} data-entry-index={entryIndex}
+                                                value={entry.value} onchange={handleEntryTextChange}
+                                                required></lightning-input>
+                                        </template>
+                                    </div>
+                                </div>
+                                <div class="entryActions slds-p-left_xxx-small">
+                                    <lightning-button-icon icon-name="utility:delete"
+                                        data-grouping-index={groupingIndex} data-entry-index={entryIndex}
+                                        onclick={handleEntryDeleteClick}></lightning-button-icon>
+                                    <lightning-icon icon-name="utility:drag_and_drop" ondragstart={handleEntryDragStart}
+                                        draggable="true" data-entry-index={entryIndex}
+                                        data-grouping-index={groupingIndex} class="dragHandle"></lightning-icon>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </template>
+        </template>
+    </div>
+
+    <template lwc:if={showBulkAddModal}>
+        <section role="dialog" tabindex="-1" aria-modal="true" onkeydown={handleBulkAddModalKeydown}
+            class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                    onclick={closeBulkAddModal}>
+                    <lightning-icon icon-name="utility:close" size="small"></lightning-icon>
+                    <span class="slds-assistive-text">Cancel and close</span>
+                </button>
+                <div class="slds-modal__header">
+                    <h1 class="slds-modal__title slds-hyphenate">Bulk Add Entries</h1>
+                </div>
+                <div class="slds-modal__content slds-p-around_medium">
+                    <lightning-textarea class="bulkAddTextarea" label="Add one entry per line"
+                        autofocus></lightning-textarea>
+                </div>
+                <div class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" aria-label="Cancel and close"
+                        onclick={closeBulkAddModal}>Cancel</button>
+                    <button class="slds-button slds-button_brand" onclick={handleBulkAddModalSaveClick}>Save</button>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+    </template>
+
+    <template lwc:if={reorderAction}>
+        <c-dbm-modal data-modal-name="randomize" header="Reorder Groupings" oncancel={handleReorderModalCancel}
+            onconfirm={handleReorderModalConfirm}>
+            <div class="slds-dueling-list slds-grid slds-grid_align-center slds-grid_vertical-align-center">
+                <div class="slds-dueling-list__column">
+                    <span class="slds-form-element__label">Second Category</span>
+                    <div class="slds-dueling-list__options">
+                        <ul aria-describedby="option-drag-label" class="slds-listbox slds-listbox_vertical"
+                            role="listbox">
+                            <template for:each={reorderAction.entries} for:item="entry" for:index="entryIndex">
+                                <li role="presentation" class="slds-listbox__item" key={entry.value}>
+                                    <div class="entryToReorder slds-listbox__option slds-listbox__option_plain slds-media slds-media_small slds-media_inline"
+                                        aria-selected="false" role="option" tabindex="0" data-index={entryIndex}
+                                        onclick={handleReorderEntryClick}>
+                                        <span class="slds-media__body">
+                                            <span class="slds-truncate" title={entry.value}>{entry.value}</span>
+                                        </span>
+                                    </div>
+                                </li>
+                            </template>
+                        </ul>
+                    </div>
+                </div>
+                <div class="slds-grid slds-grid_vertical slds-m-left_medium">
+                    <lightning-button-icon icon-name="utility:arrow_top" class="slds-m-vertical_xx-small"
+                        title="Move to top" alternative-text="Move to top"
+                        onclick={handleMoveEntryToTopClick}></lightning-button-icon>
+                    <lightning-button-icon icon-name="utility:up" class="slds-m-vertical_xx-small" title="Move up"
+                        alternative-text="Move up" onclick={handleMoveEntryUpClick}></lightning-button-icon>
+                    <lightning-button-icon icon-name="utility:down" class="slds-m-vertical_xx-small" title="Move down"
+                        alternative-text="Move to down" onclick={handleMoveEntryDownClick}></lightning-button-icon>
+                    <lightning-button-icon icon-name="utility:arrow_bottom" class="slds-m-vertical_xx-small"
+                        title="Move to bottom" alternative-text="Move to bottom"
+                        onclick={handleMoveEntryToBottomClick}></lightning-button-icon>
+                </div>
+            </div>
+        </c-dbm-modal>
+    </template>
+</template>

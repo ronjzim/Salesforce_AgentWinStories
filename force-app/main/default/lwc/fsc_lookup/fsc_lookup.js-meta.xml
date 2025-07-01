@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>63.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Lookup (Beta)</masterLabel>
+    <targets>
+        <target>lightning__FlowScreen</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__FlowScreen">
+            <property name="objectName" label="Object Name" type="String" required="true"/>
+            <property name="label" label="Label" type="String" default="Select Record"/>
+            <property name="fieldsToDisplay" label="Fields to Display" type="String" description="Enter a comma-separated string of field API names"></property>
+            <property name="whereClause" label="Where Clause" type="String" description="(Advanced) Enter a value for the SOQL query's WHERE clause"></property>          
+            <property name="value" label="Value" type="String"></property>          
+            <property name="required" label="Required" type="Boolean"></property>      
+            <property name="showNewRecordAction" label="Show 'New Record' Action" type="Boolean"></property>    
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

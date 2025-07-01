@@ -1,0 +1,642 @@
+<template>
+	<section aria-pressed={isOpen} class={sidebarClass} style="top: 90px; height: calc(100% - 130px)">
+		<div class="slds-grid slds-grid_vertical slds-template__container slds-is-absolute">
+			<div class="sidebarHeader slds-panel__header slds-panel__header_custom slds-shrink-none slds-grow-none">
+				<lightning-button-icon icon-name="utility:back" class="slds-panel__back" variant="bare"
+					alternative-text="back" title="Back" ondblclick={doReset} onclick={doSingleClick}
+					if:false={isShowAllPrograms}></lightning-button-icon>
+				<h2 class="slds-panel__header-title slds-text-heading_small slds-truncate" id="one-sidebar-header-136"
+					title="Learning Paths">
+					<span>{headerTitle}</span>
+				</h2>
+				<lightning-button-icon icon-name="utility:home" class="slds-m-left_x-small" variant="bare"
+					alternative-text="home" title="Home" disabled={isShowAllPrograms} onclick={showAllPrograms}>
+				</lightning-button-icon>
+				<lightning-button-icon icon-name="utility:close" class="slds-panel__close" variant="bare"
+					alternative-text="close" title="Close" onclick={closeSidebar}></lightning-button-icon>
+			</div>
+			<div class="contentContainer slds-grow">
+				<lightning-spinner alternative-text="Loading" variant="brand" size="large" if:true={isLoading}>
+				</lightning-spinner>
+				<!--Illustration Start-->
+				<div class="slds-grid slds-grid_vertical slds-align_absolute-center slds-m-horizontal_large slds-text-align_center fullHeight slds-grow"
+					if:true={showIllustation}>
+					<div class="slds-illustration slds-illustration_large" aria-hidden="true">
+						<img src="/projRes/ui-home-private/emptyStates/noAssistant.svg" class="slds-illustration__svg"
+                            alt="" />
+						<div class="slds-text-longform">
+							<h3 class="slds-text-heading_medium">Nothing's here yet</h3>
+							<div class="slds-text-body_regular emptyDescription">
+								Create a Program, a few Milestones & Exercises using the &nbsp;
+								<a onclick={goToApp}>Guidance Center Demo Manager app</a>.
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--Illustration End-->
+
+				<!--All Programs Start-->
+				<div class="slds-grid slds-grid_vertical slds-grow content-view allProgramsView"
+					if:true={isShowAllPrograms}>
+					<div class="slds-m-horizontal_large slds-m-bottom_small">
+						<div
+							class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-m-top_medium slds-m-bottom_small">
+							<h2 class="slds-text-heading_small"><b>Selected for You</b></h2>
+						</div>
+						<template for:each={allPrograms} for:item="program" if:true={allPrograms}>
+							<div class="thp-item-card__container slds-grid" key={program.Id}>
+								<div class="thp-item-card__image slds-grow-none">
+									<div class="thp-content-icon__main slds-icon-standard-survey slds-icon_container">
+										<svg class="slds-icon" focusable="false" data-key="survey" aria-hidden="true"
+											viewBox="0 0 100 100" style="height: 100%; width: 100%">
+											<g>
+												<g>
+													<path
+														d="M24 23h44c2.2 0 4 1.8 4 4v4c0 2.2-1.8 4-4 4H24c-2.2 0-4-1.8-4-4v-4c0-2.2 1.8-4 4-4zM24 41h25c2.2 0 4 1.8 4 4v4c0 2.2-1.8 4-4 4H24c-2.2 0-4-1.8-4-4v-4c0-2.2 1.8-4 4-4zM65.9 52c7.7 0 14 6.3 14 14s-6.3 14-14 14-14-6.3-14-14 6.3-14 14-14zm7.9 10.9c.3-.3.3-1 0-1.3l-1.4-1.3c-.4-.4-1-.4-1.4 0l-7.5 8.4-3.4-3.4c-.4-.4-1-.4-1.4 0l-1.4 1.3c-.4.3-.4.9 0 1.3l4.8 4.7c.4.4.9.6 1.4.6.6 0 1-.2 1.4-.6l8.9-9.7zM24 59h23.2c-.8 2.3-1.2 4.3-1.2 6-.1 2.1.1 4.1.6 6H24c-2.2 0-4-1.8-4-4v-4c0-2.2 1.8-4 4-4z">
+													</path>
+												</g>
+											</g>
+										</svg>
+									</div>
+								</div>
+								<div
+									class="thp-item-card__content slds-grid slds-grid_vertical slds-grow slds-has-flexi-truncate">
+									<div class="thp-item-card__title">
+										<button class="slds-button_reset slds-text-link" data-programid={program.Id}
+                                            onclick={selectProgram}>
+                                            <b>{program.Name}</b>
+                                        </button>
+									</div>
+									<div class="thp-item-card__description">
+										<p>{program.Description__c}</p>
+									</div>
+									<div
+										class="thp-item-card__footer slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+										<div class="thp-item-card__footer-left slds-text-body_small">
+											<span class="thp-due-date">Due
+                                                <span class="slds-m-left_xx-small">
+                                                    <lightning-formatted-date-time value={program.Due_Date__c}
+                                                        year="numeric" month="numeric"
+                                                        day="numeric"></lightning-formatted-date-time>
+                                                </span>
+											</span>
+										</div>
+										<div class="thp-item-card__footer-right slds-text-body_small">
+											<div class="thp-progress-summary__container">
+												<div
+													class="thp-progress__container slds-grid slds-grid_vertical-align-center">
+													<span
+                                                        class="slds-m-right_xx-small">{program.Completion_Percentage__c}%</span>
+													<div class="thp-progress__bar">
+														<lightning-progress-bar value={program.Completion_Percentage__c}
+															size="medium" variant="circular"></lightning-progress-bar>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</template>
+					</div>
+				</div>
+				<!--All Programs End-->
+				<!--Program Detail Start-->
+				<div class="slds-grid slds-grid_vertical slds-grow content-view" if:true={isShowProgramDetails}>
+					<template for:each={program} for:item="program" if:true={program}>
+						<div class="thp-item-card__container" key={program.Id}>
+							<div class="slds-m-around_medium">
+								<div>
+									<div class="slds-grid slds-grid_vertical slds-border_bottom slds-p-bottom_medium">
+										<div class="header slds-grid slds-m-bottom_small">
+											<h2 class="slds-col slds-align-bottom slds-text-heading_medium">
+												<b>{program.Name}</b>
+											</h2>
+										</div>
+										<p>{program.Description__c}</p>
+										<div class="thp-side-panel-header__footer">
+											<div
+												class="slds-grid slds-grid_align-spread slds-size_1-of-1 slds-m-top_small">
+												<div
+													class="thp-side-panel-header__footer-summary slds-m-right_small slds-truncate">
+												</div>
+												<div class="thp-side-panel-header__footer-percent">
+													<b>{program.Completion_Percentage__c}%</b>
+												</div>
+											</div>
+											<div class="thp-side-panel-header__footer-progress-bar slds-m-top_xx-small">
+												<lightning-progress-bar value={program.Completion_Percentage__c}
+													size="medium" variant="circular">
+												</lightning-progress-bar>
+											</div>
+											<div class="slds-grid slds-grid_align-spread slds-m-top_x-small">
+												<div
+													class="thp-side-panel-header__footer-meta-left slds-m-right_small slds-truncate">
+													<span class="thp-due-date">Due
+                                                        <span
+                                                            class="slds-m-left_xx-small"><lightning-formatted-date-time
+                                                                value={program.Due_Date__c} year="numeric"
+                                                                month="numeric" day="numeric">
+                                                            </lightning-formatted-date-time></span>
+													</span>
+												</div>
+												<div class="thp-side-panel-header__footer-meta-right slds-truncate">
+													<span class="thp-progress-summary__text"
+                                                        aria-hidden="true">{program.Current_Value__c} of
+                                                        {program.Total_Milestones_and_Exercises__c}
+                                                    </span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!--Program Outcome Start-->
+							<div class="slds-m-horizontal_large slds-m-bottom_medium">
+								<div class="slds-m-bottom_medium">
+									<h3
+										class="slds-show_inline-block slds-text-heading_small slds-text-title_bold slds-m-bottom_medium">
+										Program Outcome
+										<lightning-helptext class="slds-p-left_x-small helptext"
+											content="A goal that you must achieve to complete the program. Progress is reflected when you take action towards the goal in Salesforce, and is evaluated twice daily.">
+										</lightning-helptext>
+									</h3>
+
+									<div class="thp-panel-program__section slds-border_bottom">
+										<div class="thp-item-list__container slds-p-bottom_small"
+											data-item-variant="bare">
+												 <template for:each={progOutcomeList} for:item="programOutcome"
+													if:true={progOutcomeList}>
+                                                        <article class="thp-item-list__item slds-m-top_small"  key={programOutcome.Id}>
+                                                        <div class="thp-milestone" data-size="small">
+                                                            <div class="thp-item-card__container slds-grid" data-variant="bare" data-size="small">
+                                                                
+                                                                <div if:false={milestoneOutcomeType}>
+                                                                    <div class="thp-item-card__image slds-grow-none">
+                                                                            <div if:true={programOutcome.Completed__c}
+                                                                                        class="slds-icon_container_circle slds-icon-action-approval slds-icon_container greenCheckIcon">
+                                                                                        <svg class="slds-icon"
+                                                                                            focusable="false"
+                                                                                            data-key="approval"
+                                                                                            aria-hidden="true"
+                                                                                            viewBox="0 0 52 52"
+                                                                                            style="width: 100%; height: 100%">
+                                                                                            <g>
+                                                                                                <path
+                                                                                                    d="M19 43.6L2.5 27c-.6-.6-.6-1.6 0-2.2l2.2-2.2c.6-.6 1.6-.6 2.2 0l12.4 12.5c.4.4 1.1.4 1.5 0l24.3-24.5c.6-.6 1.6-.6 2.2 0l2.2 2.2c.6.6.6 1.6 0 2.2L21.2 43.6c-.6.7-1.6.7-2.2 0z">
+                                                                                                </path>
+                                                                                            </g>
+                                                                                        </svg>
+                                                                                </div>
+                                                                                <lightning-progress-ring
+                                                                                    if:false={programOutcome.Completed__c}
+                                                                                    class="thp-milestone__progress-ring"
+                                                                                    value={programOutcome.Completion_Percentage__c}
+                                                                                    size="large">
+                                                                                </lightning-progress-ring>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                <div if:true={milestoneOutcomeType}>
+                                                                    <div class="thp-item-card__image slds-grow-none">
+                                                                        <div class="thp-content-icon__container slds-is-relative slds-show_inline-block">
+                                                                            <div class="thp-content-icon__main slds-icon-standard-account slds-icon_container">
+                                                                                <div class="thp-item-card__image slds-grow-none">
+                                                                                    <c-cx-in-custom-guidance-center-icon
+                                                                                        icon-name="programOutcome"
+                                                                                        is-complete={programOutcome.Completed__c}>
+                                                                                    </c-cx-in-custom-guidance-center-icon>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div if:true={programOutcome.Completed__c}>
+                                                                            <div class="slds-is-absolute slds-theme_success thp-content-icon__checkmark">
+                                                                                <div class="thp-content-icon__check-icon">
+                                                                                    <div class="slds-icon-utility-check slds-icon_container">
+                                                                                        <svg class="slds-icon" focusable="false" data-key="check"
+                                                                                            aria-hidden="true" viewBox="0 0 52 52"
+                                                                                            style="height: 50%; width: 50%;">
+                                                                                            <g>
+                                                                                                <path
+                                                                                                    d="M19.1 42.5L2.6 25.9c-.6-.6-.6-1.6 0-2.2l2.2-2.2c.6-.6 1.6-.6 2.2 0L19.4 34c.4.4 1.1.4 1.5 0L45.2 9.5c.6-.6 1.6-.6 2.2 0l2.2 2.2c.6.6.6 1.6 0 2.2L21.3 42.5c-.6.7-1.6.7-2.2 0z">
+                                                                                                </path>
+                                                                                            </g>
+                                                                                        </svg>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+
+                                                                <div
+                                                                    class="thp-item-card__content slds-grid slds-grid_vertical slds-grow slds-has-flexi-truncate">
+                                                                    <div class="slds-text-title_bold thp-item-card__title">
+                                                                        <div class="slds-text-title_bold" slot="title">
+                                                                             {programOutcome.Name__c}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="thp-item-card__description">
+                                                                        <div class="truncate__content description truncate__content--clamp">
+                                                                            <div class="truncate__inner">
+                                                                                <p>{programOutcome.Description__c}</p>
+                                                                            </div>
+                                                                        </div>
+                                                                        <button class="truncate__button slds-button_reset slds-text-link">
+                                                                        Show More
+                                                                    </button>
+                                                                    </div>
+                                                                    <div
+                                                                        class="thp-item-card__footer slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                                                                        <div class="thp-item-card__footer-left slds-text-body_small">
+                                                                            <span class="thp-due-date"  if:false={programOutcome.Completed__c}>
+                                                                            Due
+                                                                            <span class="slds-m-left_xx-small"><lightning-formatted-date-time
+                                                                                                    value={programOutcome.Due_Date__c}
+                                                                                                    year="numeric"
+                                                                                                    month="numeric"
+                                                                                                    day="numeric">
+                                                                                                </lightning-formatted-date-time></span>
+                                                                            
+                                                                            </span>
+                                                                                 <span
+                                                                                                                        if:true={programOutcome.Completed__c}>Completed&nbsp;
+                                                                                                                        <lightning-formatted-date-time
+                                                                                                                            value={programOutcome.Completed_On__c}
+                                                                                                                            year="numeric"
+                                                                                                                            month="numeric"
+                                                                                                                            day="numeric">
+                                                                                                                        </lightning-formatted-date-time>
+                                                                                                                    </span>
+                                                                            
+                                                                        </div>
+                                                                         <div class="thp-item-card__footer-right slds-text-body_small">
+                                                                                                        <div class="slds-text-body_small">
+                                                                                                            <div
+                                                                                                                class="thp-progress-summary__container thp-progress-summary_steps">
+                                                                                                                <span
+                                                                                                                        class="thp-progress-summary__text"
+                                                                                                                        aria-hidden="false">
+                                                                                                                        <lightning-formatted-number
+                                                                                                                            value={programOutcome.Current_Value__c}
+                                                                                                                            maximum-fraction-digits="0"></lightning-formatted-number>
+                                                                                                                        &nbsp;of&nbsp;
+                                                                                                                        <lightning-formatted-number
+                                                                                                                            value={programOutcome.Total_Target_Value__c}
+                                                                                                                            maximum-fraction-digits="0"></lightning-formatted-number>
+                                                                                                                    </span>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                    </div>
+                                                                           
+                                                                </div>
+                                                            </div>
+                                                        </div>
+													</article>
+												</template>
+										</div>
+									</div>
+								</div>
+								<!--Program Outcome End-->
+								<!--Section Header Start-->
+								<div>
+									<h3
+										class="slds-show_inline-block slds-text-heading_small slds-text-title_bold slds-m-bottom_medium">
+										Milestones &amp; Exercises
+										<lightning-helptext class="slds-p-left_x-small helptext"
+											content="Milestones are goals that you complete over the course of a program. Exercises are resources provided to help you train for and achieve milestones and the program outcome.">
+										</lightning-helptext>
+									</h3>
+									<lightning-button variant="base" label="Collapse All" title="Collapse All"
+										onclick={toggleExpand} class="slds-float_right slds-m-left_x-small">
+									</lightning-button>
+								</div>
+								<template for:each={allSectionsList} for:item="sections" if:true={allSectionsList}>
+                                    <div  key={sections.Id}>
+                                        
+                                        <div class="thp-panel-program__section slds-border_bottom">
+                                            <div class="section-container">
+                                                <div class="section-header is-open" data-toggle={sections.Id}>
+                                                    <h4 class="slds-m-top_small slds-m-bottom_small">
+                                                        <div class="slds-summary-detail">
+                                                            <lightning-button-icon size="medium"
+                                                                class="slds-accordion__summary-action-icon dropdown" icon-name="utility:switch"
+                                                                alternative-text="Settings" title="Settings" variant="bare" data-id={sections.Id} onclick={handleToggleClick}></lightning-button-icon>
+                                                            <div class="slds-m-horizontal_x-small">
+                                                                <div if:true={sections.Completed__c}>
+                                                                    <div class="slds-icon_container_circle slds-icon-action-approval slds-icon_container sectionCheckIcon">
+                                                                        <svg class="slds-icon"
+                                                                            focusable="false"
+                                                                            data-key="approval"
+                                                                            aria-hidden="true"
+                                                                            viewBox="0 0 52 52"
+                                                                            style="width: 13px;height: 13px;position: absolute;top: 6px;left: 6px;">
+                                                                            <g>
+                                                                                <path
+                                                                                    d="M19 43.6L2.5 27c-.6-.6-.6-1.6 0-2.2l2.2-2.2c.6-.6 1.6-.6 2.2 0l12.4 12.5c.4.4 1.1.4 1.5 0l24.3-24.5c.6-.6 1.6-.6 2.2 0l2.2 2.2c.6.6.6 1.6 0 2.2L21.2 43.6c-.6.7-1.6.7-2.2 0z">
+                                                                                </path>
+                                                                            </g>
+                                                                        </svg>
+                                                                    </div>
+                                                                </div>
+                                                                <lightning-progress-ring
+                                                                    if:false={sections.Completed__c}
+                                                                    value={sections.Completion_Percentage__c} size="small">
+                                                                </lightning-progress-ring>
+                                                            </div>
+                                                            <span class="slds-truncate slds-text-title_bold slds-text-color_default" title={sections.Name}>{sections.Name}</span>
+                                                        </div>
+                                                    </h4>
+                                                    <!--Section Body Start--> 
+                                                    <div class="section-body">
+                                                       
+                                                        <template for:each={sections.Milestones_and_Exercises__r} for:item="m" if:true={sections.Milestones_and_Exercises__r}>
+                                                                <div class="slds-m-left_xx-large" key={m.Id}>
+                                                                    <ul>
+                                                                        
+                                                                        <template if:false={m.MilestoneIsTrue__c}>
+                                                                        <li class="slds-p-bottom_medium slds-border_bottom">
+                                                                            <article class="thp-item-list__item slds-m-top_small">
+                                                                                <div class=" thp-item-card__container slds-grid">
+                                                                                    <div class="thp-item-card__image slds-grow-none">
+                                                                                        <div class="thp-content-icon__container slds-is-relative slds-show_inline-block">
+                                                                                            <div class="thp-content-icon__main slds-icon-standard-account slds-icon_container">
+                                                                                                <div class="thp-item-card__image slds-grow-none">
+                                                                                                    <c-cx-in-custom-guidance-center-icon
+                                                                                                        icon-name={m.Type__c}
+                                                                                                        is-complete={m.Completed_Ex__c}>
+                                                                                                    </c-cx-in-custom-guidance-center-icon>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div if:true={Completed_Ex__c}>
+                                                                                            <div class="slds-is-absolute slds-theme_success thp-content-icon__checkmark">
+                                                                                                <div class="thp-content-icon__check-icon">
+                                                                                                    <div class="slds-icon-utility-check slds-icon_container">
+                                                                                                        <svg class="slds-icon" focusable="false" data-key="check"
+                                                                                                            aria-hidden="true" viewBox="0 0 52 52"
+                                                                                                            style="height: 50%; width: 50%;">
+                                                                                                            <g>
+                                                                                                                <path
+                                                                                                                    d="M19.1 42.5L2.6 25.9c-.6-.6-.6-1.6 0-2.2l2.2-2.2c.6-.6 1.6-.6 2.2 0L19.4 34c.4.4 1.1.4 1.5 0L45.2 9.5c.6-.6 1.6-.6 2.2 0l2.2 2.2c.6.6.6 1.6 0 2.2L21.3 42.5c-.6.7-1.6.7-2.2 0z">
+                                                                                                                </path>
+                                                                                                            </g>
+                                                                                                        </svg>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    
+                                                                                    <div
+                                                                                        class="thp-item-card__content slds-grid slds-grid_vertical slds-grow slds-has-flexi-truncate">
+                                                                                        <div class="slds-text-title_bold thp-item-card__title">
+                                                                                            <button class="slds-button_reset slds-text-link"
+                                                                                            data-recid={m.Id}
+                                                                                                            data-type={m.Type__c}
+                                                                                                            data-url={m.URL__c}
+                                                                                                            data-iscomplete={m.Completed__c}
+                                                                                                            onclick={handleExerciseClick}>
+                                                                                                                <b>{m.Name__c}</b>
+                                                                                                            </button>
+                                                                                        </div>
+                                                                                        <div class="thp-item-card__description">
+                                                                                            <div class="truncate__content description truncate__content--clamp">
+                                                                                                <div class="truncate__inner">
+                                                                                                    <p>{m.Description__c}</p>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div
+                                                                                            class="thp-item-card__footer slds-grid slds-grid_align-start slds-grid_vertical-align-center">
+                                                                                            <div class="thp-item-card__footer-left slds-text-body_small">
+                                                                                            </div>
+                                                                                            <div class="thp-item-card__footer-right slds-text-body_small">
+                                                                                                <div class="thp-progress-summary__container">
+                                                                                                    <span class="slds-grid slds-grid_vertical-align-center"
+                                                                                                                if:false={m.Completed_Ex__c}>Due
+                                                                                                                <span
+                                                                                                                    class="slds-m-left_xx-small">
+                                                                                                                    <lightning-formatted-date-time
+                                                                                                                        value={m.Due_Date__c}
+                                                                                                                        year="numeric"
+                                                                                                                        month="numeric"
+                                                                                                                        day="numeric">
+                                                                                                                    </lightning-formatted-date-time></span></span>
+                                                                                                                        <div
+                                                                                                                    class="slds-grid slds-grid_vertical-align-center">
+                                                                                                                    <span
+                                                                                                                        if:true={m.Completed_Ex__c}>Completed&nbsp;
+                                                                                                                        <lightning-formatted-date-time
+                                                                                                                            value={m.Completed_On__c}
+                                                                                                                            year="numeric"
+                                                                                                                            month="numeric"
+                                                                                                                            day="numeric">
+                                                                                                                        </lightning-formatted-date-time>
+                                                                                                                    </span>
+                                                                                                                </div>
+                                                                                                    <span class="thp-progress-summary__text" aria-hidden="true"></span>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </article>
+                                                                        </li>
+                                                                        </template>
+                                                                 
+                                                                        <template if:true={m.MilestoneIsTrue__c}>
+                                                                        <div if:false={m.Program_Outcome__c}>
+                                                                        <li class="slds-p-bottom_medium">
+                                                                            <article class="thp-item-list__item slds-m-top_small">
+                                                                                <div class=" thp-milestone">
+                                                                                    <div class="thp-milestone__item">
+                                                                                        
+                                                                                        <div class="thp-item-card__container slds-grid">
+
+
+                                                                                            <div if:false={milestoneOutcomeType}>
+                                                                                                <div class="thp-item-card__image slds-grow-none">
+                                                                                                        <div if:true={m.Completed__c}
+                                                                                                        class="slds-icon_container_circle slds-icon-action-approval slds-icon_container greenCheckIcon">
+                                                                                                        <svg class="slds-icon" focusable="false"
+                                                                                                            data-key="approval" aria-hidden="true"
+                                                                                                            viewBox="0 0 52 52"
+                                                                                                            style="width: 100%; height: 100%">
+                                                                                                            <g>
+                                                                                                                <path
+                                                                                                                    d="M19 43.6L2.5 27c-.6-.6-.6-1.6 0-2.2l2.2-2.2c.6-.6 1.6-.6 2.2 0l12.4 12.5c.4.4 1.1.4 1.5 0l24.3-24.5c.6-.6 1.6-.6 2.2 0l2.2 2.2c.6.6.6 1.6 0 2.2L21.2 43.6c-.6.7-1.6.7-2.2 0z">
+                                                                                                                </path>
+                                                                                                            </g>
+                                                                                                        </svg>
+                                                                                                    </div>
+                                                                                                    <lightning-progress-ring
+                                                                                                        if:false={m.Completed__c}
+                                                                                                        class="thp-milestone__progress-ring"
+                                                                                                        value={m.Completion_Percentage__c}
+                                                                                                        size="large">
+                                                                                                    </lightning-progress-ring>
+                                                                                                </div>
+                                                                                            </div>
+
+                                                                                            <div if:true={milestoneOutcomeType}>
+                                                                                                <div class="thp-item-card__image slds-grow-none">
+                                                                                                    <div class="thp-content-icon__container slds-is-relative slds-show_inline-block">
+                                                                                                        <div class="thp-content-icon__main slds-icon-standard-account slds-icon_container">
+                                                                                                            <div class="thp-item-card__image slds-grow-none">
+                                                                                                                <c-cx-in-custom-guidance-center-icon
+                                                                                                                    icon-name="milestone"
+                                                                                                                    is-complete={m.Completed__c}>
+                                                                                                                </c-cx-in-custom-guidance-center-icon>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        <div if:true={m.Completed__c}>
+                                                                                                        <div class="slds-is-absolute slds-theme_success thp-content-icon__checkmark">
+                                                                                                            <div class="thp-content-icon__check-icon">
+                                                                                                                <div class="slds-icon-utility-check slds-icon_container">
+                                                                                                                    <svg class="slds-icon" focusable="false" data-key="check"
+                                                                                                                        aria-hidden="true" viewBox="0 0 52 52"
+                                                                                                                        style="height: 50%; width: 50%;">
+                                                                                                                        <g>
+                                                                                                                            <path
+                                                                                                                                d="M19.1 42.5L2.6 25.9c-.6-.6-.6-1.6 0-2.2l2.2-2.2c.6-.6 1.6-.6 2.2 0L19.4 34c.4.4 1.1.4 1.5 0L45.2 9.5c.6-.6 1.6-.6 2.2 0l2.2 2.2c.6.6.6 1.6 0 2.2L21.3 42.5c-.6.7-1.6.7-2.2 0z">
+                                                                                                                            </path>
+                                                                                                                        </g>
+                                                                                                                    </svg>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+
+
+                                                                                            <div
+                                                                                                class="thp-item-card__content slds-grid slds-grid_vertical slds-grow slds-has-flexi-truncate">
+                                                                                                <div class="slds-text-title_bold thp-item-card__title">
+                                                                                                    <div class="slds-text-title_bold">{m.Name__c}</div>
+                                                                                                </div>
+                                                                                                <div class="thp-item-card__description">
+                                                                                                    <div class="truncate__content description truncate__content--clamp" >
+                                                                                                        <div class="truncate__inner">
+                                                                                                            <p>{m.Description__c}</p>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div
+                                                                                                    class="thp-item-card__footer slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                                                                                                    <div class="thp-item-card__footer-left slds-text-body_small">
+                                                                                                        <span class="thp-due-date" if:false={m.Completed__c}>Due<span
+                                                                                                                    class="slds-m-left_xx-small">
+                                                                                                                    <lightning-formatted-date-time
+                                                                                                                        value={m.Due_Date__c}
+                                                                                                                        year="numeric"
+                                                                                                                        month="numeric"
+                                                                                                                        day="numeric">
+                                                                                                                    </lightning-formatted-date-time>
+                                                                                                                    </span>
+                                                                                                                </span>
+                                                                                                                  <span
+                                                                                                                        if:true={m.Completed__c}>Completed&nbsp;
+                                                                                                                        <lightning-formatted-date-time
+                                                                                                                            value={m.Completed_On__c}
+                                                                                                                            year="numeric"
+                                                                                                                            month="numeric"
+                                                                                                                            day="numeric">
+                                                                                                                        </lightning-formatted-date-time>
+                                                                                                                    </span>
+
+                                                                                                    </div>
+                                                                                                    <div class="thp-item-card__footer-right slds-text-body_small">
+                                                                                                        <div class="slds-text-body_small">
+                                                                                                            <div
+                                                                                                                class="thp-progress-summary__container thp-progress-summary_steps">
+                                                                                                                <span
+                                                                                                                        class="thp-progress-summary__text"
+                                                                                                                        aria-hidden="false">
+                                                                                                                        <lightning-formatted-number
+                                                                                                                            value={m.Current_Value__c}
+                                                                                                                            maximum-fraction-digits="0"></lightning-formatted-number>
+                                                                                                                        &nbsp;of&nbsp;
+                                                                                                                        <lightning-formatted-number
+                                                                                                                            value={m.Total_Target_Value__c}
+                                                                                                                            maximum-fraction-digits="0"></lightning-formatted-number>
+                                                                                                                    </span>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </article>
+                                                                        </li>
+                                                                        </div>
+                                                                        </template>
+                                                                     
+                                                                    </ul>
+                                                                </div>
+                                                        </template>
+                                                       
+                                                    </div>
+                                                   <!--Section Body End--> 
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+							</div>
+						</div>
+					</template>
+				</div>
+				<!--Program Detail End-->
+				<!-- video or lesson detail Start -->
+				<div class="slds-grid slds-grid_vertical slds-grow content-view allProgramsView"
+					if:true={isShowLessonDetails}>
+					<div class="thp-item-card__container" style="border:0;">
+						<div class="slds-m-around_medium">
+							<div if:true={isLessonContent}> 
+                                 <template if:true={lesson}>
+								<div class="slds-grid slds-grid_vertical slds-border_bottom slds-p-bottom_medium">
+									<div class="header slds-grid slds-m-bottom_small">
+										<h2 class="slds-col slds-align-bottom slds-text-heading_medium">
+											<b>{lessonName}</b>
+										</h2>
+									</div>
+									<p>{lessonDescription}</p>
+								</div>
+                                <lightning-formatted-rich-text class="slds-p-top_medium" style="display:block;"
+                                    value={lessonRichText}
+                                ></lightning-formatted-rich-text>
+                                 </template>
+							</div>
+                            
+							<div if:false={isLessonContent}>
+                                 <template if:true={video} >
+								<div class="slds-grid slds-grid_vertical slds-p-bottom_medium">
+									<div class="header slds-grid slds-m-bottom_small">
+										<h2 class="slds-col slds-align-bottom slds-text-heading_medium">
+											<b>{videoName}</b>
+										</h2>
+									</div>
+									<iframe if:true={videoEmbedURL} width="100%" height="360" src={videoEmbedURL}
+										title="Video player" frameborder="0"
+										allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+										allowfullscreen>
+									</iframe>
+									<p class="slds-p-top_medium">{videoDescription}</p>
+								</div>
+                                 </template>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- video or lesson detail end -->
+			</div>
+		</div>
+	</section>
+</template>

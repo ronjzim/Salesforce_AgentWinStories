@@ -1,0 +1,24 @@
+.prodExcpList::marker {
+  color: transparent;
+}
+
+.spinnerContainer {
+  background-color: rgba(255, 255, 255, 0.75) !important;
+  position: fixed;
+}
+
+.exceptionContainer .slds-badge {
+  --slds-c-badge-text-color: #fff;
+}
+
+[data-aprvstatus="Awaiting Response"] {
+  --slds-c-badge-color-background: #747474;
+}
+
+[data-aprvstatus="Approved"] {
+  --slds-c-badge-color-background: #2e844a;
+}
+
+[data-aprvstatus="Denied"] {
+  --slds-c-badge-color-background: #ea001e;
+}

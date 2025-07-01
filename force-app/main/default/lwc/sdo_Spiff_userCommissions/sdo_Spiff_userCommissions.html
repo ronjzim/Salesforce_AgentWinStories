@@ -1,0 +1,110 @@
+<template>
+    
+    <div class="spiff_container">
+        <!--Commission Accordion-->
+        
+        <div class="spiff_commission-estimator" if:true={showPageLoader}>
+            <div class="spiff_message-container">
+                <img src={leftDotImage} class="spiff_dot-left" if:true={leftDotImage}></img>
+                <img src={tennisImage} class="spiff_tennisImage" if:true={showLoader}></img>
+            </div>
+        </div>
+        <!--Spiff Entry Message-->
+        <div if:false={showPageLoader}>
+            <div id="spiff_entry-message-container" class="spiff_entry-message-container" if:true={loadInitiatorMessage}>
+                <div class="spiff_entry-message-header">
+                <span>Did you Quick Save ?</span>
+                </div>
+                <div id="spiff_entry-message" class="spiff_entry-message-body">
+                    <span>Your Quote was last saved on <lightning-formatted-date-time value={lastModifiedDateFormatted}  year="numeric" month="short" day="2-digit" hour="numeric" minute="2-digit"
+                        time-zone-name="short"></lightning-formatted-date-time>. To calculate the latest estimate for your commission be sure to go back and hit the  "Quick Save" button. Close the message to go back or press Continue to get  your estimate.</span>
+                </div>
+                <div class="spiff_entry-message_footer">
+                    <lightning-button variant="brand" onclick={loadCommission} label="Continue"></lightning-button>
+                </div>
+            </div>
+        </div>
+
+        <!--Spiff Commission Estimator-->
+        <div class="spiff_commission-estimator" if:false={loadInitiatorMessage}>
+            <div if:true={showMainBody}>
+                <ul class="slds-accordion">
+
+                    <li class="slds-accordion__list-item">
+                      <section class="slds-accordion__section spiff_no-border spiff_bold slds-is-open spiff_accordion-section" data-id="accordion-section">
+                        
+                       <div class="slds-accordion__summary spiff_accordion-summary" data-id="accordion-header">
+          
+                          <lightning-layout>
+                             <!--Commission Accordion Header--> 
+                            <lightning-layout-item size="11" small-device-size="11" medium-device-size="11" large-device-size="11">
+                                <lightning-icon icon-name="utility:chevronright" size="x-small" onclick={changeState} data-id="iconRight" if:false={open}></lightning-icon>
+                                <lightning-icon icon-name="utility:chevrondown" size="x-small" onclick={changeState} data-id="iconDown" if:true={open}></lightning-icon>
+                                    <img class="spiff_logo" src={spiffLogo}/>
+                                    <span if:false={enableCommissionBreakdownLink} class="spiff_commission-breakdown-disabled">COMMISSION BREAKDOWN</span>
+                                    <div class="spiff_last-Fetch" if:true={showAsOnHeader}>
+                                            As of&nbsp;<lightning-formatted-date-time value={timeStamp} year="numeric" month="short" day="2-digit" hour="numeric" minute="2-digit"
+                                        time-zone-name="short"></lightning-formatted-date-time>&nbsp;&nbsp;
+                                    </div>
+                          </lightning-layout-item>
+                          
+                            <!--Refresh button-->
+                            <lightning-layout-item size="1" small-device-size="1" medium-device-size="1" large-device-size="1">
+                              <div class="spiff_refresh_button">
+                                <span>
+                                    <lightning-icon style="cursor:pointer;" class="spiff_refresh" icon-name="utility:refresh" alternative-text="Refresh Commission from Spiff" title="Refresh Commission from Spiff" size="xx-small" onclick={refresh}></lightning-icon>
+                                </span>
+                              </div>
+                            </lightning-layout-item>
+                          </lightning-layout>
+                          
+                        </div>
+          
+                        <!--Commission Data-->
+                        <div class="slds-accordion__content"  if:true={open}>
+                            <div class="spiff_body">
+                                <!--Show Message/Exceptions-->
+                                <div class="spiff_exception-window" if:true={showMessage}>
+                                    <div class="spiff_message-container">
+                                        <img src={leftDotImage} class="spiff_dot-left" if:true={leftDotImage}></img>
+                                        <img src={tennisImage} class="spiff_tennisImage" if:true={showLoader}></img>
+                                        <span class="spiff_message">{message}</span>
+                                    </div>
+                                </div>
+            
+            
+                                <!--Show the Header of Statement Period-->
+                                <div class="spiff_commission-period">
+                                    <span class="spiff_statement-period">{commissionResponse.statement_period} </span><span class="spiff_days-left">{commissionResponse.days_left} days left</span>
+                                </div>
+        
+                                <!--Show Commission Plans and horizontal stack chart-->
+                                <template for:each={commissionResponse.plans} for:item="commission">
+                                    <c-sdo_-spiff_commission-accordion key={commission.id} commission={commission}></c-sdo_-spiff_commission-accordion>
+                                    <c-sdo_-spiff_horizontal-Stack-Chart key={commission.id} show-component="true" commission={commission}></c-sdo_-spiff_horizontal-Stack-Chart>
+                                </template>
+        
+                            
+                            </div>
+          
+                        </div>
+                      </section>
+                    </li>
+                
+                  </ul>
+            </div>
+
+            <div class="spiff_exception-window" if:true={showVirtualBody}>
+                <div class="spiff_no-line-item-window">
+                    <img src={noLineItemImage} class="spiff_no-line-item-image" if:true={noLineItemImage}></img>
+                    <div class="spiff_section-break-large"></div>
+                    <div class="spiff_lets-get-started-label" style="color:black">{customLabels.letsGetStartedMessage}</div>
+                    <div class="spiff_no-line-item-label" style="color:black">{customLabels.noLineItemMessage}</div>
+                </div>
+            </div>
+        </div>
+        
+        
+    </div>
+
+</template>

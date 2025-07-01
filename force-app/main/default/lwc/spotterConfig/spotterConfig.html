@@ -1,0 +1,359 @@
+<template>
+  <div class="slds-grid slds-gutters_x-small slds-is-relative height100">
+    <template if:true={loading}>
+      <lightning-spinner
+        alternative-text="Loading"
+        size="medium"
+      ></lightning-spinner>
+    </template>
+
+    <template if:true={doConfigsExist}>
+      <div class="slds-col slds-size_2-of-12">
+        <article class="slds-card height100 slds-scrollable_y">
+          <div class="slds-card__header slds-grid">
+            <header
+              class="slds-media slds-media_center slds-has-flexi-truncate"
+            >
+              <!-- <div class="slds-media__figure">
+                <span class="slds-icon_container slds-icon-standard-account" title="account">
+                  <svg class="slds-icon slds-icon_small" aria-hidden="true">
+                    <use xlink:href="/assets/icons/standard-sprite/svg/symbols.svg#account"></use>
+                  </svg>
+                  <span class="slds-assistive-text">account</span>
+                </span>
+              </div> -->
+              <div class="slds-media__body">
+                <h2
+                  class="slds-card__header-title slds-truncate slds-text-heading_small"
+                >
+                  Configurations
+                </h2>
+              </div>
+            </header>
+          </div>
+          <div class="slds-card__body">
+            <div class="slds-p-horizontal_small">
+              <lightning-input
+                name="enter-search"
+                variant="label-hidden"
+                type="search"
+                placeholder="Quick Find"
+                onchange={filterConfigList}
+              ></lightning-input>
+            </div>
+            <lightning-vertical-navigation
+              onselect={handleConfigSelect}
+              selected-item={navSelectedItem}
+            >
+              <lightning-vertical-navigation-section>
+                <template for:each={filteredConfigList} for:item="config">
+                  <lightning-vertical-navigation-item
+                    key={config.Id}
+                    label={config.Name}
+                    name={config.Id}
+                  ></lightning-vertical-navigation-item>
+                </template>
+              </lightning-vertical-navigation-section>
+            </lightning-vertical-navigation>
+          </div>
+        </article>
+      </div>
+    </template>
+    <template if:true={currentConfig.Id}>
+      <div class="slds-col slds-size_7-of-12">
+        <article class="slds-card height100 slds-scrollable_y">
+          <div class="slds-p-around_small">
+            <div
+              class="description slds-text-align_center slds-text-heading_small"
+            >
+              <p>
+                Click on the image to create hotspots. Drag to change positions.
+                Click on any hotspot or its section to link it to a product.
+              </p>
+            </div>
+            <div class="lg-workspace-container slds-m-vertical_small">
+              <lightning-accordion>
+                <lightning-accordion-section label={currentConfig.Title__c}>
+                  <div class="lg-container">
+                    <img
+                      class="lg-image"
+                      src={currentConfig.Image_URL__c}
+                      onclick={handleImageClick}
+                    />
+                    <template
+                      for:each={hotspots}
+                      for:item="hotspot"
+                      for:index="index"
+                    >
+                      <div
+                        class="lg-hotspot"
+                        style={hotspot.Style_CSS__c}
+                        key={hotspot.Style_CSS__c}
+                        data-idx={index}
+                        onmousedown={dragMouseDown}
+                        onclick={handleHotspotClicked}
+                      >
+                        <div class="lg-hotspot-dot"></div>
+                      </div>
+                    </template>
+                  </div>
+                </lightning-accordion-section>
+              </lightning-accordion>
+            </div>
+            <div class="slds-text-align_center">
+              <div class="slds-m-bottom_large" if:true={showChangeFileUpload}>
+                <lightning-file-upload
+                  label="Upload New Image"
+                  name="changeImageUploader"
+                  accept={acceptedFormats}
+                  onuploadfinished={handleNewImageUploadFinished}
+                  multiple="false"
+                >
+                </lightning-file-upload>
+              </div>
+              <lightning-button
+                variant="base"
+                label="Change Image"
+                title="Change Image"
+                onclick={handleChangeImage}
+                class="slds-m-left_x-small"
+              ></lightning-button>
+              <lightning-button
+                variant="destructive-text"
+                label="Delete"
+                title="Delete Configuration"
+                onclick={handleDeleteConfig}
+                class="slds-m-left_x-small"
+              ></lightning-button>
+              <lightning-button
+                label="Cancel"
+                title="Cancel Configuration"
+                onclick={handleCancelConfig}
+                class="slds-m-left_x-small"
+              ></lightning-button>
+              <lightning-button
+                variant="brand"
+                label="Save"
+                title="Save Configuration"
+                onclick={handleSaveConfig}
+                class="slds-m-left_x-small"
+              ></lightning-button>
+              <!-- disabled={isSaveDisabled} -->
+            </div>
+          </div>
+        </article>
+      </div>
+      <div class="slds-col slds-size_3-of-12">
+        <article class={detailSectionCardCss}>
+          <div class="slds-p-horizontal_small slds-p-bottom_small">
+            <lightning-tabset>
+              <lightning-tab label="Details">
+                <lightning-input
+                  type="text"
+                  label="Configuration Name"
+                  required
+                  value={currentConfig.Name}
+                  onchange={handleConfigNameChange}
+                  class="slds-m-bottom_small configNameField"
+                  if:true={currentConfig}
+                ></lightning-input>
+                <lightning-input
+                  type="text"
+                  label="Title"
+                  required
+                  value={currentConfig.Title__c}
+                  onchange={handleConfigTitleChange}
+                  class="slds-m-bottom_large configTitleField"
+                  if:true={currentConfig}
+                ></lightning-input>
+
+                <div
+                  if:true={showEmptyHotspotMessage}
+                  class="slds-inline_icon_text slds-grid slds-inline_icon_text--error slds-m-bottom_large"
+                >
+                  <lightning-icon
+                    icon-name="utility:error"
+                    alternative-text="Error!"
+                    title="Error"
+                    variant="error"
+                    size="x-small"
+                    class="slds-col"
+                  ></lightning-icon>
+                  <div class="slds-col slds-align-middle slds-text-color_error">
+                    <p>{hotspotsWithNoProduct}</p>
+                  </div>
+                </div>
+
+                <template
+                  for:each={hotspots}
+                  for:item="hotspot"
+                  for:index="index"
+                >
+                  <div
+                    class="slds-section hotspot-section slds-m-bottom_large"
+                    data-idx={index}
+                    data-product={hotspot.Product__c}
+                    key={hotspot.Style_CSS__c}
+                    onclick={handleSectionClick}
+                  >
+                    <h3 class="slds-section__title">
+                      <button
+                        aria-expanded="true"
+                        class="slds-button slds-section__title-action"
+                      >
+                        <lightning-icon
+                          class="slds-section__title-action-icon slds-button__icon_left"
+                          size="x-small"
+                          icon-name="utility:switch"
+                          alternative-text="Open/Close Section"
+                          title="Link hotspot to product"
+                        >
+                        </lightning-icon>
+                        <span
+                          class="slds-truncate hotspot-section-heading"
+                          title="Hotspot"
+                          >Hotspot</span
+                        >
+                        <lightning-button-icon
+                          icon-name="utility:delete"
+                          variant="bare"
+                          onclick={handleDeleteHotspot}
+                          alternative-text="Delete"
+                          title="Delete"
+                          data-idx={index}
+                        ></lightning-button-icon>
+                      </button>
+                    </h3>
+                    <div
+                      aria-hidden="false"
+                      class="slds-section__content slds-p-left_small"
+                    >
+                      <lightning-record-edit-form
+                        record-id={hotspot.Id}
+                        object-api-name="Spotter_Hotspot__c"
+                      >
+                        <lightning-messages> </lightning-messages>
+                        <lightning-input-field
+                          data-idx={index}
+                          onchange={handleProductSelect}
+                          field-name="Product__c"
+                          value={hotspot.Product__c}
+                        >
+                        </lightning-input-field>
+                      </lightning-record-edit-form>
+                      <lightning-record-view-form
+                        if:true={hotspot.Product__c}
+                        record-id={hotspot.Product__c}
+                        object-api-name="Product2"
+                      >
+                        <div class="slds-grid">
+                          <div class="slds-col slds-size_1-of-2">
+                            <lightning-output-field
+                              field-name="StockKeepingUnit"
+                            >
+                            </lightning-output-field>
+                          </div>
+                          <div class="slds-col slds-size_1-of-2">
+                            <lightning-output-field field-name="IsActive">
+                            </lightning-output-field>
+                          </div>
+                        </div>
+                      </lightning-record-view-form>
+                    </div>
+                  </div>
+                </template>
+              </lightning-tab>
+            </lightning-tabset>
+          </div>
+        </article>
+      </div>
+    </template>
+    <template if:false={currentConfig.Id}>
+      <div class="slds-col slds-grow">
+        <article class="slds-card height100">
+          <div
+            class="slds-grid height100 slds-grid_vertical-align-center slds-grid_align-center"
+          >
+            <div class="slds-col flexGrow1 slds-text-align_center">
+              <c-spotter-illustration></c-spotter-illustration>
+              <h3 class="slds-m-bottom_medium slds-text-heading_medium">
+                This looks empty... upload an image to get started!
+              </h3>
+              <lightning-file-upload
+                name="fileUploader"
+                accept={acceptedFormats}
+                onuploadfinished={handleUploadFinished}
+                multiple="false"
+              >
+              </lightning-file-upload>
+              <p
+                class="slds-m-top_x-large slds-m-bottom_xx-large slds-text-body_regular"
+                if:true={doConfigsExist}
+              >
+                Or choose an existing configuration
+              </p>
+            </div>
+          </div>
+        </article>
+      </div>
+    </template>
+  </div>
+
+  <!--Modal Popup-->
+  <section
+    role="dialog"
+    tabindex="-1"
+    aria-labelledby="modal-heading-01"
+    aria-modal="true"
+    aria-describedby="modal-content-id-1"
+    class={modalClass}
+  >
+    <div class="slds-modal__container">
+      <header class="slds-modal__header">
+        <button
+          class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+          title="Close"
+          onclick={closeModal}
+        >
+          <lightning-icon
+            icon-name="utility:close"
+            alternative-text="Close Modal"
+            variant="inverse"
+            size="small"
+          >
+          </lightning-icon>
+        </button>
+        <h2
+          id="modal-heading-01"
+          class="slds-text-heading_medium slds-modal__title slds-hyphenate"
+        >
+          {modalHeader}
+        </h2>
+      </header>
+      <div
+        class="slds-modal__content slds-p-around_medium"
+        id="modal-content-id-1"
+      >
+        <p class="slds-text-align_center">{modalContent}</p>
+      </div>
+      <footer class="slds-modal__footer">
+        <lightning-button
+          variant="neutral"
+          label="Cancel"
+          title="cancel"
+          onclick={closeModal}
+        >
+        </lightning-button>
+        <lightning-button
+          variant="brand"
+          class="slds-m-left_x-small"
+          label={modalActionLabel}
+          title={modalActionLabel}
+          onclick={handleModalConfirm}
+        >
+        </lightning-button>
+      </footer>
+    </div>
+  </section>
+  <div class={modalBackdropClass}></div>
+</template>

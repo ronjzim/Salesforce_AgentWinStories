@@ -1,0 +1,46 @@
+.builderContainer {
+    height: 100%;
+    max-width: 100%;
+    position: relative;
+}
+
+.builderHeader {
+    position: sticky;
+    background-color: white;
+    top: 0;
+    z-index: 500;
+    width: 100%;
+}
+
+.builderBody {
+    max-width: 95vw !important;
+    position: relative;
+}
+
+.contentPane, .previewPane {
+    top: 0;
+    position: relative;
+    transition-duration: 0.3s;
+    transition-timing-function: ease-in-out;
+}
+
+.previewEnlargeButton {
+    position: absolute;
+    top: 100px;
+    left: -1em;
+}
+
+.previewShrinkButton {
+    position: absolute;
+    top: 100px;
+    left: -0.1em;
+}
+
+.importTextarea {
+    --slds-c-textarea-sizing-min-height: 20em;
+}
+
+.errorMessageAccordion {
+    --slds-c-accordion-section-spacing-block-start: 0;
+    --slds-c-accordion-section-spacing-block-end: 0;
+}

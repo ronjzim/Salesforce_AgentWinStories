@@ -1,0 +1,228 @@
+.spiff_container{
+    padding: 0px 20px 10px 20px;
+    text-align: -webkit-center; 
+}
+
+.spiff_band-list{
+    position: relative;
+    margin: auto;
+    height: 27px;
+    left: -1px;
+    background-color: #f6f8f9;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+
+.spiff_band-base{
+    height: 27.5px;
+    float: left;
+    position: relative;
+}
+
+.spiff_section-break-large{
+    height: 1px;
+    padding : 20px;
+}
+
+.spiff_section-break-medium{
+    height: 1px;
+    padding : 10px;
+}
+
+.spiff_section-break-small{
+    height: 1px;
+    padding : 5px;
+}
+
+.spiff_section-break-xsmall{
+    height: 1px;
+    padding : 2px;
+}
+
+.spiff_band-color{
+    text-align: center;
+}
+
+.spiff_next-tier-color{
+    position: absolute;
+    height: 2px;
+    border-radius: 2px;
+}
+
+.spiff_achieved-quota-header{
+    padding-bottom: 5px;
+    text-align: center;
+    padding: 0px 4px 0px 4px;
+    white-space: nowrap;
+    position: relative;
+
+}
+
+.spiff_achieved-quota{
+    color: grey;
+    font-size: 12px;
+    z-index: 2;
+    background: white;
+    position: relative;
+    font-weight: 400;
+}
+
+.spiff_bold{
+    color: black;
+    font-size: 11px;
+    z-index: 2;
+    background: white;
+    position: relative;
+}
+
+.spiff_seperator{
+    height: 110px;
+    position: absolute;
+    top: -84px;
+    z-index: 1;
+    border-style: dashed;
+    border-color: #c4c6c7;
+    border-inline-start: none;
+    border-width: 1.5px;
+}
+
+.spiff_closedSeperator{
+    width: 0.1px;
+    height: 40px;
+    background: grey;
+    position: absolute;
+    top: 26px;
+    z-index: 1;
+    border: 0.6px solid #e3e8eb;
+}
+.spiff_ifClosedSeperator{
+    width: 0.1px;
+    height: 25px;
+    background: grey;
+    position: absolute;
+    top: 26px;
+    z-index: 1;
+    border: 0.6px solid #e3e8eb;
+}
+.spiff_closedSeperator-text{
+    position: absolute;
+    top: 55px;
+    font-weight: 700;
+    font-size: 11px;
+    color : black;
+}
+.spiff_ifClosedSeperator-text{
+    position: absolute;
+    top: 40px;
+    font-weight: 700;
+    font-size: 11px;
+    color : black;
+}
+
+section{
+    height: 26.3px;
+}
+.spiff_next-tier-band{
+    position: relative;
+    margin: auto;
+    height: 1.5px;
+    left: -1px;
+    background-color: #e5e5e5;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+
+.spiff_space{
+    padding : 0 10px 0 0;
+    height: 0px;
+    width:1px;
+    display: inline-block;
+}
+
+.spiff_legend{
+    width: 10px;
+    height: 10px;
+    border-radius: 10px;
+    display: inline-block;
+}
+
+.spiff_legend-text{
+    display: inline-block;
+    padding: 0 0 0 6px;
+    color : grey;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.spiff_legend-container{
+    display: inline-block;
+    padding: 0px 0px 0px 4px;
+}
+
+.spiff_legend-list{
+    float: left;
+}
+
+.spiff_quota-bar{
+    position: relative;
+    height: 8px;
+    border: 1.2px solid #c4c6c7;
+    border-bottom: none;
+    float: left;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+
+.spiff_amount-label{
+    font-weight: 400;
+    text-align: center;
+    background-color: #f6f8f9;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    border-radius: 4px;
+    display: inline-block;
+    color: grey;
+    font-size: 12px;
+}
+
+.spiff_current-tier{
+    position: relative;
+    float: left;
+    top:-20px;
+    z-index: 2;
+    background: white;
+    padding: 0px 2px 0px 2px;
+    font-size: 12px;
+}
+
+.spiff_next-tier{
+    position: relative;
+    top: -20px;
+    float: right;
+    z-index: 2;
+    background: white;
+    padding: 0px 2px 0px 2px;
+    font-size: 12px;
+}
+
+.spiff_band-window{
+    position: absolute;
+    background-color: #00000000;
+    z-index: 3;
+    height: 26.5px;
+    outline: 2px solid white;
+    border-radius: 4px;
+}
+
+@media only screen and (max-width: 600px) {
+    .spiff_section-mobile-footer{ 
+        height: 1px;
+        padding : 20px;
+    }
+}

@@ -1,0 +1,117 @@
+<template>
+    <div class="dataContainer">
+        <div class="actionBar slds-p-around_x-small">
+            <lightning-button-icon icon-name="utility:orchestrator" tooltip="Randomize values" title="Randomize values"
+                onmousedown={handleRandomizeClick} class="slds-p-horizontal_xxx-small"></lightning-button-icon>
+            <lightning-button-icon icon-name="utility:clear" tooltip="Clear selected values"
+                title="Clear selected values" onmousedown={handleClearSelectedClick}
+                class="slds-p-horizontal_xxx-small"></lightning-button-icon>
+            <lightning-button-icon icon-name="utility:delete" tooltip="Clear all values" title="Clear all values"
+                onmousedown={handleClearAllClick} class="slds-p-horizontal_xxx-small"></lightning-button-icon>
+            <lightning-button label={saveBlankButton.label} onmousedown={handleSaveBlanksClick}
+                icon-name={saveBlankButton.iconName} variant={saveBlankButton.variant} class="slds-p-horizontal_xxx-small slds-m-top_medium"></lightning-button>
+        </div>
+        <div class="tableContainer">
+            <table class="slds-p-top_x-small" onkeydown={handleTableKeyDown}>
+                <template lwc:if={has2Groupings}>
+                    <tr class="firstRow"  onkeydown={handleTableKeyDown}>
+                        <th class="blankCell">
+                            <lightning-button-icon icon-name="utility:rotate" size="x-small" tooltip="Switch groupings"
+                                title="Switch groupings" onclick={handleSwitchGroupingsClick}></lightning-button-icon>
+                        </th>
+                        <template for:each={columnHeaders} for:item="col" for:index="colIndex">
+                            <th scope="col" class="columnHeader highlightable slds-truncate slds-text-link_reset"
+                                key={col} data-col-index={colIndex} onmouseenter={handleHeaderMouseEnter}
+                                onmouseleave={handleHeaderMouseLeave} onmousedown={handleHeaderMouseDown}
+                                onmouseup={handleTableMouseUp}>
+                                <span class="slds-p-around_xx-small slds-truncate" title={col.value}>{col.value}</span>
+                            </th>
+                        </template>
+                    </tr>
+                </template>
+                <template for:each={rows} for:item="row" for:index="rowIndex">
+                    <tr key={row.header} data-row-index={rowIndex}>
+                        <th scope="row" class="rowHeader highlightable slds-truncate slds-text-link_reset"
+                            data-row-index={rowIndex} onmouseenter={handleHeaderMouseEnter}
+                            onmouseleave={handleHeaderMouseLeave} onmousedown={handleHeaderMouseDown}
+                            onmouseup={handleTableMouseUp} onkeydown={handleTableKeyDown}>
+                            <span class="slds-p-around_xx-small" title={row.header}>{row.header}</span>
+                        </th>
+                        <template for:each={row.data} for:item="cell" for:index="colIndex">
+                            <td key={cell.index}>
+                                <lightning-input value={cell.value} class="inputCell highlightable" type="number"
+                                    formatter={reportDetails.metricType} label="Enter Value" variant="label-hidden"
+                                    data-row-index={rowIndex} data-col-index={colIndex} placeholder={placeholder}
+                                    oncommit={handleCellValueChange} onmouseenter={handleCellMouseEnter}
+                                    onmouseleave={handleCellMouseLeave} onmousedown={handleCellMouseDown}
+                                    onmouseup={handleTableMouseUp} onfocus={handleCellFocus}
+                                    step="any"></lightning-input>
+                            </td>
+                        </template>
+                    </tr>
+                </template>
+            </table>
+        </div>
+
+        <template lwc:if={showRandomizeModal}>
+            <!--   -->
+            <c-dbm-modal data-modal-name="randomize" header="Randomize Values" oncancel={handleRandomizeModalCancel}
+                onconfirm={handleRandomizeModalSave}>
+                <div>
+                    <div class="slds-grid slds-gutters slds-p-vertical_x-small">
+                        <lightning-input label="Lower Bound" type="number" value={randomizeModalDetails.lowerBound}
+                            data-randomize-property="lowerBound"
+                            class="slds-col slds-size_1-of-3 randomizeLowerBound"></lightning-input>
+                        <lightning-input label="Upper Bound" type="number" value={randomizeModalDetails.upperBound}
+                        data-randomize-property="upperBound"
+                            class="slds-col slds-size_1-of-3 randomizeUpperBound"></lightning-input>
+                        <lightning-input label="Decimal Places" type="number" value={randomizeModalDetails.numDecimals} min=0
+                            max=6 data-randomize-property="numDecimals"
+                            class="slds-col slds-size_1-of-3 randomizeDecimals"></lightning-input>
+                    </div>
+                    <!-- <div class="slds-grid slds-gutters slds-p-vertical_x-small">
+                    <lightning-combobox label="Apply to" options={randomizeApplyTo.options} value={randomizeApplyTo.default.value} class="slds-col slds-size_1-of-1"></lightning-combobox>
+                    <lightning-combobox label="Overwrite" options={randomizeApplyTo.options} value={randomizeApplyTo.default.value} class="slds-col slds-size_1-of-1"></lightning-combobox>
+                </div> -->
+                    <div class="toggleContainer">
+                        <lightning-input label="Apply to Selected Cells Only" type="toggle"
+                            checked={randomizeModalDetails.selectedOnly} data-randomize-property="selectedOnly"
+                            message-toggle-active="Random values will populate only selected cells"
+                            message-toggle-inactive="Random values will populate all cells"
+                            class="slds-p-vertical_x-small randomizeApplyTo"></lightning-input>
+                    </div>
+                    <div class="toggleContainer">
+                        <lightning-input label="Overwrite Existing Values" type="toggle"
+                            checked={randomizeModalDetails.overwrite} data-randomize-property="overwrite"
+                            message-toggle-active="Random values will overwrite any existing values"
+                            message-toggle-inactive="Random values will only populate blank cells"
+                            class="slds-p-vertical_x-small randomizeOverwrite"></lightning-input>
+                    </div>
+                </div>
+            </c-dbm-modal>
+            <!-- <section role="dialog" tabindex="-1" aria-modal="true" onkeydown={handleBulkAddModalKeydown}
+            class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                    onclick={closeBulkAddModal}>
+                    <lightning-icon icon-name="utility:close" size="small"></lightning-icon>
+                    <span class="slds-assistive-text">Cancel and close</span>
+                </button>
+                <div class="slds-modal__header">
+                    <h1 class="slds-modal__title slds-hyphenate">Bulk Add Entries</h1>
+                </div>
+                <div class="slds-modal__content slds-p-around_medium">
+                    <lightning-textarea class="bulkAddTextarea" label="Add one entry per line"
+                        autofocus></lightning-textarea>
+                </div>
+                <div class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" aria-label="Cancel and close"
+                        onclick={closeBulkAddModal}>Cancel</button>
+                    <button class="slds-button slds-button_brand" onclick={handleBulkAddModalSaveClick}>Save</button>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div> -->
+        </template>
+    </div>
+</template>

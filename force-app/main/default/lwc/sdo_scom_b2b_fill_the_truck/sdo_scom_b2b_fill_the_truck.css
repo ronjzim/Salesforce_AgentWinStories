@@ -1,0 +1,28 @@
+:host {
+    --c-progress-bar-width: 24px;
+    --slds-c-card-body-spacing-inline-start: 8px;
+    --slds-c-card-body-spacing-inline-end: 8px;
+    --slds-c-card-body-spacing-block-start: 8px;
+    --slds-c-card-body-spacing-block-end: 8px;
+}
+.progress-bar2 {
+    background-image: linear-gradient(to right, #ff0000, #ffa500, #008000);
+    border: 3px #b4afaf solid;
+    border-radius: 20px;
+    height: 30px;
+    width: 100%;
+}
+.progress-bar2 .completed-bar2 {
+    border-radius: 20px;
+    align-items: center;
+    height: 100%;
+    width: var(--c-progress-bar-width);
+    transition: width 2s ease 0.4s;
+}
+.completed-bar2__dashed {
+    border: 1px dashed #ffffff;
+    height: 0px;
+}
+.truck-icon-color {
+    --slds-c-icon-color-foreground-default: #ffffff;
+}

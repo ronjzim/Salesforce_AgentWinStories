@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>55.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>CMS Single Component</masterLabel>
+    <description>This component allows users to leverage pre-defined data sets in the post-modern demo world </description>
+    <targets>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property   name="articleToDisplay" 
+                        label="Article To Display"  
+                        type="String"
+                        datasource="apex://SDO_CMS_SingleComponentPicklist"
+                        description="Select Article to display on this component. Choose 'Current Record' for Article Content record pages only, as it will display the current article from that record page."/>
+            <property   name="contentSource" 
+                        label="Content Source" 
+                        type="String"
+                        datasource="Full Article,Preview Content"
+                        description="Select the content source for this article. Full Article is whole text, and preview content is the abridged version. NOTE: When you use text overlay, you will only see the preview content option despite this choice."
+                        default="Preview Content"/>
+            <property   name="useOnlyImage" 
+                        label="Display Image" 
+                        type="Boolean"
+                        description="Choose this option to display the image from the content source."
+                        default="true"/>
+            <property   name="useOnlyText" 
+                        label="Display Text" 
+                        type="Boolean"
+                        description="Choose this option to display the text from the content source."
+                        default="true"/>
+            <property   name="useButton" 
+                        label="Display Button" 
+                        type="Boolean"
+                        description="Choose this option to display the button with the Learn More Here button"
+                        default="true"/>
+            <property   name="TextOverLay" 
+                        label="Display as Text Overlay" 
+                        type="Boolean"
+                        description="This changes how the component looks. If you select Text overlay, it places the text overtop of the image."
+                        default="false"/>
+            <property   name="buttonLabel" 
+                        label="Button Label" 
+                        type="String"
+                        description="Use this value to insert the value of the button you would like to display."
+                        default="Learn More"/>
+            <property   name="cssHeightOverride" 
+                        type="String" 
+                        label="CSS Image Height" 
+                        default ="auto"
+                        description="This is to override the default height of the image displayed in this content article. Options are 'auto' or an integer. Do not mix numbers and letters in this string or it may result in an error in your component."/>
+            <property   name="recordId" 
+                        type="String" 
+                        label="Record ID" 
+                        default ="{!recordId}"
+                        description="Should be set to {!recordId} This is a required field to expose record Id in experience cloud. Basically, don't ever change this input."/>
+        </targetConfig>
+ </targetConfigs>
+</LightningComponentBundle>

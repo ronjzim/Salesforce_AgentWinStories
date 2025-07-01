@@ -1,0 +1,166 @@
+<template>
+  <article class="snapshot-container" style={backColor}>
+    <div class="profile-section" style={profileFlex}>
+      <div class="customer-image-container" style={imageMargin}>
+        <div class="user-avatar" style={photoFlex}> </div>
+      </div>
+      <div class="greeting-container" style={textFlex}>
+        <div class="slds-text-heading_medium slds-text-color_weak">
+          {greeting}
+        </div>
+        <div class="slds-text-heading_large">{fname}</div>
+      </div>
+    </div>
+
+    <div class="record-snapshot" role="list">
+      <template lwc:if={tasksOn}>
+        <!-- Open Tasks Section -->
+        <div class="record-count" role="listitem">
+          <div class="icon">
+            <lightning-icon
+              icon-name="standard:task"
+              alternative-text="Open Tasks"
+            ></lightning-icon>
+          </div>
+          <div class="copy">
+            <div class="title">
+              <h3>My Tasks</h3>
+            </div>
+            <template if:true={tasks}>
+              <div class="counts">
+                <div class="count1">
+                  <a onclick={navigateToTasks}
+                    >Upcoming ({tasks.upcomingCount})</a
+                  >
+                </div>
+                <div class="count2">
+                  <a onclick={navigateToTasks}
+                    >Overdue (<span class="slds-text-color_error"
+                      >{tasks.overdueCount}</span
+                    >)</a
+                  >
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+      </template>
+
+      <!-- Open Cases Section -->
+      <template lwc:if={casesOn}>
+        <div class="record-count" role="listitem">
+          <div class="icon">
+            <lightning-icon
+              icon-name="standard:case"
+              alternative-text="Open Cases"
+            ></lightning-icon>
+          </div>
+          <div class="copy">
+            <div class="title">
+              <h3>My Cases</h3>
+            </div>
+            <template lwc:if={cases}>
+              <div class="counts">
+                <div class="count1">
+                  <a onclick={navigateToCases}>Open ({cases.openCount})</a>
+                </div>
+                <div class="count2">
+                  <a onclick={navigateToCases}
+                    >Need Review (<span class="slds-text-color_error"
+                      >{cases.reviewCount}</span
+                    >)</a
+                  >
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+      </template>
+
+      <!-- Products Section -->
+      <template lwc:if={prodsOn}>
+        <div class="record-count" role="listitem">
+          <div class="icon">
+            <lightning-icon
+              icon-name="standard:product"
+              alternative-text="Products"
+            ></lightning-icon>
+          </div>
+          <div class="copy">
+            <div class="title">
+              <h3>My Products</h3>
+            </div>
+            <template lwc:if={assets}>
+              <div class="counts">
+                <div class="count1">
+                  <a href="#">Purchased ({assets.purchasesCount})</a>
+                </div>
+                <div class="count2">
+                  <a href="#">Registered ({assets.registeredCount})</a>
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+      </template>
+
+      <!-- Leads Section -->
+      <template lwc:if={leadsOn}>
+        <div class="record-count" role="listitem">
+          <div class="icon">
+            <lightning-icon
+              icon-name="standard:lead"
+              alternative-text="Leads"
+            ></lightning-icon>
+          </div>
+          <div class="copy">
+            <div class="title">
+              <h3>My Leads</h3>
+            </div>
+            <template lwc:if={leads}>
+              <div class="counts">
+                <div class="count1">
+                  <a onclick={navigateToLeads}>Open ({leads.leadCount})</a>
+                </div>
+                <div class="count2">
+                  <a onclick={navigateToLeads}
+                    >Hot (<span class="slds-text-color_error"
+                      >{leads.hotCount}</span
+                    >)</a
+                  >
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+      </template>
+
+      <!-- Opportunity Section -->
+      <template lwc:if={oppsOn}>
+        <div class="record-count" role="listitem">
+          <div class="icon">
+            <lightning-icon
+              icon-name="standard:opportunity"
+              alternative-text="Opportunity"
+            ></lightning-icon>
+          </div>
+          <div class="copy">
+            <div class="title">
+              <h3>My Opportunities</h3>
+            </div>
+            <template lwc:if={opps}>
+              <div class="counts">
+                <div class="count1">
+                  <a onclick={navigateToOpps}>Open ({opps.oppCount})</a>
+                </div>
+                <div class="count2">
+                  <a onclick={navigateToOpps}>New ({opps.thisMonthCount})</a>
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+      </template>
+    </div>
+  </article>
+</template>

@@ -1,0 +1,40 @@
+<template>
+    <div class="wrapper">
+        <template for:each={fetchedArtcle} for:item="article">
+            <div class="single" key={article.Id}>
+                <template if:true={useOnlyImage}>
+                        <div class="articleImage" key={article.Id} >
+                            <img src={article.SDO_ImageURL__c} key={article.Id}/>
+                            <template if:true={useOnlyText}>
+                                <span class="caption captionimg" key={article.Id}> 
+                                    <div class="padding">
+                                        <template if:true={previewContent}>
+                                            <h2>{article.Name}</h2>
+                                            <lightning-formatted-rich-text value={article.SDO_CMS_PreviewContent__c}></lightning-formatted-rich-text>
+                                        </template>
+                                        <template if:true={useButton}>
+                                            <div class="block margintop">
+                                                <lightning-button label={buttonLabel} variant="brand" title="Learn More Here" onclick={handleButtonClick} class="cmsbutton" key={article.Id} data-key={article.Id}></lightning-button>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </span> 
+                            </template>
+                        </div>
+                </template>
+                <template if:false={useOnlyImage}>
+                    <template if:true={useOnlyText}>
+                        <span class="caption" key={article.Id}> 
+                            <h2>{article.Name}</h2>
+                            <template if:true={previewContent}><lightning-formatted-rich-text value={article.SDO_CMS_PreviewContent__c}></lightning-formatted-rich-text></template>
+                            <template if:false={previewContent}><lightning-formatted-rich-text value={article.SDO_ArticleContent__c}></lightning-formatted-rich-text> </template>
+                        </span> 
+                    </template>
+                    <template if:true={useButton}>
+                        <lightning-button label={buttonLabel} title="Learn More Here" variant="brand" onclick={handleButtonClick} class="slds-align_absolute-center" key={article.Id} data-key={article.Id}></lightning-button>
+                    </template>
+                </template>
+            </div>
+        </template>
+    </div>
+</template>

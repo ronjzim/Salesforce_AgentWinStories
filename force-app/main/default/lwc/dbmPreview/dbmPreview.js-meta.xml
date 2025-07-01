@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>63.0</apiVersion>
+    <isExposed>true</isExposed>    
+    <targets>
+        <target>lightning__AppPage</target>
+        <target>lightning__HomePage</target>
+        <target>lightning__FlowScreen</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__FlowScreen,lightning__AppPage,lightning__HomePage">
+            <property name="chartTitle" label="Chart Title" type="String"/>
+            <property name="chartType" label="Chart Type" type="String" description="Choose from: line, bar, horizontalBar, doughnut, pie, polarArea, bubble, scatter."/>
+            <property name="metricName" label="Metric Name" type="String"/>
+            <property name="metricType" label="Metric Type" type="String"/>
+            <property name="grouping1Name" label="Grouping #1 Name" type="String"/>
+            <property name="chartDataString" label="Data to Display (JSON string)" type="String"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

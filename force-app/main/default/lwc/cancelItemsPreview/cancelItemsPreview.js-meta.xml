@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>56.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Cancel Items Preview NEW</masterLabel>
+    <targets>
+        <target>lightning__FlowScreen</target>
+    </targets>
+  <targetConfigs>
+         <targetConfig targets="lightning__FlowScreen">
+            <propertyType name="OP" extends="SObject" label="Select a sObject" description="Select a sObject"/>
+            <property name="records" type="{OP[]}" label="Records" description="Record List Variable" role="inputOnly"/>
+         </targetConfig>
+  </targetConfigs>
+</LightningComponentBundle>

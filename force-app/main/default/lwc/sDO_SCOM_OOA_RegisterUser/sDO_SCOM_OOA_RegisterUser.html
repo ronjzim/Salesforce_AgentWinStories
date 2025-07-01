@@ -1,0 +1,31 @@
+<template>
+    <div class="slds-card">
+        <div class="container">
+            <template if:false={submitBool}>
+                <div class="slds-text-heading_large slds-m-vertical_large slds-text-align_center">{formTitle}</div>
+
+                <lightning-input class="slds-m-vertical_small" data-name="firstName" type="text" label="First Name" required onchange={handleOnChange}></lightning-input>
+
+                <lightning-input class="slds-m-vertical_small" data-name="lastName" type="text" label="Last Name" required onchange={handleOnChange}></lightning-input>
+
+                <lightning-input class="slds-m-vertical_small email" data-name="email" type="Email" label="Email" onblur={handleInputBlur} required></lightning-input>
+
+                <lightning-input class="slds-m-vertical_small" data-name="phone" type="Phone" label="Phone" required onchange={handleOnChange}></lightning-input>
+
+                <lightning-input class="slds-m-vertical_small" data-name="role" type="text" label="Role" onchange={handleOnChange}></lightning-input>
+
+                <lightning-input class="slds-m-vertical_small" data-name="accountId" type="text" label="Account Id" required onchange={handleOnChange}></lightning-input>
+
+                <lightning-button class="slds-m-vertical_large"  variant="brand" label="Submit" title="Submit" disabled={disableBtn} onclick={onSubmit} style="display: block;text-align: center;"></lightning-button>
+            </template>
+        </div>
+        <div class="container submit">
+            <template if:true={submitBool}>
+                <lightning-icon icon-name="standard:task2" alternative-text="task" title="Task" size="large"></lightning-icon>
+                <div class="slds-text-heading_large slds-m-top_large slds-m-bottom_small slds-text-align_center">Your request has been sent for approval</div>
+                <div class="slds-text-heading_medium slds-m-vertical_small slds-text-align_center">We will get back to you soon</div>
+                <lightning-button class="slds-m-vertical_large"  variant="base" label="Submit Another Request" title="Submit Another Request" onclick={submitAnotherRequest}></lightning-button>
+            </template>
+        </div>
+    </div>
+</template>

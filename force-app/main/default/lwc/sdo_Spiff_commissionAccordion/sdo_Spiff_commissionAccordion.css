@@ -1,0 +1,104 @@
+.spiff_commission{
+    padding: 0px 20px 10px 20px;
+}
+.spiff_commission-breakdown>span{
+    color: #70b0df;
+    position: absolute;
+    right: 7px;
+    font-size: 11px;
+    top: 13px;
+}
+.spiff_total-plan-commission{
+    position: relative;
+    font-size: 14px;
+    color: black;
+}
+.spiff_total-plan-commission > span{
+    position: absolute;
+    right: 0px;
+    padding: 0 15px 0 0;
+}
+.spiff_commission-period{
+    padding: 0px 0px 15px 15px;
+    color: black;
+}
+.spiff_commission-details{
+   padding : 0 0 12px 25px;
+   font-size: 11px;
+   font-weight: 400;
+}
+.spiff_align-right{
+    text-align: right;
+}
+
+.slds-accordion{
+    padding: 1px 0px 1px 10px;
+    border: 1px solid #80808080;
+    border-radius: 4px;
+}
+.spiff_no-border{
+    border:none;
+}
+.spiff_bold{
+    font-weight: 600;
+}
+
+.spiff_section-space{
+    height: 1px;
+    padding: 9px;
+}
+
+.spiff_commission-body{
+    padding : 0 0 10px 0;
+}
+
+.spiff_message{
+    overflow-wrap: break-word;
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 12px;
+    color: #000000;
+}
+
+.spiff_commission-message{
+    overflow-wrap: anywhere;
+}
+
+.slds-accordion__section{
+    padding-left : 0px !important;
+}
+
+.spiff_accordion-summary{
+    font-size: 15px;
+}
+
+.spiff_accordion-summary > lightning-layout{
+    width : 100%;
+}
+
+.spiff_heading{
+    width : 100% !important;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    font-size: 14px;
+    padding-left: 10px;
+}
+
+.spiff_accordion-section{
+    padding : 12px 12px 0px 0px;
+}
+
+.spiff_header-link, .spiff_header-link:hover , .spiff_header-link:focus{
+    color: black !important;
+    text-decoration: none !important;
+    text-overflow: ellipsis !important;
+}
+
+.spiff_payout-rule{
+    padding: 4px;
+    font-size: 12px;
+    color: black;
+}

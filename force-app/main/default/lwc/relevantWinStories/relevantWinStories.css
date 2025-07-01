@@ -1,0 +1,49 @@
+.stories-container {
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.story-card {
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-left: 4px solid #1589ee;
+}
+
+.story-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-left-color: #0176d3;
+}
+
+.story-header {
+    align-items: center;
+}
+
+.story-customer {
+    font-weight: 600;
+}
+
+.relevance-score {
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.story-summary {
+    line-height: 1.5;
+}
+
+.success-factors .slds-badge {
+    font-size: 0.75rem;
+    margin-bottom: 0.25rem;
+}
+
+.empty-state {
+    opacity: 0.7;
+}
+
+.story-footer {
+    font-size: 0.75rem;
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid #e5e5e5;
+}

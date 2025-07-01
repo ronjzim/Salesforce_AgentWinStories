@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>54.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Spotter</masterLabel>
+    <targets>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property name="spotterMode" label="Spotter Mode - Configuration Source" type="String" datasource="Select Manually,Based on Current Product Record" default="Select Manually"/>
+            <property name="configId" label="Select A Configuration - Only When Selecting Manually" type="String" datasource="apex://DE_RY_Spotter_DataSource"/>
+            <property name="showHotspotsDesktop" label="When On Desktop, Show Hotspots" type="String" datasource="Always,On Hover of the Image" default="On Hover of the Image"/>
+            <property name="showHotspotsMobile" label="When On Mobile, Show Hotspots" type="String" datasource="Always,On Tap of the Image" default="Always"/>
+            <property name="showSpotterTitle" label="Show Spotter Title" type="Boolean" default="true"/>
+            <property name="showProductCarousel" label="Show Product Carousel" type="Boolean" default="true"/>
+            <property name="productCarouselTitle" label="Product Carousel Title" type="String" default="PRODUCTS"/>
+            <property name="recordId" type="String" label="Record Id" description="Automatically bind the page's record id to the component variable" default="{!recordId}"/>
+            <property name="effectiveAccountId" type="String" label="Effective Account Id" description="The ID of the account under which the user is acting (BETA) (Auto-filled)" default="{!CurrentUser.effectiveAccountId}"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

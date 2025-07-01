@@ -1,0 +1,31 @@
+<template>
+    <lightning-modal-header
+        label={label}
+    ></lightning-modal-header>
+    <lightning-modal-body>
+        <div if:true={partialSuccessMessage} class="slds-box slds-theme_success">
+            <p>{partialSuccessMessage}</p>
+        </div>
+        <section if:true={errors.length} class="slds-m-top_small error-section">
+            <div class="slds-box slds-theme_error">
+                <h2>{errorMessageSectionLabel}</h2>
+            </div>
+            <ul class="slds-list_dotted slds-p-around_x-small">
+                <template for:each={errors} for:item="error">
+                    <li key={error}>{error}</li>
+                </template>
+            </ul>
+        </section>
+
+        <section if:true={exceptions.length} class="slds-m-top_small error-section">
+            <div class="slds-box slds-theme_error">
+                <h2>There are some Exceptions:</h2>
+            </div>
+            <ul class="slds-list_dotted slds-p-around_x-small">
+                <template for:each={exceptions} for:item="exception">
+                    <li key={exception}>{exception}</li>
+                </template>
+            </ul>
+        </section>
+    </lightning-modal-body>
+</template>

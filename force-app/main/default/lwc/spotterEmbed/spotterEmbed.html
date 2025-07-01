@@ -1,0 +1,211 @@
+<template>
+  <div if:true={currentConfig}>
+    <ul class="slds-accordion">
+      <li class="slds-accordion__list-item">
+        <section class="slds-accordion__section slds-is-open">
+          <div class="slds-accordion__summary" if:true={showSpotterTitle}>
+            <h2 class="slds-accordion__summary-heading">
+              <button
+                class="slds-button slds-button_reset slds-accordion__summary-action"
+                aria-controls="referenceId-39"
+                aria-expanded="true"
+                title="Accordion summary"
+              >
+                <lightning-icon
+                  class="slds-accordion__summary-action-icon slds-button__icon slds-button__icon_left"
+                  size="x-small"
+                  icon-name="utility:switch"
+                  alternative-text="Open/Close Section"
+                  title={currentConfig.Title__c}
+                >
+                </lightning-icon>
+                <span class="slds-accordion__summary-content"
+                  >{currentConfig.Title__c}</span
+                >
+              </button>
+            </h2>
+          </div>
+          <div class="slds-accordion__content" id="referenceId-39">
+            <div class={containerClass}>
+              <img
+                onload={imageLoaded}
+                class="lg-image"
+                src={currentConfig.Image_URL__c}
+              />
+              <template
+                for:each={hotspots}
+                for:item="hotspot"
+                for:index="index"
+              >
+                <div
+                  class="lg-hotspot"
+                  style={hotspot.Style_CSS__c}
+                  key={hotspot.Style_CSS__c}
+                  data-idx={index}
+                  onmouseenter={handleHotspotMouseIn}
+                  onmouseleave={handleHotspotMouseOut}
+                >
+                  <a
+                    class="lg-hotspot-dot"
+                    onclick={handleHospotClick}
+                    data-idx={index}
+                  ></a>
+                  <div
+                    class="lg-tooltip"
+                    data-idx={index}
+                    data-productid={hotspot.Product__c}
+                    if:true={hotspot.Product__c}
+                    onclick={handleTooltipClick}
+                  >
+                    <section class="slds-popover-custom" role="dialog">
+                      <lightning-icon
+                        icon-name="utility:chevronright"
+                        alternative-text="Utility Icon"
+                        title="Navigate to Product"
+                        size="x-small"
+                        class="slds-button slds-button_icon slds-button_icon-small slds-float_right slds-popover__close customContainer"
+                      ></lightning-icon>
+                      <div class="slds-popover__body">
+                        <div>
+                          <p class="slds-text-title_bold">
+                            {hotspot.Product__r.Name}
+                          </p>
+                          <p class="slds-text-body_regular slds-truncate">
+                            {hotspot.Product__r.StockKeepingUnit}
+                          </p>
+                          <div
+                            class="slds-p-top_small slds-text-title_bold"
+                            if:true={hotspot.Price}
+                          >
+                            <lightning-formatted-number
+                              value={hotspot.Price}
+                              format-style="currency"
+                              currency-code={currencyIsoCode}
+                              minimum-fraction-digits={hotspot.minimum_fraction_digits}
+                            ></lightning-formatted-number>
+                          </div>
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </div>
+              </template>
+            </div>
+            <div class="slds-m-top_small" if:true={showProductCarousel}>
+              <div
+                class="slds-text-title_bold slds-m-bottom_small"
+                if:true={productCarouselTitle}
+              >
+                {productCarouselTitle}
+              </div>
+              <div class="carousel-wrapper">
+                <button
+                  class={carouselButtonClassLeft}
+                  title="Scroll Left"
+                  onclick={scrollCarousel}
+                  data-scrollto="start"
+                >
+                  <lightning-icon
+                    class="slds-button__icon carousel-button-icon"
+                    icon-name="utility:chevronleft"
+                    alternative-text="Scroll Left"
+                    size="x-small"
+                    title="Scroll Left"
+                    variant="inverse"
+                  ></lightning-icon>
+                  <span class="slds-assistive-text">Scroll Left</span>
+                </button>
+                <div
+                  class="slds-grid slds-scrollable_x product-carousel"
+                  onscroll={handleCarouselScroll}
+                >
+                  <template for:each={productCarouselList} for:item="spot">
+                    <div
+                      class="slds-col productTile slds-m-left_large slds-m-bottom_small"
+                      key={spot.Product__c}
+                    >
+                      <div
+                        class="productTile-clickable"
+                        data-productid={spot.Product__c}
+                        onclick={handleTooltipClick}
+                      >
+                        <div class="productTileImage slds-m-bottom_small">
+                          <div
+                            class="tileImageContainer slds-align_absolute-center"
+                          >
+                            <img src={spot.imgUrl} />
+                          </div>
+                        </div>
+                        <div
+                          class="slds-text-title_bold slds-m-bottom_xxx-small slds-line-clamp_x-small"
+                        >
+                          {spot.Product__r.Name}
+                        </div>
+                        <div
+                          class="slds-m-bottom_x-small slds-text-color_weak font14"
+                        >
+                          SKU# {spot.Product__r.StockKeepingUnit}
+                        </div>
+                        <div if:true={spot.Price} class="slds-text-title_bold">
+                          <lightning-formatted-number
+                            value={spot.Price}
+                            format-style="currency"
+                            currency-code={currencyIsoCode}
+                            minimum-fraction-digits={spot.minimum_fraction_digits}
+                          ></lightning-formatted-number>
+                        </div>
+                      </div>
+                    </div>
+                  </template>
+                </div>
+                <button
+                  class={carouselButtonClassRight}
+                  title="Scroll Right"
+                  onclick={scrollCarousel}
+                  data-scrollto="end"
+                >
+                  <lightning-icon
+                    class="slds-button__icon carousel-button-icon"
+                    icon-name="utility:chevronright"
+                    alternative-text="Scroll Right"
+                    size="x-small"
+                    title="Scroll Right"
+                    variant="inverse"
+                  ></lightning-icon>
+                  <span class="slds-assistive-text">Scroll Right</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </li>
+    </ul>
+
+    <!-- <lightning-accordion>
+      <lightning-accordion-section label={currentConfig.Title__c}>
+      </lightning-accordion-section>
+    </lightning-accordion> -->
+  </div>
+  <!-- <div if:false={isManualSelect}>
+    <div
+      class="slds-inline_icon_text slds-grid slds-inline_icon_text--error"
+      if:false={hasRecordContext}
+    >
+      <lightning-icon
+        icon-name="utility:error"
+        alternative-text="Error!"
+        title="Error"
+        variant="error"
+        size="small"
+        class="slds-col"
+      ></lightning-icon>
+      <div class="slds-col slds-align-middle slds-text-color_error">
+        <p>
+          The Spotter Mode - Configuration Source was selected as 'Based on
+          Current Product Record' but we couldnt find the record context. Please
+          verify your configuration.
+        </p>
+      </div>
+    </div>
+  </div> -->
+</template>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>59.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>SDO Cart CSV Upload</masterLabel>
+    <targets>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property name="title" type="String" label="Title" default="Cart CSV Upload"/>
+            <property name="iconName" type="String" label="Icon" default="standard:webcart"/>
+            <property name="addToCartLabel" type="String" label="Add to Cart button label" default="Add to Cart"/>
+            <property name="resetLabel" type="String" label="Reset button label" default="Reset"/>
+            <property name="successMessage" type="String" label="Add to cart success message" default="All items added to cart successfully!"/>
+            <property name="partialSuccessMessage" type="String" label="Add to cart partial success message" default="{0} of {1} items added to cart successfully!"/>
+            <property name="errorMessageModalLabel" type="String" label="Add to cart error modal title" default="CSV Cart Upload Status"/>
+            <property name="errorMessageSectionLabel" type="String" label="Add to cart error section title" default="Following products failed to add to cart:"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

@@ -1,0 +1,25 @@
+<template>
+
+    <template for:each={records} for:item="r">
+        <div class="the-row" key={r.Id} style="border-bottom: 1px solid #ccc;">
+            <lightning-layout multiple-rows>
+
+                <lightning-layout-item size="6" small-device-size="6" medium-device-size="2" large-device-size="2"
+                    padding="around-small"> 
+                    <c-cancel-items-preview-img productid={r.Product2Id}></c-cancel-items-preview-img>
+                </lightning-layout-item>
+                <lightning-layout-item size="6" small-device-size="6" medium-device-size="6" large-device-size="6"
+                    padding="around-small">
+                    <div class="slds-text-heading_small slds-p-top_large">{r.Name}</div>
+                </lightning-layout-item>
+                <lightning-layout-item size="6" small-device-size="6" medium-device-size="4" large-device-size="4"
+                    padding="around-small">
+                    <div class="slds-text-heading_small slds-p-top_large" style="display:grid;">Unit Price 
+                        <lightning-formatted-number value={r.UnitPrice} format-style="currency"></lightning-formatted-number>
+                    </div>
+                </lightning-layout-item>
+
+            </lightning-layout>
+        </div>
+    </template>
+</template>

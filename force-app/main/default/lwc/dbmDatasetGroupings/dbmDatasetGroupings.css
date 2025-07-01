@@ -1,0 +1,44 @@
+.bulkAddTextarea {
+    --slds-c-textarea-sizing-min-height: 20em;
+}
+
+.selectedEntry {
+    background-color: #0176D3 !important;
+    color: white;
+}
+
+.dragIndicator {
+    position: absolute;
+    height: 1px;
+    border: solid green 2px;
+    width: 100%;
+    display: none;
+}
+
+.dragIndicator.visible {
+    display: block;
+}
+
+.dragging {
+    /* border: solid #0176D3 1px; */
+    /* transform: rotate(2deg); */
+    background-color: white !important;
+    opacity: 25%;
+}
+
+.entryActions {
+    opacity: 0;
+    transition: ease-in-out 100ms;
+}
+
+.entryRow:hover .entryActions {
+    opacity: 100%;
+}
+
+.dragHandle {
+    cursor: grab;
+}
+
+.dragHandle:active {
+    cursor: grabbing;
+}

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>59.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>SDO B2B Fill The Truck</masterLabel>
+    <targets>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property name="totalTruckCapacity" type="Integer" label="Total Truck Cubic Feet Capacity"  default="100" required="true"/>
+            <property name="numberOfTrucksLabel" type="String" label="Number of Trucks Label"  default="Number of Trucks"/>
+            <property name="totalTruckCapacityLabel" type="String" label="Total Truck Cubic Feet Label"  default="Total Truck Cubic Feet"/>
+            <property name="remainingTruckCapacityLabel" type="String" label="Remaining Space in the Truck Label"  default="Remaining to Complete Truck"/>
+            <property name="filledTruckCapacityLabel" type="String" label="Cubic Feet Used Label"  default="Cubic Feet Used"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

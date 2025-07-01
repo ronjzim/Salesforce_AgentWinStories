@@ -1,0 +1,208 @@
+<!-- modernContactCard.html -->
+<template>
+    <div class="contact-card">
+        <template lwc:if={contact}>
+            <!-- Header Section -->
+            <div class="card-header">
+                <div class="contact-avatar">
+                    <div class="avatar-circle">
+                        {contactInitials}
+                    </div>
+                </div>
+                <div class="contact-info">
+                    <h1 class="contact-name">{contactName}</h1>
+                    <p class="contact-title" lwc:if={title}>{title}</p>
+                    <p class="contact-account" lwc:if={accountName}>
+                        <lightning-icon icon-name="standard:account" size="x-small" class="account-icon"></lightning-icon>
+                        {accountName}
+                    </p>
+                </div>
+                <div class="action-buttons">
+                    <template lwc:if={isEditing}>
+                        <lightning-button 
+                            variant="neutral" 
+                            label="Cancel" 
+                            onclick={handleCancel}
+                            class="cancel-btn">
+                        </lightning-button>
+                        <lightning-button 
+                            variant="brand" 
+                            label="Save" 
+                            onclick={handleSave}
+                            disabled={isLoading}
+                            class="save-btn">
+                        </lightning-button>
+                    </template>
+                    <template lwc:else>
+                        <lightning-button 
+                            variant="brand" 
+                            label="Edit" 
+                            onclick={handleEdit}
+                            class="edit-btn">
+                        </lightning-button>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Loading Spinner -->
+            <template lwc:if={isLoading}>
+                <div class="loading-overlay">
+                    <lightning-spinner alternative-text="Saving..." size="medium"></lightning-spinner>
+                </div>
+            </template>
+
+            <!-- Contact Details -->
+            <div class="card-body">
+                <template lwc:if={isEditing}>
+                    <!-- Edit Mode -->
+                    <div class="edit-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">First Name</label>
+                                <lightning-input 
+                                    type="text" 
+                                    value={editData.FirstName}
+                                    data-field="FirstName"
+                                    onchange={handleInputChange}
+                                    class="modern-input">
+                                </lightning-input>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Last Name</label>
+                                <lightning-input 
+                                    type="text" 
+                                    value={editData.LastName}
+                                    data-field="LastName"
+                                    onchange={handleInputChange}
+                                    class="modern-input">
+                                </lightning-input>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Email</label>
+                                <lightning-input 
+                                    type="email" 
+                                    value={editData.Email}
+                                    data-field="Email"
+                                    onchange={handleInputChange}
+                                    class="modern-input">
+                                </lightning-input>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Phone</label>
+                                <lightning-input 
+                                    type="tel" 
+                                    value={editData.Phone}
+                                    data-field="Phone"
+                                    onchange={handleInputChange}
+                                    class="modern-input">
+                                </lightning-input>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Title</label>
+                                <lightning-input 
+                                    type="text" 
+                                    value={editData.Title}
+                                    data-field="Title"
+                                    onchange={handleInputChange}
+                                    class="modern-input">
+                                </lightning-input>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Department</label>
+                                <lightning-input 
+                                    type="text" 
+                                    value={editData.Department}
+                                    data-field="Department"
+                                    onchange={handleInputChange}
+                                    class="modern-input">
+                                </lightning-input>
+                            </div>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label class="form-label">Description</label>
+                            <lightning-textarea 
+                                value={editData.Description}
+                                data-field="Description"
+                                onchange={handleInputChange}
+                                rows="4"
+                                class="modern-textarea">
+                            </lightning-textarea>
+                        </div>
+                    </div>
+                </template>
+                <template lwc:else>
+                    <!-- View Mode -->
+                    <div class="contact-details">
+                        <div class="detail-grid">
+                            <div class="detail-item" lwc:if={email}>
+                                <div class="detail-icon">
+                                    <lightning-icon icon-name="utility:email" size="small"></lightning-icon>
+                                </div>
+                                <div class="detail-content">
+                                    <div class="detail-label">Email</div>
+                                    <div class="detail-value">
+                                        <a href={emailLink} class="email-link">{email}</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="detail-item" lwc:if={phone}>
+                                <div class="detail-icon">
+                                    <lightning-icon icon-name="utility:phone_portrait" size="small"></lightning-icon>
+                                </div>
+                                <div class="detail-content">
+                                    <div class="detail-label">Phone</div>
+                                    <div class="detail-value">
+                                        <a href={phoneLink} class="phone-link">{phone}</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="detail-item" lwc:if={department}>
+                                <div class="detail-icon">
+                                    <lightning-icon icon-name="utility:groups" size="small"></lightning-icon>
+                                </div>
+                                <div class="detail-content">
+                                    <div class="detail-label">Department</div>
+                                    <div class="detail-value">{department}</div>
+                                </div>
+                            </div>
+
+                            <div class="detail-item full-width" lwc:if={description}>
+                                <div class="detail-icon">
+                                    <lightning-icon icon-name="utility:note" size="small"></lightning-icon>
+                                </div>
+                                <div class="detail-content">
+                                    <div class="detail-label">Description</div>
+                                    <div class="detail-value description-text">{description}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </template>
+
+        <!-- Error State -->
+        <template lwc:elseif={wiredContactResult.error}>
+            <div class="error-state">
+                <lightning-icon icon-name="utility:error" size="medium" class="error-icon"></lightning-icon>
+                <p class="error-message">Unable to load contact record</p>
+            </div>
+        </template>
+
+        <!-- Loading State -->
+        <template lwc:else>
+            <div class="loading-state">
+                <lightning-spinner alternative-text="Loading..." size="medium"></lightning-spinner>
+            </div>
+        </template>
+    </div>
+</template>

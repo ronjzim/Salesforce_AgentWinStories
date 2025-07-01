@@ -1,0 +1,33 @@
+<template>
+<template if:true={productsConsumed}>
+<lightning-card  title="Products Consumed" icon-name="standard:product">
+ 
+<table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered" aria-label="Example table of Opportunities with vertical borders">
+  <thead>
+      <tr class="slds-line-height_reset">
+      <th class="" scope="col">
+        <div class="slds-truncate" title="Opportunity Name">Product Name</div>
+      </th>
+      <th class="" scope="col">
+        <div class="slds-truncate" title="Opportunity Name">Quanity Consumed</div>
+      </th>
+      <th class="" scope="col">
+        <div class="slds-truncate" title="Opportunity Name">Unit of Measure</div>
+      </th>
+      </tr>
+  </thead>
+  <tbody>
+      <template for:each={productsConsumed} for:item="pcRec">
+      <tr key={pcRec.Id}>
+          <td>{pcRec.Product2.Name}</td>
+          <td>{pcRec.QuantityConsumed}</td>
+          <td>{pcRec.QuantityUnitOfMeasure}</td>
+
+      </tr>
+      </template>
+  </tbody>
+</table>
+</lightning-card>
+</template>
+
+</template>

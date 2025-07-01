@@ -1,0 +1,37 @@
+.low-bg {
+    background-color: #3BA755
+}
+
+.moderate-bg {
+    background-color: #FCC003;
+}
+
+.high-bg {
+    background-color: #BA0517;
+    color: white;
+}
+
+.container { 
+    background-color: #c9c9c9; 
+    width: 100%; 
+    border-radius: 6px; 
+} 
+
+.skill { 
+    /* background-color: #45C65A;  */
+    color: white; 
+    padding: 1%; 
+    text-align: right; 
+    font-size: 20px; 
+    border-radius: 6px;
+    height: 15px;
+    outline: 2px solid white;
+}
+
+.effort { 
+    width: 50%; 
+}
+
+.bold {
+    font-weight: bold;
+}

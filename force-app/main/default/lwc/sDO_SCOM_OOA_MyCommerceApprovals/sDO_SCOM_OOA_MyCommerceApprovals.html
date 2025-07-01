@@ -1,0 +1,12 @@
+<template>
+	<lightning-card title="My Approvals" class="slds-is-relative">
+		<lightning-spinner lwc:if={isLoading} alternative-text="Loading..." variant="brand">
+		</lightning-spinner>
+		<c-s-d-o_-s-c-o-m_-o-o-a_-custom-data-table-types key-field="Id" data={data} columns={columns}
+			show-row-number-column
+			onvalueselect={handleSelection} draft-values={draftValues} oncellchange={handleCellChange}
+			onrecordlinkclick={handleRecordNav}
+			onsave={handleSave} oncancel={handleCancel} hide-checkbox-column="true">
+		</c-s-d-o_-s-c-o-m_-o-o-a_-custom-data-table-types>
+	</lightning-card>
+</template>

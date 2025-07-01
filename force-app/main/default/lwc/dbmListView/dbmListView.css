@@ -1,0 +1,16 @@
+.listViewContainer {
+    width: 100%;
+}
+
+.sortIcon {
+    visibility: hidden;
+}
+
+[data-is-sorted-by="true"] .sortIcon {
+    visibility: visible;
+}
+
+.columnHeader:hover .sortIcon {
+    visibility: visible;
+     --slds-c-icon-color-foreground-default: #0176D3;
+}

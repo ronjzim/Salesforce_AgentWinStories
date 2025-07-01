@@ -1,0 +1,88 @@
+<template>
+
+    <div class="slds-grid slds-gutters slds-wrap">
+
+        <!-- Company Name -->
+		<div class="slds-col slds-size_1-of-1">
+			<lightning-input
+				type="text"
+				label={labels.component.companyName}
+				value={companyName}
+				onchange={handleCompanyNameChange}
+				required
+				min-length="1"
+				message-when-bad-input={labels.component.companyNameNotValid}
+				message-when-value-missing={labels.component.companyNameNotValid}
+				message-when-too-short={labels.component.companyNameNotValid}
+				class="requiredInput"
+			></lightning-input>
+		</div>
+
+        <!-- Address Line 1 -->
+		<div class="slds-col slds-size_1-of-1">
+			<lightning-input
+				type="text"
+				label={labels.component.streetAddress1}
+				value={streetAddress1}
+				onchange={handleStreetAddress1Change}
+				required
+				min-length="5"
+				class="requiredInput"
+			></lightning-input>
+		</div>
+
+		<!-- City -->
+		<div class="slds-col slds-size_1-of-2">
+			<lightning-input
+				type="text"
+				label={labels.component.city}
+				value={city}
+				onchange={handleCityChange}
+				required
+				min-length="5"
+				class="requiredInput"
+			></lightning-input>
+		</div>
+
+        <!-- State -->
+		<div class="slds-col slds-size_1-of-2">
+			<lightning-input
+				type="text"
+				label={labels.component.stateProvince}
+				value={stateProvince}
+				onchange={handleStateProvinceChange}
+				
+				min-length="2"
+				
+			></lightning-input>
+		</div>
+
+        <!-- Postal Code -->
+		<div class="slds-col slds-size_1-of-2">
+			<lightning-input
+				type="text"
+				label={labels.component.postalcode}
+				value={postalCode}
+				onchange={handlePostalCodeChange}
+				required
+				min-length="5"
+				class="requiredInput"
+			></lightning-input>
+		</div>
+
+		<!-- Country -->
+		<div class="slds-col slds-size_1-of-2">
+			<lightning-input
+				type="text"
+				label={labels.component.country}
+				value={country}
+				onchange={handleCountryChange}
+				required
+				min-length="2"
+				class="requiredInput"
+			></lightning-input>
+		</div>
+
+    </div>
+    
+</template>

@@ -1,0 +1,31 @@
+<template>
+    <template lwc:if={isLoading}>
+        <div class="slds-is-relative">
+            <lightning-spinner
+                alternative-text="Loading"
+                size="small"
+            ></lightning-spinner>
+        </div>
+    </template>
+    <template lwc:else>
+        <!--Todo replace with formated currency -->
+        <p>
+            <lightning-formatted-number
+                value={negotiatedPrice}
+                format-style="currency"
+                currency-code={currencyCode}
+            ></lightning-formatted-number>
+        </p>
+        <template if:true={showOriginalPrice}>
+            <p>
+                <s>
+                    <lightning-formatted-number
+                        value={originalPrice}
+                        format-style="currency"
+                        currency-code={currencyCode}
+                    ></lightning-formatted-number>
+                </s>
+            </p>
+        </template>
+    </template>
+</template>

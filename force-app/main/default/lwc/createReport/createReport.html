@@ -1,0 +1,272 @@
+<template>
+    <template if:true={showSpinner}>
+        <lightning-spinner></lightning-spinner>
+    </template>
+
+    <lightning-card class="introCard">
+        <h1 class="slds-text-heading_large slds-align_absolute-center">
+            Welcome to Dashboard Magic!
+        </h1>
+
+        <div class="slds-p-around_medium">
+            <ul class="slds-list_dotted slds-text-heading_small introBullets">
+                <p class="slds-text-heading_medium">
+                    <b>SEs, please read this:</b>
+                </p>
+                <p class="slds-text-body_small slds-p-bottom_small">I know, I know... I hate reading too</p>
+                <li>This tool creates pretty looking dashboard charts but does NOT create real underlying data. <b>Make
+                        sure you have at least 1 "real" report on your dashboard to click into!</b></li>
+                <li>This tool is in beta. If you have any issues, questions or feedback please message <a
+                        href="mailto:david.fromstein@salesforce.com">david.fromstein@salesforce.com</a></li>
+                <li>If you get a "Web service callout failed" error at the end, refresh Dashboard Magic and try
+                    again. It just means your session's timed out, nbd</li>
+                <li><a href="https://salesforce.vidyard.com/watch/UZcyRofHuyevTaMUbAJcBV?" target="_blank">Demo video</a> (pw: salesforce1)</li>
+            </ul>
+        </div>
+        <p class="slds-text-heading_medium slds-align_absolute-center">
+            <a onclick={handleFinishIntro}>Proceed to Dashboard Magic!</a>
+        </p>
+    </lightning-card>
+
+    <!-- Navigation header-->
+    <div class="slds-grid slds-grid_vertical-align-center slds-box slds-m-bottom_small slds-hide slds-theme_default navHeader">
+        <div class="slds-col slds-size_1-of-12 slds-text-align_center">
+            <lightning-button label={currentStep.backButton.label} disabled={currentStep.backButton.disabled}
+                variant={currentStep.backButton.variant} onclick={handleNavBack}></lightning-button>
+        </div>
+        <div class="slds-col slds-size_10-of-12">
+            <lightning-progress-indicator current-step={currentStep.name}>
+                <lightning-progress-step label="Report Details" value="details"></lightning-progress-step>
+                <lightning-progress-step label="Fake Data" value="data"></lightning-progress-step>
+            </lightning-progress-indicator>
+        </div>
+        <div class="slds-col slds-size_1-of-12 slds-text-align_center">
+            <lightning-button label={currentStep.nextButton.label} disabled={currentStep.nextButton.disabled}
+                variant={currentStep.nextButton.variant} onclick={handleNavNext}></lightning-button>
+        </div>
+    </div>
+
+    <lightning-card title="1. Report Details" class="detailsCard slds-hide">
+        <div title="Report Details" class="reportDetails step">
+            <div class="slds-grid slds-wrap slds-p-around_small">
+                <div
+                    class="slds-col slds-p-horizontal_medium slds-size_1-of-1 slds-medium-size_7-of-12 slds-order_2 slds-medium-order_1">
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-size_1-of-1">
+                            <lightning-input label="Report Name" placeholder="e.g. Reps by Activity Count" value={group}
+                                onchange={handleReportNameChange} required pattern="[a-zA-Z0-9_\s]*"
+                                message-when-pattern-mismatch="Please enter only letters, numbers and underscores"
+                                field-level-help="You can change this later by renaming the report">
+                            </lightning-input>
+                            <template if:true={existingMatches.length}>
+                                <p class="slds-box slds-theme_shade slds-theme_alert-texture">Fake data already exists
+                                    under for the report
+                                    name
+                                    "{group}". If you save this data under the same report name, previous data will
+                                    be
+                                    deleted.<br>You can change the report name above, or you can <a
+                                        onclick={loadExistingFakeData}>load the existing data</a>.</p>
+                            </template>
+                        </div>
+                        <hr>
+                        <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2">
+                            <lightning-input label="Primary Grouping" placeholder="e.g. Full Name"
+                                value={primaryGrouping} onchange={handlePrimaryGroupingChange}
+                                field-level-help="This is the *name* of the primary category that your report will be grouped by. Examples: 'Product Family' in 'Revenue by Product Family', 'Region' in 'CSAT by Region', 'Rep Name' in 'Pipeline by Rep'"
+                                required>
+                            </lightning-input>
+                            <lightning-input type="checkbox" label="Add secondary grouping" value={hasSecondGrouping}
+                                onchange={handleToggleSecondGrouping} class="multiGroupToggle"></lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2">
+                            <template if:true={hasSecondGrouping}>
+                                <lightning-input label="Secondary Grouping" placeholder="e.g. Type"
+                                    value={secondaryGrouping} onchange={handleSecondaryGroupingChange} required
+                                    field-level-help="(Optional) This is the *name* of the sub-grouping under the primary grouping. Examples: for primary grouping of 'Product Family', secondary grouping might be 'Product Name'; for primary grouping of 'Region', secondary grouping might be 'State'">
+                                </lightning-input>
+                            </template>
+                        </div>
+                        <lightning-input label="Metric Name" placeholder="e.g. Record Count" value={metricName}
+                            class="slds-col slds-size_1-of-1 slds-large-size_1-of-2" onchange={handleMetricNameChange}
+                            required
+                            field-level-help="The metric name is what each bar represents. Common examples are 'Record Count', '$ Amount', 'Close Rate', etc">
+                        </lightning-input>
+                        <lightning-combobox label="Metric Type" options={metricTypeOptions} value={defaultMetricType}
+                            onchange={handleMetricTypeChange} class="slds-col slds-size_1-of-1 slds-large-size_1-of-2"
+                            field-level-help="Controls the formatting for the metric">
+                        </lightning-combobox>
+                    </div>
+
+                </div>
+                <div
+                    class="slds-col slds-p-horizontal_medium slds-size_1-of-1 slds-medium-size_5-of-12 slds-order_1 slds-medium-order_2 diagramContainer">
+                    <h1 class="slds-text-heading_small">Example Diagram</h1>
+                    <a href={diagramImageSource} target="_blank">
+                        <p class="slds-text-body_small slds-p-left_x-small">Click to expand</p>
+                        <img class="diagram slds-box" src={diagramImageSource}>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </lightning-card>
+    <lightning-card title="2. Fake Data" class="dataCard slds-hide">
+        <div title="Fake Data" class="fakedata step">
+            <lightning-button-group class="slds-p-left_small">
+                <lightning-button label="Add grouping" icon-name="utility:add" onclick={handleNewGroupClick}>
+                </lightning-button>
+                <lightning-button label="Delete all" icon-name="utility:delete" onclick={resetGroups}>
+                </lightning-button>
+                <!-- TODO: maybe add this. For now, users will have to add numbers manually
+                <lightning-input label="Number each line" onchange={handleNumerate} field-level-help="Check this to prefix each line with a number. This is useful when you want to preserve the order of the items you enter, such as with months of the year. Note: the prefixes won't show up on this screen, they will be added when you click Finish">                    
+                </lightning-input>                
+                -->
+                <!-- Used for debugging purposes 
+                <lightning-button label="print" onclick={handlePrint}>
+                </lightning-button> -->
+            </lightning-button-group>
+            <div class="slds-grid">
+                <div class="slds-grid slds-wrap slds-col slds-size_1-of-2 newTableContainer">
+                    <div
+                        class="slds-grid slds-wrap slds-p-around_medium slds-col slds-size_1-of-1 slds-large-size_2-of-3 newTable">
+                        <!-- HEADER ROW -->
+                        <div class="headerRow slds-grid slds-col slds-size_1-of-1" key={group}>
+                            <div class="slds-col slds-size_3-of-12 slds-text-title_bold">
+                                <template if:false={hasSecondGrouping}>
+                                    {primaryGroupingPlaceholder}
+                                </template>
+                                <template if:true={hasSecondGrouping}>
+                                    Groupings
+                                </template>
+                            </div>
+                            <template if:true={hasSecondGrouping}>
+                                <!-- Janky spacing element to keep the Value header aligned over the indented secondary metric input fields -->
+                                <div class="slds-p-left_large"></div>
+                            </template>
+                            <div class="slds-col slds-size_3-of-12">
+                                <span class="slds-text-title_bold">{metricName}</span> (numeric value)
+                            </div>
+                        </div>
+
+                        <!-- LOOP THROUGH EACH GROUP -->
+                        <template for:each={fakedataGroups} for:item="group">
+                            <!-- PRIMARY VALUE ROW -->
+                            <div class="primaryRow slds-grid slds-col slds-size_1-of-1" data-group-index={group.index}
+                                data-row-type="primary" key={group}>
+                                <!-- PRIMARY GROUPING INPUT-->
+                                <div class="slds-col slds-size_3-of-12">
+                                    <lightning-input type="text" placeholder={primaryGroupingPlaceholder}
+                                        value={group.primaryGrouping} onchange={handleRecordPrimaryChange}
+                                        variant="label-hidden" required>
+                                    </lightning-input>
+                                </div>
+                                <!-- IF SINGLE GROUPING, GET METRIC VALUE -->
+                                <template if:false={hasSecondGrouping}>
+                                    <div class="slds-col slds-size_3-of-12" data-record-index=0>
+                                        <lightning-input type="number" formatter={metricType} placeholder={metricName}
+                                            value={group.firstValue} variant="label-hidden" step="any"
+                                            onchange={handleRecordValueChange} required>
+                                        </lightning-input>
+                                    </div>
+                                </template>
+                                <!-- IF MULTIPLE GROUPINGS, ADD "ADD" BUTTON -->
+                                <template if:true={hasSecondGrouping}>
+                                    <lightning-button-icon icon-name="utility:add"
+                                        alternative-text="Add secondary grouping row" onclick={handleAddSubgroupClick}>
+                                    </lightning-button-icon>
+                                </template>
+                                <lightning-button-icon icon-name="utility:delete" class="deleteButton"
+                                    onclick={handleDelete}>
+                                </lightning-button-icon>
+                            </div>
+                            <!-- SECONDARY GROUPINGS -->
+                            <template if:true={hasSecondGrouping}>
+                                <template for:each={group.records} for:item="record">
+                                    <span class="secondaryRow slds-grid slds-col slds-size_1-of-1 slds-p-left_large"
+                                        key={record} data-record-index={record.recordIndex}
+                                        data-group-index={group.index} data-row-type="secondary">
+                                        <div class="slds-col slds-size_3-of-12">
+                                            <lightning-input type="text" placeholder={secondaryGroupingPlaceholder}
+                                                value={record.secondaryGrouping} onchange={handleRecordSecondaryChange}
+                                                variant="label-hidden" required>
+                                            </lightning-input>
+                                        </div>
+                                        <div class="slds-col slds-size_3-of-12">
+                                            <lightning-input type="number" formatter={metricType}
+                                                placeholder={metricName} value={record.value} variant="label-hidden"
+                                                onchange={handleRecordValueChange} oncommit={handlePercentUpdate}
+                                                step="any" required>
+                                            </lightning-input>
+                                        </div>
+                                        <lightning-button-icon icon-name="utility:delete" class="deleteButton"
+                                            onclick={handleDelete}>
+                                        </lightning-button-icon>
+                                    </span>
+                                </template>
+                            </template>
+                        </template>
+                    </div>
+                </div>
+                <!--
+                <div class="slds-col slds-size_1-of-2 slds-p-around_medium bulkAdd">
+                    <template if:true={hasSecondGrouping}>
+                        <lightning-textarea label="Bulk add secondary groupings" value={bulkAddString}
+                            field-level-help="Add each secondary grouping on a new line, then click Add to add them">
+
+                        </lightning-textarea>
+                        <lightning-button label="Add 'em" onclick={handleBulkAdd}></lightning-button>
+                    </template>
+                </div>
+                -->
+            </div>
+
+        </div>
+    </lightning-card>
+    <lightning-card title="3. Finished!" class="finishedCard slds-hide">
+        <p class="slds-p-horizontal_medium slds-text-heading_small">Congratulations, your report has been created! You
+            can now add it to a dashboard. Want another report? Click <a onclick={handleRefresh}>here</a> to start
+            again.</p>
+    </lightning-card>
+
+
+    <template if:true={showModal}>
+        <section role="alertdialog" tabindex="0" class="slds-modal slds-fade-in-open slds-modal_prompt">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header slds-theme_info slds-theme_alert-texture">
+                    <h2 class="slds-text-heading_medium">Your report is brewing!</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium">
+                    <p class="slds-text-heading_small slds-align_absolute-center">Your report is about to open in a new
+                        page (for boring technical reasons). You can immediately add it to a dashboard, then come back
+                        to this page if you want to generate another report.</p>
+                </div>
+                <footer class="slds-modal__footer slds-theme_default">
+                    <lightning-button label="Uh, ok!" class="slds-p-around_xx-small" onclick={handleModalClose}>
+                    </lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+    <!-- don't know if we're gonna use this or not-->
+    <template if:true={showBulkAddModal}>
+        <section role="alertdialog" tabindex="0" class="slds-modal slds-fade-in-open slds-modal_prompt">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header slds-theme_warning slds-theme_alert-texture">
+                    <!--<lightning-button-icon icon-name="utility:close" alternative-text="Cancel"></lightning-button-icon>-->
+                    <h2 class="slds-text-heading_medium">Confirm bulk add</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium">
+                    <p class="slds-text-heading_small slds-align_absolute-center">This will erase any </p>
+                </div>
+                <footer class="slds-modal__footer slds-theme_default">
+                    <lightning-button label="Uh, ok!" class="slds-p-around_xx-small" onclick={handleModalClose}>
+                    </lightning-button>
+                    <lightning-button label="Uh, ok!" class="slds-p-around_xx-small" onclick={handleModalClose}>
+                    </lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

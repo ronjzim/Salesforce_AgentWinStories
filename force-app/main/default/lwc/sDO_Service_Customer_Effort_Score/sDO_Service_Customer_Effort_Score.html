@@ -1,0 +1,96 @@
+<template>
+    <lightning-card title="Customer Effort Score">
+        <div class="slds-p-horizontal_large slds-border_top" if:true={myCase}>
+            <div class="slds-grid slds-grid_vertical-align-center slds-m-top_medium">
+                <h1 class="slds-text-heading_large bold">{myCase.SDO_Service_Customer_Effort_Score__c}</h1>
+                <template lwc:if={scoreIsHigh}>
+                    <lightning-badge label="High" class="high-bg slds-m-left_small"></lightning-badge>
+                </template>
+                <template lwc:elseif={scoreIsModerate}>
+                    <lightning-badge label="Moderate" class="moderate-bg slds-m-left_small"></lightning-badge>
+                </template>
+                <template lwc:else>
+                    <lightning-badge label="Low" class="low-bg slds-m-left_small"></lightning-badge>
+                </template>
+            </div>
+            <div class="container slds-m-top_medium">
+                <template lwc:if={scoreIsHigh}>
+                    <div class="skill effort high-bg" style={widthPercentage}></div>
+                </template>
+                <template lwc:elseif={scoreIsModerate}>
+                    <div class="skill effort moderate-bg" style={widthPercentage}></div>
+                </template>
+                <template lwc:else>
+                    <div class="skill effort low-bg" style={widthPercentage}></div>
+                </template>
+                <!-- <div class="skill effort" style={widthPercentage}></div>  -->
+            </div>
+            <div class="slds-grid slds-m-top_medium slds-grid_vertical">
+                <div>
+                    <p class="slds-text-heading_xsmall">Top Contributing Factors</p>
+                    <!-- <p>What's affecting Customer Effort the most?</p> -->
+                </div>
+                <div class="slds-box slds-m-top_medium slds-grid slds-grid_vertical-align-center">
+                    <div>
+                        <p class="slds-text-heading_xsmall">Speed to Answer (secs)</p>
+                        <p>
+                            <span class="slds-text-heading_medium">{myCase.SDO_Service_Speed_to_Answer__c}</span>
+                            <!-- <span class="slds-text-heading_small"> secs</span> -->
+                        </p>
+                    </div>
+                    <div class="slds-col_bump-left">
+                        <lightning-icon icon-name="utility:clock" alternative-text="Connected" size="small" title="large size">
+                        </lightning-icon>
+                    </div>
+                </div>
+                <div class="slds-box slds-m-top_medium slds-grid slds-grid_vertical-align-center">
+                    <div>
+                        <p class="slds-text-heading_xsmall">Agent Interactions</p>
+                        <p>
+                            <span class="slds-text-heading_medium">{myCase.SDO_Service_Agent_Interactions__c}</span>
+                        </p>
+                    </div>
+                    <div class="slds-col_bump-left">
+                        <lightning-icon icon-name="utility:user" alternative-text="Connected" size="small" title="large size">
+                        </lightning-icon>
+                    </div>
+                </div>
+                <div class="slds-box slds-m-top_medium slds-grid slds-grid_vertical-align-center">
+                    <div>
+                        <p class="sslds-text-heading_xsmall">Email Response Time (days)</p>
+                        <p>
+                            <span class="slds-text-heading_medium">{myCase.SDO_Service_Email_Response_Time__c}</span>
+                            <!-- <span class="slds-text-heading_small"> days</span> -->
+                        </p>
+                    </div>
+                    <div class="slds-col_bump-left">
+                        <lightning-icon icon-name="utility:clock" alternative-text="Connected" size="small" title="large size">
+                        </lightning-icon>
+                    </div>
+                </div>
+                <div class="slds-box slds-m-top_medium slds-grid slds-grid_vertical-align-center">
+                    <div>
+                        <p class="slds-text-heading_xsmall">Escalated</p>
+                        <p>
+                            <template lwc:if={myCase.SDO_Service_Escalated__c}>
+                                <span class="slds-text-heading_medium">Yes</span>
+                            </template>
+                            <template lwc:else>
+                                <span class="slds-text-heading_medium">No</span>
+                            </template>
+                        </p>
+                    </div>
+                    <div class="slds-col_bump-left">
+                        <template lwc:if={myCase.SDO_Service_Escalated__c}>
+                            <lightning-icon icon-name="utility:arrowup" alternative-text="Connected" size="small" title="large size"></lightning-icon>
+                        </template>
+                        <template lwc:else>
+                            <lightning-icon icon-name="utility:arrowdown" alternative-text="Connected" size="small" title="large size"></lightning-icon>
+                        </template>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <p slot="footer">Card Footer</p> -->
+    </lightning-card>
+</template>

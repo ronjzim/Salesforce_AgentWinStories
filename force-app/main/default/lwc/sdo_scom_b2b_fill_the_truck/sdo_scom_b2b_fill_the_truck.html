@@ -1,0 +1,37 @@
+<template>
+    <lightning-card hide-header class="progress-container slds-is-relative">
+        <div class="progress-bar2 slds-m-bottom_small" style={computedStyle}>
+            <div class="completed-bar2 slds-grid">
+                <hr class="slds-col completed-bar2__dashed" />
+                <lightning-icon
+                    icon-name="utility:truck"
+                    class="slds-no-flex truck-icon-color"
+                    alternative-text="Truck Position"
+                    title="Truck Position"
+                    size="small"
+                ></lightning-icon>
+            </div>
+        </div>
+        <lightning-layout pull-to-boundary="medium" multiple-rows>
+            <template for:each={layoutItems} for:item="item">
+                <lightning-layout-item size={layoutItemSize} padding="horizontal-medium" key={item.label}>
+                    <dl class={layoutDlClass}>
+                        <dt>{item.label}:</dt>
+                        <dd>
+                            <lightning-formatted-number
+                                value={item.value}
+                                format-style={item.formatStyle}
+                                maximum-fraction-digits="2"
+                            ></lightning-formatted-number>
+                        </dd>
+                    </dl>
+                </lightning-layout-item>
+            </template>
+        </lightning-layout>
+        <lightning-spinner
+            if:true={isLoading}
+            alternative-text="Loading"
+            size="small"
+        ></lightning-spinner>
+    </lightning-card>
+</template>

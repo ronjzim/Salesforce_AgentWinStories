@@ -1,0 +1,115 @@
+<template>
+	<legend class="slds-text-title_caps slds-var-p-around_x-small spcHeader">
+		{labels.component.header}
+	</legend>
+
+	<div class="slds-box slds-var-m-bottom_medium">
+		<div class="slds-grid slds-gutters slds-wrap">
+			
+			<div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+				<div class="slds-var-m-bottom_medium">
+					<lightning-radio-group
+						name="paymentType"
+						label="Select your payment method"
+						variant="label-hidden"
+						options={paymentMethods}
+						value={paymentType}
+						type="radio"
+						onchange={handlePaymentTypeChange}
+					>
+					</lightning-radio-group>
+				</div>
+			</div>
+
+			<div
+				class="slds-col slds-size_1-of-1 slds-medium-size_3-of-4 slds-border_left columnPaymentForm"
+			>
+
+				<div class="slds-grid slds-gutters slds-wrap">
+
+					<template if:true={isPO}>
+						<c-b2b-checkout-payment-po
+							cart-id={cartId}
+							purchase-order-number={purchaseOrderNumber}
+							onpochange={handlePoChange}
+						>
+						</c-b2b-checkout-payment-po>
+
+						<template if:true={displayPurchaseOrderBillingAddresses}>
+
+							<div class="slds-col slds-size_1-of-1">
+								<c-b2b-checkout-payment-billing-address
+									contact-point-address-id={billingContactPointAddressId}
+									default-address={defaultAddress}
+									selected-address={selectedAddress}
+									options={addressOptions}
+									hide-address={hideBillingAddress}
+									require-address={requireBillingAddress}
+									onbillingaddresschange={handleBillingAddressChange}>
+								</c-b2b-checkout-payment-billing-address>
+							</div>
+	
+						</template>
+
+					</template>
+
+					<template if:true={isCC}>
+
+						<div class="slds-col slds-size_1-of-1">
+							<c-b2b-checkout-payment-cc
+								cart-id={cartId}
+								
+								hide-cardexpiration-month={hideCardExpirationMonth}
+								hide-card-holder-name={hideCardHolderName}
+								hide-card-type={hideCardType}
+								
+								hide-c-v-v={hideCVV}
+								hide-expiration-year={hideExpirationYear}
+								require-card-expiration-month={requireCardExpirationMonth}
+								require-card-expiration-year={requireCardExpirationYear}
+								require-card-type={requireCardType}
+								require-cardholder-ame={requireCardholderName}
+								
+								require-c-v-v={requireCVV}
+								
+								name-on-card={nameOnCard}
+								card-type={cardType}
+								card-number={cardNumber}
+								cvv={cvv}
+								expiry-month={expiryMonth}
+								expiry-year={expiryYear}
+								
+								onnameoncardchange={handleNameChange}
+								oncardtypechange={handleCardTypeChange}
+								oncardnumberchange={handleCardNumberChange}
+								oncvvchange={handleCVVChange}
+								onexpirymonthchange={handleExpiryMonthChange}
+								onexpiryyearchange={handleExpiryYearChange}
+							></c-b2b-checkout-payment-cc>
+
+						</div>
+
+						<template if:true={displayCreditCardBillingAddresses}>
+
+							<div class="slds-col slds-size_1-of-1">
+								<c-b2b-checkout-payment-billing-address
+									contact-point-address-id={billingContactPointAddressId}
+									default-address={defaultAddress}
+									selected-address={selectedAddress}
+									options={addressOptions}
+									hide-address={hideBillingAddress}
+									require-address={requireBillingAddress}
+									onbillingaddresschange={handleBillingAddressChange}>
+								</c-b2b-checkout-payment-billing-address>
+							</div>
+	
+						</template>
+
+					</template>
+
+				</div>
+
+			</div>
+		</div>
+	</div>
+</template>

@@ -1,0 +1,4 @@
+.error-section {
+    border: 1px solid var(--dxp-g-destructive, #c23934);
+    border-radius: 0.25rem;
+}

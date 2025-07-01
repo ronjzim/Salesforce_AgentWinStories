@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>55.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>CMS Collection Component</masterLabel>
+    <description>This component allows users to leverage pre-defined data sets in the post-modern demo world </description>
+    <targets>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property   name="collectionToDisplay" 
+                        label="Collection To Display" 
+                        type="String"
+                        datasource="apex://SDO_CMS_RetrieveCollectionList"
+                        description="Select Content Collection to display on this component"/>      
+            <property   name="contentSource" 
+                        label="Content Source" 
+                        type="String"
+                        datasource="Full Article,Preview Content"
+                        description="Select the content source for this article. Full Article is whole text, and preview content is the abridged version"
+                        default="Preview Content"/>
+            <property   name="useOnlyImage" 
+                        label="Display Image" 
+                        type="Boolean"
+                        description="Choose this option to display the image from the content source."
+                        default="true"/>
+            <property   name="useOnlyText" 
+                        label="Display Text" 
+                        type="Boolean"
+                        description="Choose this option to display the text from the content source."
+                        default="true"/>
+            <property   name="useButton" 
+                        label="Display Button" 
+                        type="Boolean"
+                        description="Choose this option to display the button with the Learn More Here button"
+                        default="true"/>
+            <property   name="buttonLabel" 
+                        label="Button Label" 
+                        type="String"
+                        description="Use this value to insert the value of the button you would like to display."
+                        default="Learn More"/>
+                        
+        </targetConfig>
+ </targetConfigs>
+</LightningComponentBundle>

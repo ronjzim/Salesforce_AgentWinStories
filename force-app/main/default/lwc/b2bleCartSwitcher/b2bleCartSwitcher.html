@@ -1,0 +1,113 @@
+<template>
+    <template if:true={carts}>
+        <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+            <thead>
+                <tr class="slds-line-height_reset">
+                    <!--
+                    <th class="" scope="col">
+                        <div class="slds-truncate" title="Cart Id">Cart Id</div>
+                    </th>
+                    -->
+                    <th class="" scope="col">
+                        <div class="slds-truncate" title="Cart Name">Cart Name</div>
+                    </th>
+                    <th class="" scope="col">
+                        <div class="slds-truncate" title="Cart Total">Cart Total</div>
+                    </th>
+                    <th class="" scope="col">
+                        <div class="slds-truncate" title="Active">Active</div>
+                    </th>
+                    <th class="" scope="col">
+                        <div class="slds-truncate" title="Actions">Actions</div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <template for:each={carts} for:item="c">
+                    <tr key={c.id} class="slds-hint-parent">
+                        <!--<td>{c.cartSummary.cartId}</td>-->
+                        <td>{c.cartSummary.name}</td>
+                        <td><lightning-formatted-number value={c.cartSummary.grandTotalAmount} format-style="currency" currency-code={c.cartSummary.currencyIsoCode}></lightning-formatted-number></td>
+                        <td>
+                            <template if:false={c.cartSummary.isSecondary}>
+                                <lightning-icon icon-name="action:approval" alternative-text="Approved" title="Approved" size="small"></lightning-icon>
+                            </template>
+                        </td>
+                        <td>
+                            <template if:false={c.ownedByCurrentUser}>
+                                <lightning-button data-id={c.id} variant="brand" label="Take Ownership" title="Take Ownership" onclick={takeCartOwnership} class="slds-m-left_x-small"></lightning-button>
+                            </template>
+                            <template if:true={c.cartSummary.isSecondary}>
+                                <lightning-button data-id={c.id} variant="brand" label="Make Active" title="Make Active" onclick={switchToCart} class="slds-m-left_x-small"></lightning-button>
+                            </template>
+                            <template if:true={c.ownershipTaken}>
+                                <lightning-button data-id={c.id} variant="brand" label="Release Ownership" title="Release Ownership" onclick={releaseCartOwnership} class="slds-m-left_x-small"></lightning-button>
+                            </template>
+                            <template if:false={c.isShared}>
+                                <lightning-button data-id={c.id} variant="brand" label="Share" title="Share" onclick={shareCartOwnership} class="slds-m-left_x-small"></lightning-button>
+                            </template>
+                            <lightning-button data-id={c.id} variant="brand" label="Delete Cart" title="Delete Cart" onclick={openDeleteModal} class="slds-m-left_x-small"></lightning-button>
+                        </td>
+                    </tr>
+                </template>
+            </tbody>
+        </table>
+        <lightning-button variant="brand" label="Create a new cart" title="Create a new cart" onclick={openCreateModal} class="slds-m-left_x-small"></lightning-button>
+    </template>
+
+    <template if:true={showDeleteModal}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeDeleteModal}>
+                        <lightning-icon icon-name="utility:close"
+                            alternative-text="close"
+                            variant="inverse"
+                            size="small" ></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Deleting Cart</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <p>Are you sure you want to delete the cart?</p>
+                </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick={closeDeleteModal} title="No">No</button>
+                    <button class="slds-button slds-button_brand" onclick={deleteAccountCart} title="Yes">Yes</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+    <template if:true={showCreateModal}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-02" aria-modal="true" aria-describedby="modal-content-id-2" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeCreateModal}>
+                        <lightning-icon icon-name="utility:close"
+                            alternative-text="close"
+                            variant="inverse"
+                            size="small" ></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-02" class="slds-text-heading_medium slds-hyphenate">Create a new Cart</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-2" style="height:250px">
+                    <lightning-combobox
+                        name="ordertype"
+                        label="Order Type"
+                        value={newCartData.orderType}
+                        placeholder="Select Order Type"
+                        options={orderOptions}
+                        onchange={onOrderTypeChange} ></lightning-combobox>
+                </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick={closeCreateModal} title="Cancel">Cancel</button>
+                    <button class="slds-button slds-button_brand" onclick={createNewCart} title="Create">Create</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

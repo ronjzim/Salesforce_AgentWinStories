@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>58.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>SDO_SCOM_POP_UP_PREVIEW</masterLabel>
+    <targets>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property 
+                name="popUpTitle" 
+                type="String" 
+                label="Title" 
+                default="GET 15% OFF YOUR FIRST ORDER" 
+                description="Title of the popup" />
+            <property 
+                name="popUpDescription" 
+                type="String" 
+                label="Description" 
+                default="Sign up for our emails to get a discount code for your first order with us!" 
+                description="Description of the popup" />
+            <property 
+                name="inputLabel" 
+                type="String" 
+                label="Input Label" 
+                default="Email" 
+                description="Label for the input field" />
+            <property 
+                name="inputPlaceholder" 
+                type="String" 
+                label="Placeholder" 
+                default="Your Email" 
+                description="Placeholder value for input" />
+            <property 
+                name="buttonLabel" 
+                type="String" 
+                label="Button Label" 
+                default="Get my discount" 
+                description="Label for the button" />
+            <property 
+                name="productContentId"
+                type="ContentReference" 
+                label="Product Image" 
+                filter="cms_image" />
+            <property 
+                name="thankYouImageContentId"
+                type="ContentReference" 
+                label="Thank you Image" 
+                filter="cms_image" />
+            <property 
+                name="altText" 
+                type="String" 
+                label="Alternate text" 
+                default="Thank you!" 
+                description="Alternate text for thank you image" />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

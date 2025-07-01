@@ -1,0 +1,54 @@
+<template>
+    <div class="container">
+        <template lwc:if={noAuctions}>
+            <p>{noAuctionText}</p>
+        </template>
+        <template lwc:else>
+            <p class="auction-price">
+                Staring Price: 
+                <lightning-formatted-number
+                    value={startingBidPrice}
+                    format-style="currency" 
+                    currency-code={cureencyCode}
+                    maximum-fraction-digits="2"
+                ></lightning-formatted-number>
+            </p>
+            <div class="bid-info">
+                <div class="number-of-bids">{numberOfBids} bids</div>
+                <div class="dot"> &#x2022; </div>
+                <div if:true={auctionPending} class="start">Starts in {startDate}</div>
+                <div if:true={auctionActive} class="end">Ends in {endDate} </div>
+                <div if:true={auctionClosed} class="close">This auction has ended.</div>
+            </div>
+            <p class="latest-bid" if:true={numberOfBids}>
+                Latest bid: 
+                <lightning-formatted-number
+                    value={latestBid}
+                    format-style="currency" 
+                    currency-code={cureencyCode}
+                    maximum-fraction-digits="2"
+                ></lightning-formatted-number>
+            </p>
+            <div class="bid-panel" if:false={hideAuctionSection}>
+                <lightning-input
+                    id="bid-amount-input" 
+                    type="number" 
+                    label={textFieldLabelText} 
+                    class="bid-amount-input"
+                    placeholder="Enter bid amount"
+                    onchange={handleBidAmountChange}
+                    data-id="inputField"
+                ></lightning-input>
+                <p class="slds-text-color_error error-message" if:false={isBidValid}>{errorMessage}</p>
+                <button
+                    class="place-bid slds-button slds-button_brand"
+                    onclick={placeBidButtonClick}
+                    disabled={hideAuctionSection}
+                >{placeBidText}</button>
+            </div>
+        </template>
+        <template lwc:if={isGuestUser}>
+            <p class="slds-p-top_small">{guestUserText}</p>
+        </template>
+    </div>
+</template>

@@ -1,0 +1,12 @@
+<template>
+	<lightning-card title="My Company Users" heading-level="1">
+		<lightning-button label="Add User" variant="brand" slot="actions"></lightning-button>
+		<lightning-spinner lwc:if={isLoading} alternative-text="Loading..." variant="brand">
+		</lightning-spinner>
+		<c-s-d-o_-s-c-o-m_-o-o-a_-custom-data-table-types key-field="id" data={data} columns={columns}
+			show-row-number-column	
+			onrecordlinkclick={handleRecordNav}
+            hide-checkbox-column="true">
+		</c-s-d-o_-s-c-o-m_-o-o-a_-custom-data-table-types>
+	</lightning-card>
+</template>

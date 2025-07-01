@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>60.0</apiVersion>
+    <description>Tracking Event Config</description>
+    <isExposed>true</isExposed>
+    <masterLabel>Xdo Tool Tracking Event Config</masterLabel>
+    <targets>
+        <target>lightning__AppPage</target>
+        <target>lightning__HomePage</target>
+        <target>lightning__RecordPage</target>
+    </targets>
+
+    <targetConfigs>
+        <targetConfig targets="lightning__AppPage, lightning__HomePage, lightning__RecordPage">
+            <property name="pageContext" type="String" label="Page Context" default="FINS-NextGen-Retail-Banking-Sales"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

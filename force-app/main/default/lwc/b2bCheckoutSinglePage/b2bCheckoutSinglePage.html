@@ -1,0 +1,98 @@
+<template>
+	<c-b2b-checkout-loading-spinner
+		show-loading-spinner={showLoadingSpinner}
+	></c-b2b-checkout-loading-spinner>
+
+	<div class="slds-grid slds-gutters slds-wrap">
+		<div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-3">
+			<!-- If the user selects something besides the default, the CartDeliveryGroup is updated. -->
+			<!-- Probably need to handle when the user goes with the default ship to. -->
+
+			<!-- FFEIX[03/17/23] : add onshippingrequestdatechange to capture Request Date in checkout -->
+			<c-b2b-checkout-ship-to-input
+
+				cart-id={cartId}
+				effective-account-id={effectiveAccountId}
+
+				hide-ship-to-section={hideShipToSection}
+				hide-delivery-instructions={hideDeliveryInstructions}
+				hide-shipping-address-selection={hideShippingAddressSelection}
+				hide-shipping-address-manual-entry={hideShippingAddressManualEntry}
+
+				auto-launch-edit-ship-to-address-dialog={autoLaunchEditShipToAddressDialog}
+
+				make-component-read-only={makeComponentReadOnly}
+
+				onshippingaddresschange={handleShippingAddressChange}
+				onshippinginstructionschange={handleShippingInstructionsChange}
+				onshippingrequestdatechange={handleShippingRequestDateChange}
+
+			></c-b2b-checkout-ship-to-input>
+
+			<c-b2b-checkout-delivery-method-selection
+				cart-id={cartId}
+				effective-account-id={effectiveAccountId}
+				
+				hide-delivery-method-selection={hideDeliveryMethodSelection}
+				use-default-delivery-method={useDefaultDeliveryMethod}
+				ondeliverymethodchange={handleDeliveryMethodChange}
+				currency={currency}
+			>
+			</c-b2b-checkout-delivery-method-selection>
+
+			<template if:false={hidePaymentMethodSection}>
+				<c-b2b-checkout-payment
+					cart-id={cartId}
+					effective-account-id={effectiveAccountId}
+
+					billing-contact-point-address-id={billingContactPointAddressId}
+					hide-card-expiration-month={hideCardExpirationMonth}
+					hide-card-holder-name={hideCardHolderName}
+					hide-card-type={hideCardType}
+					hide-credit-card-billing-address={hideCreditCardBillingAddress}
+					hide-c-v-v={hideCVV}
+					hide-expiration-year={hideExpirationYear}
+					hide-purchase-order-billing-address={hidePurchaseOrderBillingAddress}
+					payment-gateway-id={paymentGatewayId}
+					purchase-order-number={purchaseOrderNumber}
+					require-card-expiration-month={requireCardExpirationMonth}
+					require-card-expiration-year={requireCardExpirationYear}
+					require-card-type={requireCardType}
+					require-cardholder-name={requireCardholderName}
+					require-credit-card-billing-address={requireCreditCardBillingAddress}
+					require-c-v-v={requireCVV}
+					require-purchase-order-billing-address={requirePurchaseOrderBillingAddress}
+					payment-type={paymentType}
+
+					hide-purchase-order-payment-option={hidePurchaseOrderPaymentOption}
+					hide-credit-card-payment-option={hideCreditCardPaymentOption}
+
+					onbillingaddresschange={handleBillingAddressChange}
+					onpaymenttypechange={handlePaymentTypeChange}
+					onpochange={handlePoChange}
+					onnameoncardchange={handleNameChange}
+					oncardtypechange={handleCardTypeChange}
+					oncardnumberchange={handleCardNumberChange}
+					oncvvchange={handleCVVChange}
+					onexpirymonthchange={handleExpiryMonthChange}
+					onexpiryyearchange={handleExpiryYearChange}
+				></c-b2b-checkout-payment>
+
+			</template>
+
+</div>
+
+<div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-var-p-bottom_small columnSummary">
+
+    <c-b2b-checkout-cart-summary cart-id={cartId} use-default-tax-rate={useDefaultTaxRate} hide-cart-summary-section={hideCartSummarySection} subtotal={subtotal} est-shipping={estShipping} est-tax={estTax} total={total} total-promo-amount={totalPromoAmount}
+        total-after-adjustment={totalAfterAdjustment} currency={currency}>
+    </c-b2b-checkout-cart-summary>
+
+    <button title="Next" onclick={handleGoNext} class="slds-button slds-button_brand slds-button_stretch">
+				{labels.component.nextButton}
+			</button>
+</div>
+
+</div>
+
+</template>

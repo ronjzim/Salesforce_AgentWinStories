@@ -1,0 +1,51 @@
+<template>
+    <div class="previewContainer">
+        <template if:false={hideChart}>
+            <div class="slds-form-element__label">
+                Select Chart Type
+                <lightning-helptext class="slds-p-horizontal_xxx-small"
+                    content="These chart types are solely so you can visualize your fake data before saving, they will not limit or affect in any way the standard chart display options within Salesforce"></lightning-helptext>
+            </div>
+            <div class="chartIconContainer">
+                <template for:each={chartTypes} for:item="chart">
+                    <input type="image" src={chart.src} title={chart.label} width={iconSize} height={iconSize}
+                        class="slds-m-around_xxx-small" key={chart.name} data-chart-type={chart.name}
+                        onclick={handleChartTypeClick} disabled={chart.isDisabled}>
+                </template>
+            </div>
+            <template if:true={showChart}>
+                <div class="chartContainer slds-p-around_small">
+                    <c-chart type={chartDetails.style} responsive="true" stylecss="position: relative; margin: auto; min-height: 300px" maintainaspectratio="false">
+                        <c-title text={reportDetails.reportName}></c-title>
+                        <c-dataset labels={chartLabels}>
+                            <template for:each={datasets} for:item="dataset">
+                                <c-data label={dataset.label} detail={dataset.data} backgroundcolor={dataset.colour}
+                                    borderwidth="1" key={dataset.data}></c-data>
+                            </template>
+                        </c-dataset>
+                        <template if:true={linearAxis}>
+                            <c-cartesian-linear-axis axis={linearAxis} title-labelstring={linearLabel} title-display
+                                ticks-beginatzero stacked={isStacked} ticks-callback={ticksCallback}>
+                            </c-cartesian-linear-axis>
+                        </template>
+                        <template if:true={categoryAxis}>
+                            <c-cartesian-category-axis axis={categoryAxis} title-labelstring={categoryLabel}
+                                title-display stacked={isStacked}>
+                            </c-cartesian-category-axis>
+                        </template>
+                         <c-legend position="bottom" display={displayLegend}></c-legend>
+                        <!-- <template if:true={dontAnimate}> -->
+                            <c-animation duration=1></c-animation>
+                        <!-- </template> -->
+                    </c-chart>
+                    <template if:true={displayLegend}>
+                        <p class="slds-text-title slds-text-color_weak slds-align_absolute-center">{legendLabel}</p>
+                    </template>
+                </div>
+            </template>
+        </template>
+        <template if:true={hideChart}>
+            <p class="slds-text-body_regular">Chart preview will be displayed once it has been provided with data.</p>
+        </template>
+    </div>
+</template>

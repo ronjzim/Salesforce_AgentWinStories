@@ -1,0 +1,14 @@
+<template>
+    <div class="slds-box">
+        <lightning-card>
+            <h3 slot="title">
+                <lightning-icon icon-name={cardIcon} size="small"></lightning-icon>
+                &nbsp;&nbsp;{title}
+            </h3>
+            <div slot="footer" class="slds-align_absolute-center">
+                    <lightning-button label={buttonLabel1} onclick={proceedtoNext}></lightning-button>        
+            </div>
+            <p class="slds-p-horizontal_small"> <lightning-formatted-rich-text value={description}></lightning-formatted-rich-text></p>
+        </lightning-card>
+    </div>
+</template>

@@ -1,0 +1,16 @@
+<template>
+ <template if:true={showImages}>
+    <lightning-card title="Images">
+         <div class="slds-grid slds-wrap">
+         <template for:each={filesList} for:item="file">
+                     <div  key={file.value} class="slds-col slds-p-around_small slds-large-size_4-of-12 slds-medium-size_4-of-12 slds-size_12-of-12">
+                         <img src={file.url} width="200" height="200"/>
+                         <template if:true={showImageDescription}>
+                           <p>{file.label} </p>
+                         </template>
+                     </div>
+         </template>
+        </div>
+    </lightning-card> 
+ </template>
+</template>
