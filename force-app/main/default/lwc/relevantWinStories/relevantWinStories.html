@@ -20,7 +20,7 @@
             <template if:false={showLoadingSpinner}>
                 <template if:true={hasStories}>
                     <div class="stories-container">
-                        <template for:each={displayedStories} for:item="story">
+                        <template for:each={winStories} for:item="story">
                             <div key={story.id} class="story-card slds-box slds-theme_default slds-m-bottom_small" 
                                 data-story-id={story.id} onclick={handleStoryClick}>
 
