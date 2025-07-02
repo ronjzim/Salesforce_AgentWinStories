@@ -1,11 +1,11 @@
 <template>
-    <lightning-card title={cardTitle} icon-name="standard:success">
+    <lightning-card title="Relevant Customer Win Stories" icon-name="standard:case">
         <div slot="actions">
-            <lightning-button-icon 
-                icon-name="utility:refresh" 
+            <lightning-button-icon
+                icon-name="utility:refresh"
                 variant="border-filled"
-                alternative-text="Refresh Stories"
-                title="Refresh Stories"
+                alternative-text="Refresh"
+                title="Refresh"
                 onclick={handleRefresh}>
             </lightning-button-icon>
         </div>
@@ -13,39 +13,24 @@
         <div class="slds-p-horizontal_medium slds-p-bottom_medium">
             <template if:true={showLoadingSpinner}>
                 <div class="slds-is-relative slds-p-vertical_large">
-                    <lightning-spinner alternative-text="Loading relevant win stories..." size="medium"></lightning-spinner>
+                    <lightning-spinner alternative-text="Loading..." size="medium"></lightning-spinner>
                 </div>
             </template>
 
             <template if:false={showLoadingSpinner}>
                 <template if:true={hasStories}>
-                    <div class="stories-container">
-                        <template for:each={winStories} for:item="story">
-                            <div key={story.id} class="story-card slds-box slds-theme_default slds-m-bottom_small" 
-                                data-story-id={story.id} onclick={handleStoryClick}>
-
-                                <div class="story-header slds-grid slds-grid_align-spread slds-m-bottom_small">
-                                    <p class="story-customer slds-text-heading_small slds-text-color_default">
-                                        {story.customerName}
-                                    </p>
-                                    <span class="relevance-score slds-badge">
-                                        {story.relevanceScore}% Relevant
-                                    </span>
-                                </div>
-
-                                <div class="story-summary slds-text-body_regular">
-                                    <lightning-formatted-rich-text value={story.summary}></lightning-formatted-rich-text>
-                                </div>
-
-                            </div>
-                        </template>
-                    </div>
+                    <template for:each={winStories} for:item="story">
+                        <div key={story.id} class="story-card slds-box slds-m-bottom_small">
+                            <p class="slds-text-heading_small slds-m-bottom_small">{story.customerName}</p>
+                            <lightning-formatted-rich-text value={story.summary}></lightning-formatted-rich-text>
+                        </div>
+                    </template>
                 </template>
 
                 <template if:false={hasStories}>
-                    <div class="empty-state slds-text-align_center slds-p-vertical_large">
+                    <div class="slds-text-align_center slds-p-vertical_large">
                         <lightning-icon icon-name="utility:info" size="large" class="slds-m-bottom_small"></lightning-icon>
-                        <div class="slds-text-heading_small slds-text-color_weak">{emptyStateMessage}</div>
+                        <p class="slds-text-heading_small">No stories available.</p>
                     </div>
                 </template>
             </template>
