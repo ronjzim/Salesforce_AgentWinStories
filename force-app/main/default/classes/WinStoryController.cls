@@ -9,51 +9,34 @@ public without sharing class WinStoryController {
 
     @AuraEnabled(cacheable=true)
     public static List<WinStory> getStoriesFromAgentFlow(String opportunityId) {
+        // This is a temporary method for debugging the inferred industry
+        System.debug('--- STARTING INFERENCE DEBUG ---');
         try {
-            // 1. Get the Name and Industry from the PARENT ACCOUNT
-            Opportunity opp = [SELECT Account.Name, Account.Industry 
-                               FROM Opportunity 
-                               WHERE Id = :opportunityId LIMIT 1];
-            
-            String accName = opp.Account.Name;
-            String accIndustry = opp.Account.Industry;
-            
-            if (String.isBlank(accIndustry)) {
-                accIndustry = 'General';
-            }
+            Opportunity opp = [SELECT Account.Name, Account.Industry
+                            FROM Opportunity WHERE Id = :opportunityId LIMIT 1];
 
-            // 2. Set up Flow inputs for BOTH Name and Industry
+            if (opp.AccountId == null) { return getTestStories(); }
+
             Map<String, Object> flowInputs = new Map<String, Object>();
-            flowInputs.put('opportunityAccountName', accName);
-            flowInputs.put('opportunityIndustry', accIndustry);
+            flowInputs.put('opportunityAccountName', opp.Account.Name);
+            flowInputs.put('opportunityIndustry', opp.Account.Industry);
 
-            // 3. Run the Flow
             Flow.Interview storyFlow = Flow.Interview.createInterview('Get_Win_Stories_From_Prompt', flowInputs);
             storyFlow.start();
-            
-            // ... (The rest of the parsing code remains the same) ...
-            Object rawResponseObject = storyFlow.getVariableValue('promptResponse');
-            if (rawResponseObject == null) { return new List<WinStory>(); }
-            String rawJsonFromAgent = (String)rawResponseObject;
-            if (String.isBlank(rawJsonFromAgent)) { return new List<WinStory>(); }
 
-            String finalJsonToParse = rawJsonFromAgent;
-            Integer startIndex = finalJsonToParse.indexOf('[');
-            Integer endIndex = finalJsonToParse.lastIndexOf(']');
-            
-            if (startIndex != -1 && endIndex != -1 && endIndex > startIndex) {
-                finalJsonToParse = finalJsonToParse.substring(startIndex, endIndex + 1);
-            } else {
-                return getTestStories();
-            }
-            
-            finalJsonToParse = finalJsonToParse.replace('\\"', '"').replace('\\n', ' ').replace('\\r', ' ').replace('\\t', ' ');
-            return (List<WinStory>) JSON.deserialize(finalJsonToParse, List<WinStory>.class);
+            // Get the output variable from the FIRST step of your Flow
+            Object inferredIndustryObject = storyFlow.getVariableValue('inferredIndustry');
+
+            // Log the result to the Apex Debug Log
+            System.debug('Raw Inferred Industry Object: ' + inferredIndustryObject);
 
         } catch (Exception e) {
-            System.debug('WinStoryController EXCEPTION: ' + e.getMessage() + ' at line ' + e.getLineNumber());
-            return getTestStories();
+            System.debug('An exception occurred during debug: ' + e.getMessage());
         }
+
+        System.debug('--- FINISHED INFERENCE DEBUG ---');
+        // Always return the fallback data during this test
+        return getTestStories();
     }
     
     @AuraEnabled(cacheable=true)
