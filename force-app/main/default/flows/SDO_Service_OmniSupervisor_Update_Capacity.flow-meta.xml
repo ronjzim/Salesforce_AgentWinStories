@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Send_The_Notification</name>
+        <label>Send Notification</label>
+        <locationX>314</locationX>
+        <locationY>1106</locationY>
+        <actionName>customNotificationAction</actionName>
+        <actionType>customNotificationAction</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>customNotifTypeId</name>
+            <value>
+                <elementReference>Get_Notification_Type.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>body</name>
+            <value>
+                <stringValue>Your Work Capacity has been updated to {!New_Capacity} - please log out and back into Omni-Channel for it to take effect</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>title</name>
+            <value>
+                <stringValue>Work Capacity Updated - Re-login to Omni-Channel</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>recipientIds</name>
+            <value>
+                <elementReference>ids</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>targetPageRef</name>
+            <value>
+                <stringValue>{         type: standard__namedPage,     attributes: {         pageName: home         } }</stringValue>
+            </value>
+        </inputParameters>
+        <nameSegment>customNotificationAction</nameSegment>
+    </actionCalls>
+    <actionCalls>
+        <name>Show_Success_Toast</name>
+        <label>Show Success Toast</label>
+        <locationX>644</locationX>
+        <locationY>674</locationY>
+        <actionName>c:SDO_Flow_showToast</actionName>
+        <actionType>component</actionType>
+        <connector>
+            <targetReference>Check_Send_Notification</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>type</name>
+            <value>
+                <stringValue>success</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>message</name>
+            <value>
+                <stringValue>Work Capacity updated to {!New_Capacity} for {!NumUserCapacityUpdated} user(s)</stringValue>
+            </value>
+        </inputParameters>
+        <nameSegment>c:SDO_Flow_showToast</nameSegment>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </actionCalls>
+    <apiVersion>60.0</apiVersion>
+    <assignments>
+        <name>Get_Num_Records</name>
+        <label>Get Num Records</label>
+        <locationX>347</locationX>
+        <locationY>134</locationY>
+        <assignmentItems>
+            <assignToReference>NumRecords</assignToReference>
+            <operator>AssignCount</operator>
+            <value>
+                <elementReference>ids</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_records_passed</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Increment_Count</name>
+        <label>Increment Count</label>
+        <locationX>644</locationX>
+        <locationY>566</locationY>
+        <assignmentItems>
+            <assignToReference>NumUserCapacityUpdated</assignToReference>
+            <operator>AssignCount</operator>
+            <value>
+                <elementReference>ids</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Show_Success_Toast</targetReference>
+        </connector>
+    </assignments>
+    <choices>
+        <name>No_Go_Back</name>
+        <choiceText>No - Go Back</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>No - Go Back</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>Yes_Reset_the_Password_s</name>
+        <choiceText>Yes - Reset the Password(s)</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Yes - Reset the Password(s)</stringValue>
+        </value>
+    </choices>
+    <decisions>
+        <name>Check_Notification_Type</name>
+        <label>Check Notification Type</label>
+        <locationX>446</locationX>
+        <locationY>998</locationY>
+        <defaultConnector>
+            <targetReference>No_Notification_Type</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No notification Type</defaultConnectorLabel>
+        <rules>
+            <name>Found_Type</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Notification_Type</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Send_The_Notification</targetReference>
+            </connector>
+            <label>Found Type</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_records_passed</name>
+        <label>Check records passed</label>
+        <locationX>347</locationX>
+        <locationY>242</locationY>
+        <defaultConnector>
+            <targetReference>Enter_New_Capacity</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>IDs present</defaultConnectorLabel>
+        <rules>
+            <name>None_passed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>NumRecords</leftValueReference>
+                <operator>LessThanOrEqualTo</operator>
+                <rightValue>
+                    <numberValue>0.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>No_User_Ids_Passed</targetReference>
+            </connector>
+            <label>None passed</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_Send_Notification</name>
+        <label>Check Send Notification</label>
+        <locationX>644</locationX>
+        <locationY>782</locationY>
+        <defaultConnectorLabel>No Notification</defaultConnectorLabel>
+        <rules>
+            <name>Send_Notification</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Send_Salesforce_notification_note_password_reset_email_will_be_sent_regardless</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Notification_Type</targetReference>
+            </connector>
+            <label>Send Notification</label>
+        </rules>
+    </decisions>
+    <description>Assigns the selected user a Presence Config with the appropriate capacity, or creates a new one if no such presence config exists by cloning the &apos;default_presence_config&apos; presence status and updating the capacity</description>
+    <environments>Default</environments>
+    <interviewLabel>SDO Service - Update Capacity {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>SDO Service - Update Capacity</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <recordLookups>
+        <name>Get_Notification_Type</name>
+        <label>Get Notification Type</label>
+        <locationX>446</locationX>
+        <locationY>890</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Check_Notification_Type</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Desktop</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>CustomNotificationType</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <name>Set_new_capacity_on_Config</name>
+        <label>Set new capacity on Config</label>
+        <locationX>644</locationX>
+        <locationY>458</locationY>
+        <connector>
+            <targetReference>Increment_Count</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>DeveloperName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>SDO_Service_presence_config</stringValue>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Capacity</field>
+            <value>
+                <elementReference>New_Capacity</elementReference>
+            </value>
+        </inputAssignments>
+        <object>PresenceUserConfig</object>
+    </recordUpdates>
+    <runInMode>SystemModeWithoutSharing</runInMode>
+    <screens>
+        <name>Enter_New_Capacity</name>
+        <label>Enter New Capacity</label>
+        <locationX>644</locationX>
+        <locationY>350</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Set_new_capacity_on_Config</targetReference>
+        </connector>
+        <fields>
+            <name>Warning</name>
+            <fieldText>&lt;p&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;Enter the new capacity you want to assign the selected agents.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;font-size: 14px; color: rgb(255, 0, 0);&quot;&gt;⚠️ Warning&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;This may create a new Presence Configuration if none with the new capacity exists (by cloning the default Config). Users will need to log out of Omni-Channel and back in for the changes to take effect.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;Updating Capacity for {!NumRecords} user(s):&lt;/span&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <fields>
+            <name>Enter_New_Capacity_Section1</name>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>Enter_New_Capacity_Section1_Column1</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>New_Capacity</name>
+                    <dataType>Number</dataType>
+                    <fieldText>New Capacity</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <isRequired>true</isRequired>
+                    <scale>0</scale>
+                </fields>
+                <fields>
+                    <name>Send_Salesforce_notification_note_password_reset_email_will_be_sent_regardless</name>
+                    <dataType>Boolean</dataType>
+                    <fieldText>Send Salesforce notification to User(s)</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <isRequired>true</isRequired>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <fields>
+                <name>Enter_New_Capacity_Section1_Column2</name>
+                <fieldType>Region</fieldType>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithoutHeader</regionContainerType>
+        </fields>
+        <nextOrFinishButtonLabel>Update Capacity</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
+        <name>No_Notification_Type</name>
+        <label>No Notification Type</label>
+        <locationX>578</locationX>
+        <locationY>1106</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>NoNotificationType</name>
+            <fieldText>&lt;p&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;The passwords were reset, but the Salesforce notification was unable to be sent.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;strong style=&quot;color: rgb(0, 0, 0); font-size: 12px;&quot;&gt;Error:&lt;/strong&gt;&lt;span style=&quot;color: rgb(0, 0, 0); font-size: 12px;&quot;&gt; No Custom Notification Type with desktop support is defined. &lt;/span&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;Please contact you admin and ask them to add a Custom Notification Type from the &apos;Custom Notifications&apos; admin screen.&lt;/span&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
+        <description>Shouldn&apos;t get here as the UI blocks selecting an action without an ID, but just in case.</description>
+        <name>No_User_Ids_Passed</name>
+        <label>No User Ids Passed</label>
+        <locationX>50</locationX>
+        <locationY>350</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>No_Users_Selected</name>
+            <fieldText>&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); color: rgb(68, 68, 68);&quot;&gt;No users were selected. Please try again.&lt;/span&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <start>
+        <locationX>221</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Num_Records</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <description>List of record IDs passed in</description>
+        <name>ids</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>NumRecords</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+        <value>
+            <numberValue>0.0</numberValue>
+        </value>
+    </variables>
+    <variables>
+        <name>NumUserCapacityUpdated</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+        <value>
+            <numberValue>0.0</numberValue>
+        </value>
+    </variables>
+    <variables>
+        <name>PresenceConfigurationToAssign</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

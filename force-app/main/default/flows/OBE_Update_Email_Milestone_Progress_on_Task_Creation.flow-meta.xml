@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>56.0</apiVersion>
+    <interviewLabel>OBE-Update Email Milestone Progress on Task Creation {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>OBE-Update Email Milestone Progress on Task Creation</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <name>Create_Email_Milestone_Progress_Update</name>
+        <label>Create Email Milestone Progress Update</label>
+        <locationX>916</locationX>
+        <locationY>435</locationY>
+        <inputAssignments>
+            <field>Milestone__c</field>
+            <value>
+                <elementReference>OBE_Email_ID</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Progress_Value__c</field>
+            <value>
+                <numberValue>1.0</numberValue>
+            </value>
+        </inputAssignments>
+        <object>CGC_Milestone_Progress__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordLookups>
+        <description>Gets the ID of the Milestone Record for Guidance Center Custom Demo Component</description>
+        <name>GetIDofEmailMilestoneRecord</name>
+        <label>Get ID of Email Milestone Record</label>
+        <locationX>731</locationX>
+        <locationY>381</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Create_Email_Milestone_Progress_Update</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Name</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Log 50 Emails with Executives</stringValue>
+            </value>
+        </filters>
+        <object>CGC_Milestone__c</object>
+        <outputAssignments>
+            <assignToReference>OBE_Email_ID</assignToReference>
+            <field>Id</field>
+        </outputAssignments>
+    </recordLookups>
+    <start>
+        <locationX>650</locationX>
+        <locationY>48</locationY>
+        <connector>
+            <targetReference>GetIDofEmailMilestoneRecord</targetReference>
+        </connector>
+        <object>Task</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Draft</status>
+    <variables>
+        <name>OBE_Email_ID</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <stringValue></stringValue>
+        </value>
+    </variables>
+</Flow>

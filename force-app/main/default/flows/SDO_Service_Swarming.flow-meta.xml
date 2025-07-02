@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>54.0</apiVersion>
+    <choices>
+        <name>Add_Members_to_Swarm_Action</name>
+        <choiceText>Add Members to Swarm</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Add Members to Swarm</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>Finish_Swarming</name>
+        <choiceText>Finish Swarming</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Finish Swarming</stringValue>
+        </value>
+    </choices>
+    <decisions>
+        <name>Check_Action</name>
+        <label>Check Action</label>
+        <locationX>446</locationX>
+        <locationY>518</locationY>
+        <defaultConnector>
+            <targetReference>Finish_Swarming_Flow</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Finish Swarm Action</defaultConnectorLabel>
+        <rules>
+            <name>Add_Members_Action</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Select_action_to_take_and_click_Next</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>Add_Members_to_Swarm_Action</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Add_Members_to_Swarm_Flow</targetReference>
+            </connector>
+            <label>Add Members</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Swarm_Status_Check</name>
+        <label>Swarm Status Check</label>
+        <locationX>446</locationX>
+        <locationY>278</locationY>
+        <defaultConnector>
+            <targetReference>Reopen_Swarm</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Swarm Closed</defaultConnectorLabel>
+        <rules>
+            <name>No_Swarm_Found</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Find_associated_Swarm_s</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Begin_Swarm</targetReference>
+            </connector>
+            <label>No Swarm Found</label>
+        </rules>
+        <rules>
+            <name>Swarm_Open</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Find_associated_Swarm_s.Status</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Closed</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Swarm_currently_open</targetReference>
+            </connector>
+            <label>Swarm Open</label>
+        </rules>
+    </decisions>
+    <formulas>
+        <name>SwarmRecordURL</name>
+        <dataType>String</dataType>
+        <expression>HYPERLINK(&quot;/&quot; &amp; {!Find_associated_Swarm_s.Id}, &quot;Swarm Details&quot; ,&quot;_parent&quot; )</expression>
+    </formulas>
+    <interviewLabel>SDO Service - Swarming {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>SDO Service - Swarming</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <recordLookups>
+        <name>Find_associated_Swarm_s</name>
+        <label>Find associated Swarm(s)</label>
+        <locationX>446</locationX>
+        <locationY>158</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Swarm_Status_Check</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>RelatedRecordId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Swarm</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <screens>
+        <name>Swarm_currently_open</name>
+        <label>Swarm currently open</label>
+        <locationX>446</locationX>
+        <locationY>398</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Check_Action</targetReference>
+        </connector>
+        <fields>
+            <name>Txt_SwarmHeader</name>
+            <fieldText>&lt;p&gt;A Swarm is already open for this record, jump to the conversation by clicking the Collaboration URL below, or select an action.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;b style=&quot;font-size: 18px;&quot;&gt;{!SwarmRecordURL}&lt;/b&gt;&lt;/p&gt;&lt;p&gt;&lt;b&gt;Start Date:&lt;/b&gt; {!Find_associated_Swarm_s.StartedDateTime}&lt;/p&gt;&lt;p&gt;&lt;b style=&quot;background-color: rgb(255, 255, 255); color: rgb(68, 68, 68);&quot;&gt;Help needed: &lt;/b&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); color: rgb(68, 68, 68);&quot;&gt;{!Find_associated_Swarm_s.HelpNeeded}&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;b style=&quot;background-color: rgb(255, 255, 255); color: rgb(68, 68, 68);&quot;&gt;Collaboration URL: &lt;/b&gt;&lt;a href=&quot;{!Find_associated_Swarm_s.CollaborationUrl}&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot;&gt;{!Find_associated_Swarm_s.CollaborationUrl}&lt;/a&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <fields>
+            <name>Select_action_to_take_and_click_Next</name>
+            <choiceReferences>Add_Members_to_Swarm_Action</choiceReferences>
+            <choiceReferences>Finish_Swarming</choiceReferences>
+            <dataType>String</dataType>
+            <fieldText>Select action to take and click &apos;Next&apos;</fieldText>
+            <fieldType>RadioButtons</fieldType>
+            <isRequired>true</isRequired>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <start>
+        <locationX>320</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Find_associated_Swarm_s</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <subflows>
+        <name>Add_Members_to_Swarm_Flow</name>
+        <label>Add Members to Swarm Flow</label>
+        <locationX>314</locationX>
+        <locationY>638</locationY>
+        <connector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Swarm_currently_open</targetReference>
+        </connector>
+        <flowName>case_swarming__Add_To_Swarm</flowName>
+        <inputAssignments>
+            <name>recordId</name>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </inputAssignments>
+    </subflows>
+    <subflows>
+        <name>Begin_Swarm</name>
+        <label>Begin Swarm</label>
+        <locationX>50</locationX>
+        <locationY>398</locationY>
+        <connector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Find_associated_Swarm_s</targetReference>
+        </connector>
+        <flowName>case_swarming__Begin_Swarming</flowName>
+        <inputAssignments>
+            <name>recordId</name>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </inputAssignments>
+    </subflows>
+    <subflows>
+        <name>Finish_Swarming_Flow</name>
+        <label>Finish Swarming</label>
+        <locationX>578</locationX>
+        <locationY>638</locationY>
+        <connector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Find_associated_Swarm_s</targetReference>
+        </connector>
+        <flowName>case_swarming__Finish_Swarm</flowName>
+        <inputAssignments>
+            <name>recordId</name>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </inputAssignments>
+    </subflows>
+    <subflows>
+        <name>Reopen_Swarm</name>
+        <label>Reopen Swarm</label>
+        <locationX>842</locationX>
+        <locationY>398</locationY>
+        <connector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Find_associated_Swarm_s</targetReference>
+        </connector>
+        <flowName>case_swarming__Reopen_The_Swarm</flowName>
+        <inputAssignments>
+            <name>recordId</name>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </inputAssignments>
+    </subflows>
+    <variables>
+        <name>NumAssociatedSwarms</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+    </variables>
+    <variables>
+        <name>recordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

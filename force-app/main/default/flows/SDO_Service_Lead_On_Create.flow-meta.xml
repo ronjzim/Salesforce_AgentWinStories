@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>54.0</apiVersion>
+    <decisions>
+        <name>Check_Number</name>
+        <label>Check Number</label>
+        <locationX>182</locationX>
+        <locationY>455</locationY>
+        <defaultConnectorLabel>No Number on Lead</defaultConnectorLabel>
+        <rules>
+            <name>Phone_Number_Set</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>NumberToUse</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Send_Welcome_Message</targetReference>
+            </connector>
+            <label>Phone Number Set</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>used to evaluate the custom setting record to see if there is a custom setting record activated before moving forward</description>
+        <name>Evaluate_process_automation_settings</name>
+        <label>Evaluate process automation settings</label>
+        <locationX>380</locationX>
+        <locationY>335</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Fire_Process_Automation_True</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Setup.xDO_Tool_ProcessAutomationSwitch__c.xDO_Tool_ProcessAutomation__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Check_Number</targetReference>
+            </connector>
+            <label>Fire Process Automation = True</label>
+        </rules>
+    </decisions>
+    <description>Triggers an SMS message to new leads that are created.</description>
+    <formulas>
+        <name>NumberToUse</name>
+        <dataType>String</dataType>
+        <expression>BLANKVALUE({!$Record.MobilePhone},{!$Record.Phone})</expression>
+    </formulas>
+    <interviewLabel>SDO Service - Lead - On Create {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>SDO Service - Lead - On Create</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>254</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Evaluate_process_automation_settings</targetReference>
+        </connector>
+        <object>Lead</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <subflows>
+        <name>Send_Welcome_Message</name>
+        <label>Send Welcome Message</label>
+        <locationX>50</locationX>
+        <locationY>575</locationY>
+        <flowName>SDO_Service_Send_Message</flowName>
+        <inputAssignments>
+            <name>ContextRecordId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>NumberToSendTo</name>
+            <value>
+                <elementReference>NumberToUse</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>RecordToAssociateTo</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>TemplateToUse</name>
+            <value>
+                <stringValue>Lead_New_Lead_SMS_Template</stringValue>
+            </value>
+        </inputAssignments>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </subflows>
+</Flow>

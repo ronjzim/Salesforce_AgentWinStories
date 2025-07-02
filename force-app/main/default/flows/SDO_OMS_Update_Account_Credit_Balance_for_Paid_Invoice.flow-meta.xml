@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>56.0</apiVersion>
+    <decisions>
+        <name>Account_has_Credit_Limit</name>
+        <label>Account has Credit Limit?</label>
+        <locationX>182</locationX>
+        <locationY>335</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Limit</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.BillingAccount.CreditLimit__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Reduce_Credit_Balance</targetReference>
+            </connector>
+            <label>Yes - Limit</label>
+        </rules>
+    </decisions>
+    <description>What: Demo OMS Credit Limit &amp; Hold
+Who: Bill Macaulay When: March 2023</description>
+    <formulas>
+        <name>fNewBalance</name>
+        <dataType>Currency</dataType>
+        <expression>{!$Record.BillingAccount.Credit_Balance__c} - {!$Record.TotalChargeAmount} - {!$Record.TotalTaxAmount}</expression>
+        <scale>2</scale>
+    </formulas>
+    <interviewLabel>OMS Update Account Credit Balance for Paid Invoice {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>OMS Update Account Credit Balance for Paid Invoice</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Reduce_Credit_Balance</name>
+        <label>Reduce Credit Balance</label>
+        <locationX>50</locationX>
+        <locationY>455</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.BillingAccountId</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Credit_Balance__c</field>
+            <value>
+                <elementReference>fNewBalance</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Account</object>
+    </recordUpdates>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Account_has_Credit_Limit</targetReference>
+        </connector>
+        <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Payment_Status__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Paid</stringValue>
+            </value>
+        </filters>
+        <object>Invoice</object>
+        <recordTriggerType>Update</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

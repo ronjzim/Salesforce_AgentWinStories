@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>55.0</apiVersion>
+    <assignments>
+        <description>Sets the opportunityId and opportunityOwnerId variables with values from the opportunity record
+            from GetOpportunity.</description>
+        <name>SetOpportunityVariables</name>
+        <label>Set Opportunity Variables</label>
+        <locationX>264</locationX>
+        <locationY>458</locationY>
+        <assignmentItems>
+            <assignToReference>opportunityId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>GetOpportunity.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>opportunityOwnerId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>GetOpportunity.OwnerId</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>IterateOverOpportunityContactRoles</targetReference>
+        </connector>
+    </assignments>
+    <environments>Default</environments>
+    <interviewLabel>Sales Bot - Get Opportunity From Contact {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Buyer Assistant - Get Opportunity From Contact</label>
+    <loops>
+        <description>Repeats actions for each opportunity contact role record in Opportunity Contact Roles from
+            GetOpportunityContactRoles.</description>
+        <name>IterateOverOpportunityContactRoles</name>
+        <label>Iterate Over Opportunity Contact Roles</label>
+        <locationX>176</locationX>
+        <locationY>242</locationY>
+        <collectionReference>GetOpportunityContactRoles</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>GetOpportunity</targetReference>
+        </nextValueConnector>
+    </loops>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <description>Gets the open opportunity with an ID that matches the opportunity ID of the current opportunity
+            contact role record.</description>
+        <name>GetOpportunity</name>
+        <label>Get Opportunity</label>
+        <locationX>264</locationX>
+        <locationY>350</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>SetOpportunityVariables</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>IterateOverOpportunityContactRoles.OpportunityId</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>IsClosed</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Opportunity</object>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Name</queriedFields>
+        <queriedFields>OwnerId</queriedFields>
+        <queriedFields>Amount</queriedFields>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <description>Gets all opportunity contact role records related to the contactId that was passed into the flow.
+            Stores the ID and the OpportunityId fields for the matching opportunity contact role records in the
+            Opportunity Contact Roles from GetOpportunityContactRoles record collection.</description>
+        <name>GetOpportunityContactRoles</name>
+        <label>Get Opportunity Contact Roles</label>
+        <locationX>176</locationX>
+        <locationY>134</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>IterateOverOpportunityContactRoles</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>ContactId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>contactId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>OpportunityContactRole</object>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>OpportunityId</queriedFields>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>GetOpportunityContactRoles</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <description>Stores the contact ID passed into the flow.</description>
+        <name>contactId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>Stores the ID of the opportunity record from GetOpportunity and is returned as output from the
+            flow.</description>
+        <name>opportunityId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+    <variables>
+        <description>Stores the owner ID of the opportunity record from GetOpportunity and is returned as output from
+            the flow.</description>
+        <name>opportunityOwnerId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+</Flow>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>57.0</apiVersion>
+    <description>Will truncate any characters after the first 8 from the provided case number</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>JustCaseNumber</name>
+        <dataType>String</dataType>
+        <expression>LPAD(LEFT({!CaseNumber}, 8),8,&quot;0&quot;)</expression>
+    </formulas>
+    <interviewLabel>Einstein Bots - Return Case by CaseNumber {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Einstein Bots - Return Case by CaseNumber</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_Case_by_CaseNumber</name>
+        <label>Get Case by CaseNumber</label>
+        <locationX>176</locationX>
+        <locationY>158</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>CaseNumber</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>JustCaseNumber</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>IsClosed</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <object>Case</object>
+        <outputReference>Case</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>LastModifiedDate</queriedFields>
+        <queriedFields>Status</queriedFields>
+        <queriedFields>Subject</queriedFields>
+        <queriedFields>CaseNumber</queriedFields>
+        <queriedFields>Origin</queriedFields>
+        <queriedFields>Priority</queriedFields>
+    </recordLookups>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Case_by_CaseNumber</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>Case</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+        <objectType>Case</objectType>
+    </variables>
+    <variables>
+        <name>CaseNumber</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

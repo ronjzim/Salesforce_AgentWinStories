@@ -1,0 +1,588 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>49.0</apiVersion>
+    <assignments>
+        <name>Not_Operational</name>
+        <label>Not Operational</label>
+        <locationX>425</locationX>
+        <locationY>519</locationY>
+        <assignmentItems>
+            <assignToReference>vAssetStatus</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>cProductStatusRegistered</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_Asset</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Product_Operational</name>
+        <label>Product Operational</label>
+        <locationX>429</locationX>
+        <locationY>434</locationY>
+        <assignmentItems>
+            <assignToReference>vAssetStatus</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>cProductStatusOperational</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_Asset</targetReference>
+        </connector>
+    </assignments>
+    <choices>
+        <name>chInstalled</name>
+        <choiceText>Installed &amp; Operational</choiceText>
+        <dataType>Boolean</dataType>
+        <value>
+            <booleanValue>true</booleanValue>
+        </value>
+    </choices>
+    <choices>
+        <name>chNotInstalled</name>
+        <choiceText>Not Installed</choiceText>
+        <dataType>Boolean</dataType>
+        <value>
+            <booleanValue>false</booleanValue>
+        </value>
+    </choices>
+    <constants>
+        <description>File formats we will allow a user to upload.</description>
+        <name>cAcceptedFileFormats</name>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>.jpg,.jpeg,.png,.tiff,.gif,.bmp</stringValue>
+        </value>
+    </constants>
+    <constants>
+        <description>Message displayed when a user pauses the flow during asset entry.</description>
+        <name>cAssetEntryPauseMessage</name>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Thanks. We&apos;ve saved the information you entered and will resume when you return to this screen.</stringValue>
+        </value>
+    </constants>
+    <constants>
+        <description>Default product quantity.</description>
+        <name>cProductQtyDefault</name>
+        <dataType>Number</dataType>
+        <value>
+            <numberValue>1.0</numberValue>
+        </value>
+    </constants>
+    <constants>
+        <name>cProductStatusOperational</name>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Installed</stringValue>
+        </value>
+    </constants>
+    <constants>
+        <name>cProductStatusRegistered</name>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Registered</stringValue>
+        </value>
+    </constants>
+    <constants>
+        <name>cTRUE</name>
+        <dataType>Boolean</dataType>
+        <value>
+            <booleanValue>true</booleanValue>
+        </value>
+    </constants>
+    <constants>
+        <description>Label of the photo upload field.</description>
+        <name>lblPhotoUpload</name>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Got a photo of your installed product? Share it here!</stringValue>
+        </value>
+    </constants>
+    <decisions>
+        <description>Checks to see whether the currently logged in user has an associated Account record. This is the minimum required to create an Asset.</description>
+        <name>Check_Account_Record</name>
+        <label>Check Account Record</label>
+        <locationX>91</locationX>
+        <locationY>237</locationY>
+        <defaultConnector>
+            <targetReference>Sorry_No_Contact</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Missing Account Record</defaultConnectorLabel>
+        <rules>
+            <name>Has_Account_Record</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>sCurrentUsersAccount</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Asset_Details</targetReference>
+            </connector>
+            <label>Has Account Record</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_Product_Status</name>
+        <label>Check Product Status</label>
+        <locationX>259</locationX>
+        <locationY>433</locationY>
+        <defaultConnector>
+            <targetReference>Not_Operational</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Not Installed</defaultConnectorLabel>
+        <rules>
+            <name>Installed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>lblIs_the_product_operational</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>cTRUE</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Product_Operational</targetReference>
+            </connector>
+            <label>Installed</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Checks whether the currently logged in user is an employee, or an external party.</description>
+        <name>Internal_or_External_User</name>
+        <label>Internal or External User</label>
+        <locationX>92</locationX>
+        <locationY>116</locationY>
+        <defaultConnector>
+            <targetReference>Sorry_No_Contact</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Is Internal User</defaultConnectorLabel>
+        <rules>
+            <name>Is_External_User</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>vIsExternalUser</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>cTRUE</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Check_Account_Record</targetReference>
+            </connector>
+            <label>Is External User</label>
+        </rules>
+    </decisions>
+    <description>SAMPLE: Allows a community user to register a product as an asset in the community.</description>
+    <dynamicChoiceSets>
+        <description>Returns a choice list of all active products in the org. Filter this list down further if you want to restrict the products available to choose.</description>
+        <name>GetActiveProducts</name>
+        <dataType>String</dataType>
+        <displayField>Name</displayField>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>IsActive</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <object>Product2</object>
+        <outputAssignments>
+            <assignToReference>vSelectedProduct</assignToReference>
+            <field>Id</field>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>vSelectedProductName</assignToReference>
+            <field>Name</field>
+        </outputAssignments>
+        <sortField>Name</sortField>
+        <sortOrder>Asc</sortOrder>
+        <valueField>Id</valueField>
+    </dynamicChoiceSets>
+    <interviewLabel>Register New Product {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Register New Product</label>
+    <processType>Flow</processType>
+    <recordCreates>
+        <description>Initial creation of asset record. Required in order to allow file uploads in the next screen.</description>
+        <name>Create_Asset_Record</name>
+        <label>Create Asset Record</label>
+        <locationX>237</locationX>
+        <locationY>333</locationY>
+        <assignRecordIdToReference>vAssetId</assignRecordIdToReference>
+        <connector>
+            <targetReference>scrConfirmInstall</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Error</targetReference>
+        </faultConnector>
+        <inputAssignments>
+            <field>AccountId</field>
+            <value>
+                <elementReference>sCurrentUsersContact.AccountId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ContactId</field>
+            <value>
+                <elementReference>sCurrentUsersContact.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Description</field>
+            <value>
+                <elementReference>lblDescription_Notes</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Name</field>
+            <value>
+                <elementReference>vSelectedProductName</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Product2Id</field>
+            <value>
+                <elementReference>vSelectedProduct</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>PurchaseDate</field>
+            <value>
+                <elementReference>Purchase_Date</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Quantity</field>
+            <value>
+                <elementReference>cProductQtyDefault</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>SerialNumber</field>
+            <value>
+                <elementReference>lblSerial_Number</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Asset</object>
+    </recordCreates>
+    <recordUpdates>
+        <description>Update the registered asset with the installation date and an installation photo.</description>
+        <name>Update_Asset</name>
+        <label>Update Asset</label>
+        <locationX>586</locationX>
+        <locationY>346</locationY>
+        <connector>
+            <targetReference>Thank_you</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Error</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>vAssetId</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>InstallDate</field>
+            <value>
+                <elementReference>lblInstallation_Date</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <elementReference>vAssetStatus</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Asset</object>
+    </recordUpdates>
+    <screens>
+        <description>Captures the initial details of the asset to create.</description>
+        <name>Asset_Details</name>
+        <label>Register Your Product</label>
+        <locationX>90</locationX>
+        <locationY>335</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <connector>
+            <targetReference>Create_Asset_Record</targetReference>
+        </connector>
+        <fields>
+            <name>lblChoose_Your_Product</name>
+            <choiceReferences>GetActiveProducts</choiceReferences>
+            <dataType>String</dataType>
+            <fieldText>Choose Your Product</fieldText>
+            <fieldType>DropdownBox</fieldType>
+            <helpText>Select the product you&apos;d like to register.</helpText>
+            <isRequired>false</isRequired>
+        </fields>
+        <fields>
+            <name>Purchase_Date</name>
+            <dataType>Date</dataType>
+            <fieldText>Purchase Date</fieldText>
+            <fieldType>InputField</fieldType>
+            <isRequired>false</isRequired>
+        </fields>
+        <fields>
+            <name>lblSerial_Number</name>
+            <dataType>String</dataType>
+            <fieldText>Serial Number</fieldText>
+            <fieldType>InputField</fieldType>
+            <isRequired>false</isRequired>
+        </fields>
+        <fields>
+            <name>lblDescription_Notes</name>
+            <fieldText>Description / Notes</fieldText>
+            <fieldType>LargeTextArea</fieldType>
+            <helpText>Tell us a bit about this product. What are you using it for?</helpText>
+            <isRequired>false</isRequired>
+        </fields>
+        <fields>
+            <name>lblYourContact</name>
+            <fieldText>&lt;DIV ALIGN=&quot;LEFT&quot;&gt;&lt;FONT FACE=&quot;Arial&quot; STYLE=&quot;font-size:12px&quot; COLOR=&quot;#000000&quot; LETTERSPACING=&quot;0&quot; KERNING=&quot;0&quot;&gt;&lt;U&gt;Your Contact Information:&lt;/U&gt;&lt;/FONT&gt;&lt;/DIV&gt;&lt;DIV ALIGN=&quot;LEFT&quot;&gt;&lt;FONT FACE=&quot;Arial&quot; STYLE=&quot;font-size:12px&quot; COLOR=&quot;#000000&quot; LETTERSPACING=&quot;0&quot; KERNING=&quot;0&quot;&gt;{!sCurrentUsersContact.FirstName} {!sCurrentUsersContact.LastName}&lt;/FONT&gt;&lt;/DIV&gt;&lt;DIV ALIGN=&quot;LEFT&quot;&gt;&lt;FONT FACE=&quot;Arial&quot; STYLE=&quot;font-size:12px&quot; COLOR=&quot;#000000&quot; LETTERSPACING=&quot;0&quot; KERNING=&quot;0&quot;&gt;{!sCurrentUsersAccount.Name}&lt;/FONT&gt;&lt;/DIV&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <pausedText>{!cAssetEntryPauseMessage}</pausedText>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <description>Universal error screen for the flow.</description>
+        <name>Error</name>
+        <label>Error</label>
+        <locationX>456</locationX>
+        <locationY>137</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>lblFaultMessages</name>
+            <fieldText>&lt;DIV ALIGN=&quot;LEFT&quot;&gt;&lt;FONT FACE=&quot;Arial&quot; STYLE=&quot;font-size:12px&quot; COLOR=&quot;#000000&quot; LETTERSPACING=&quot;0&quot; KERNING=&quot;0&quot;&gt;Sorry, but we&amp;apos;ve encountered an error. Our support folks have been informed.&lt;/FONT&gt;&lt;/DIV&gt;&lt;DIV ALIGN=&quot;LEFT&quot;&gt;&lt;FONT FACE=&quot;Arial&quot; STYLE=&quot;font-size:12px&quot; COLOR=&quot;#000000&quot; LETTERSPACING=&quot;0&quot; KERNING=&quot;0&quot;&gt;&lt;/FONT&gt;&lt;/DIV&gt;&lt;DIV ALIGN=&quot;LEFT&quot;&gt;&lt;FONT FACE=&quot;Arial&quot; STYLE=&quot;font-size:12px&quot; COLOR=&quot;#000000&quot; LETTERSPACING=&quot;0&quot; KERNING=&quot;0&quot;&gt;ERROR: {!$Flow.FaultMessage}&lt;/FONT&gt;&lt;/DIV&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <description>Collects additional information about the asset.</description>
+        <name>scrConfirmInstall</name>
+        <label>Confirm Installation Details</label>
+        <locationX>91</locationX>
+        <locationY>432</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>false</allowFinish>
+        <allowPause>true</allowPause>
+        <connector>
+            <targetReference>Check_Product_Status</targetReference>
+        </connector>
+        <fields>
+            <name>lblIs_the_product_operational</name>
+            <choiceReferences>chInstalled</choiceReferences>
+            <choiceReferences>chNotInstalled</choiceReferences>
+            <dataType>Boolean</dataType>
+            <fieldText>Is the product operational?</fieldText>
+            <fieldType>RadioButtons</fieldType>
+            <isRequired>true</isRequired>
+        </fields>
+        <fields>
+            <name>lblInstallation_Date</name>
+            <dataType>Date</dataType>
+            <fieldText>Installation Date (Approximate)</fieldText>
+            <fieldType>InputField</fieldType>
+            <isRequired>false</isRequired>
+        </fields>
+        <fields>
+            <name>Photos</name>
+            <extensionName>forceContent:fileUpload</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>label</name>
+                <value>
+                    <elementReference>lblPhotoUpload</elementReference>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>recordId</name>
+                <value>
+                    <elementReference>vAssetId</elementReference>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>multiple</name>
+                <value>
+                    <booleanValue>true</booleanValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>accept</name>
+                <value>
+                    <elementReference>cAcceptedFileFormats</elementReference>
+                </value>
+            </inputParameters>
+            <isRequired>true</isRequired>
+            <outputParameters>
+                <assignToReference>vFileUploadRelatedRecord</assignToReference>
+                <name>recordId</name>
+            </outputParameters>
+            <outputParameters>
+                <assignToReference>vContentDocumentIds</assignToReference>
+                <name>contentDocIds</name>
+            </outputParameters>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>Sorry_No_Contact</name>
+        <label>Sorry</label>
+        <locationX>313</locationX>
+        <locationY>20</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <fields>
+            <name>txtNoContact</name>
+            <fieldText>Sorry, we couldn&apos;t retrieve your personal or company information.</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>Thank_you</name>
+        <label>Thank you</label>
+        <locationX>698</locationX>
+        <locationY>237</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>false</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>lblThankYouMessage</name>
+            <fieldText>Thank you! Your product has been registered, and will be reviewed for Support.</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <startElementReference>SDO_Community_Get_Community_User_CRM_Data</startElementReference>
+    <status>Active</status>
+    <subflows>
+        <description>Retrieves the currently logged-in user&apos;s CRM data, including the associated User, Contact, and Account records. Also returns a flag to indicate whether the currently logged in user has a community license.</description>
+        <name>SDO_Community_Get_Community_User_CRM_Data</name>
+        <label>Get Community User CRM Data</label>
+        <locationX>97</locationX>
+        <locationY>18</locationY>
+        <connector>
+            <targetReference>Internal_or_External_User</targetReference>
+        </connector>
+        <flowName>SDO_Community_Get_Community_User_CRM_Data</flowName>
+        <outputAssignments>
+            <assignToReference>vIsExternalUser</assignToReference>
+            <name>vIsExternalUser</name>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>sCurrentUser</assignToReference>
+            <name>sCurrentUser</name>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>sCurrentUsersContact</assignToReference>
+            <name>sCurrentUsersContact</name>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>sCurrentUsersAccount</assignToReference>
+            <name>sCurrentUsersAccount</name>
+        </outputAssignments>
+    </subflows>
+    <variables>
+        <description>Currently logged-in user record.</description>
+        <name>sCurrentUser</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>User</objectType>
+    </variables>
+    <variables>
+        <description>Account record (if any) of the currently logged-in user.</description>
+        <name>sCurrentUsersAccount</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Account</objectType>
+    </variables>
+    <variables>
+        <description>Contact record (if any) associated with the current user.</description>
+        <name>sCurrentUsersContact</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Contact</objectType>
+    </variables>
+    <variables>
+        <description>Record ID of the Asset created.</description>
+        <name>vAssetId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>Status to assign to the asset.</description>
+        <name>vAssetStatus</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>List of IDs of the documentes created as part of file upload.</description>
+        <name>vContentDocumentIds</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>vFileUploadRelatedRecord</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>Returns TRUE if the currently logged in user has a Community Cloud or Portal license, and FALSE if that user has an internal license (Sales Cloud, Service Cloud, Platform).</description>
+        <name>vIsExternalUser</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>vSelectedProduct</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>name of the product selected by the user to register.</description>
+        <name>vSelectedProductName</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

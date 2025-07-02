@@ -1,0 +1,561 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>49.0</apiVersion>
+    <assignments>
+        <description>Creates or updates course enrollment.</description>
+        <name>Update_Course_Enrollment</name>
+        <label>Update Course Enrollment</label>
+        <locationX>50</locationX>
+        <locationY>1454</locationY>
+        <assignmentItems>
+            <assignToReference>vNewCourseEnrollment.Enrolled_User__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>vCurrentUserId</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>vNewCourseEnrollment.Training_Course__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>vTrainingCourse.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>vNewCourseEnrollment.Enrollment_Status__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Enrolled</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Enroll_Me</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <description>Check to see if a training course record was retrieved.</description>
+        <name>Check_for_Course</name>
+        <label>Check for Course</label>
+        <locationX>842</locationX>
+        <locationY>398</locationY>
+        <defaultConnector>
+            <targetReference>o_Course_Found</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Does Not Exist</defaultConnectorLabel>
+        <rules>
+            <name>Exists</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>vTrainingCourse</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_User_s_Enrollments</targetReference>
+            </connector>
+            <label>Exists</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Check to see whether we can get the current user&apos;s ID.</description>
+        <name>Check_for_User</name>
+        <label>Check for User</label>
+        <locationX>1370</locationX>
+        <locationY>158</locationY>
+        <defaultConnector>
+            <targetReference>No_user_Found</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No User Found</defaultConnectorLabel>
+        <rules>
+            <name>Has_User</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>vCurrentUserId</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Course</targetReference>
+            </connector>
+            <label>Has User</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Checks to see whether an enrollment for this course already exists</description>
+        <name>Course_Reg_Exists</name>
+        <label>Course Reg Exists</label>
+        <locationX>314</locationX>
+        <locationY>638</locationY>
+        <defaultConnector>
+            <targetReference>Get_Current_User</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Does Not Exist</defaultConnectorLabel>
+        <rules>
+            <name>Exists_Completed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>vExistingCourseEnrollment</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>vExistingCourseEnrollment.Enrollment_Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Completed</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Congratulations</targetReference>
+            </connector>
+            <label>Exists: Completed</label>
+        </rules>
+        <rules>
+            <name>Exists_Other</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>vExistingCourseEnrollment</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>vExistingCourseEnrollment.Enrollment_Status__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Completed</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Congratulations_0</targetReference>
+            </connector>
+            <label>Exists: Other</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Checks whether the user indicated that everything was OK with the enrollment.</description>
+        <name>Everything_OK</name>
+        <label>Everything OK?</label>
+        <locationX>314</locationX>
+        <locationY>1334</locationY>
+        <defaultConnector>
+            <targetReference>Tell_Us_About_It</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>chkYesProceed</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Course_Enrollment</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <description>Allows a user to register for a training course.</description>
+    <formulas>
+        <description>Retrieves the currently logged-in user&apos;s Salesforce ID.</description>
+        <name>fGetCurrentUserId</name>
+        <dataType>String</dataType>
+        <expression>{!$User.Id}</expression>
+    </formulas>
+    <interviewLabel>Register for Training Course {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Register for Training Course</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <recordCreates>
+        <description>Stores the enrollment record of the current user in the current course.</description>
+        <name>Enroll_Me</name>
+        <label>Enroll Me!</label>
+        <locationX>50</locationX>
+        <locationY>1574</locationY>
+        <connector>
+            <targetReference>Registration_Complete</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Error</targetReference>
+        </faultConnector>
+        <inputReference>vNewCourseEnrollment</inputReference>
+    </recordCreates>
+    <recordLookups>
+        <description>Retrieves the training course record.</description>
+        <name>Get_Course</name>
+        <label>Get Course</label>
+        <locationX>842</locationX>
+        <locationY>278</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Check_for_Course</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Error</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <object>SDO_Community_Training_Course__c</object>
+        <outputReference>vTrainingCourse</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Name</queriedFields>
+        <queriedFields>Short_Description__c</queriedFields>
+        <queriedFields>Course_Image__c</queriedFields>
+        <queriedFields>Course_Format__c</queriedFields>
+        <queriedFields>Course_Status__c</queriedFields>
+        <queriedFields>Available_for_Registration__c</queriedFields>
+    </recordLookups>
+    <recordLookups>
+        <description>Retrieves the current user record.</description>
+        <name>Get_Current_User</name>
+        <label>Get Current User</label>
+        <locationX>314</locationX>
+        <locationY>1094</locationY>
+        <assignNullValuesIfNoRecordsFound>true</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Register_for_a_Course</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Error</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>vCurrentUserId</elementReference>
+            </value>
+        </filters>
+        <object>User</object>
+        <outputReference>vCurrentUserRecord</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Name</queriedFields>
+        <queriedFields>FirstName</queriedFields>
+        <queriedFields>LastName</queriedFields>
+        <queriedFields>City</queriedFields>
+        <queriedFields>State</queriedFields>
+        <queriedFields>Country</queriedFields>
+        <queriedFields>Email</queriedFields>
+        <queriedFields>Phone</queriedFields>
+        <queriedFields>MobilePhone</queriedFields>
+        <queriedFields>SmallPhotoUrl</queriedFields>
+    </recordLookups>
+    <recordLookups>
+        <description>Checks to see whether the current user has enrolled in this course.</description>
+        <name>Get_User_s_Enrollments</name>
+        <label>Get User&apos;s Enrollments</label>
+        <locationX>314</locationX>
+        <locationY>518</locationY>
+        <assignNullValuesIfNoRecordsFound>true</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Course_Reg_Exists</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Error</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Enrolled_User__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>vCurrentUserId</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Training_Course__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>vTrainingCourse.Id</elementReference>
+            </value>
+        </filters>
+        <object>SDO_Community_Course_Enrollment__c</object>
+        <outputReference>vExistingCourseEnrollment</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Enrollment_Status__c</queriedFields>
+        <queriedFields>Enrolled_User__c</queriedFields>
+        <queriedFields>Contact_Id__c</queriedFields>
+        <queriedFields>Name</queriedFields>
+    </recordLookups>
+    <screens>
+        <description>You&apos;ve already taken this course.</description>
+        <name>Congratulations</name>
+        <label>Congratulations</label>
+        <locationX>50</locationX>
+        <locationY>758</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>txtAlreadyCompleted</name>
+            <fieldText>&lt;p&gt;&lt;b&gt;Congratulations!&lt;/b&gt;&lt;/p&gt;&lt;p&gt;You&apos;ve already completed this course.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <description>You&apos;ve already taken this course.</description>
+        <name>Congratulations_0</name>
+        <label>Congratulations</label>
+        <locationX>314</locationX>
+        <locationY>758</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Get_Current_User</targetReference>
+        </connector>
+        <fields>
+            <name>txtAlreadyRegistered</name>
+            <fieldText>&lt;p&gt;&lt;b&gt;Congratulations!&lt;/b&gt;&lt;/p&gt;&lt;p&gt;You&apos;ve already enrolled in this course.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <description>An error has been encountered</description>
+        <name>Error</name>
+        <label>Error</label>
+        <locationX>314</locationX>
+        <locationY>1694</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>txtErrorDetails</name>
+            <fieldText>&lt;p&gt;Error: {!$Flow.FaultMessage}&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <description>Screen shown when no logged in user can be found.</description>
+        <name>No_user_Found</name>
+        <label>No user Found!</label>
+        <locationX>1898</locationX>
+        <locationY>278</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>txtSorry</name>
+            <fieldText>&lt;p&gt;&lt;b&gt;We&apos;re Sorry&lt;/b&gt;&lt;/p&gt;&lt;p&gt;We cannot find a user record for you. Please try again later.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;ID: &lt;span style=&quot;background-color: rgb(255, 255, 255); color: rgb(62, 62, 60);&quot;&gt;{!vCurrentUserId}&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); color: rgb(62, 62, 60);&quot;&gt;Course: {!recordId}&lt;/span&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <description>Screen shown when no training course was found.</description>
+        <name>o_Course_Found</name>
+        <label>No Course Found</label>
+        <locationX>1370</locationX>
+        <locationY>518</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>txtSorry_0</name>
+            <fieldText>&lt;p&gt;&lt;b&gt;We&apos;re Sorry&lt;/b&gt;&lt;/p&gt;&lt;p&gt;We cannot find the course you were trying to register for. Please try again later.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <description>Allows a user to complete registration for a course.</description>
+        <name>Register_for_a_Course</name>
+        <label>Register for a Course</label>
+        <locationX>314</locationX>
+        <locationY>1214</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Everything_OK</targetReference>
+        </connector>
+        <fields>
+            <name>txtRegisterPrompt</name>
+            <fieldText>&lt;p&gt;&lt;b&gt;Register for {!vTrainingCourse.Name}?&lt;/b&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;We&apos;ll sign you up for this course! Please check the following information:&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <fields>
+            <name>n</name>
+            <extensionName>flowruntime:name</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>firstName</name>
+                <value>
+                    <elementReference>vCurrentUserRecord.FirstName</elementReference>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>lastName</name>
+                <value>
+                    <elementReference>vCurrentUserRecord.LastName</elementReference>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>readonly</name>
+                <value>
+                    <booleanValue>true</booleanValue>
+                </value>
+            </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+        </fields>
+        <fields>
+            <name>chkYesProceed</name>
+            <dataType>Boolean</dataType>
+            <fieldText>Yes! Everything Looks OK!</fieldText>
+            <fieldType>InputField</fieldType>
+            <isRequired>true</isRequired>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <description>Final screen when registered.</description>
+        <name>Registration_Complete</name>
+        <label>Registration Complete</label>
+        <locationX>50</locationX>
+        <locationY>1694</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>txtRegCompleted</name>
+            <fieldText>&lt;p&gt;&lt;b&gt;Congratulations!&lt;/b&gt;&lt;/p&gt;&lt;p&gt;You have registered to attend the {!vTrainingCourse.Name} course!&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <description>Allows the user to explain what was wrong with the registration.</description>
+        <name>Tell_Us_About_It</name>
+        <label>Tell Us About It</label>
+        <locationX>578</locationX>
+        <locationY>1454</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>txtWhatWentWrongLabel</name>
+            <fieldText>&lt;p&gt;&lt;b&gt;We&apos;re Sorry&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Please let us know what to change!&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <fields>
+            <name>txtIssue</name>
+            <defaultValue>
+                <stringValue>Tell us what did not look right!</stringValue>
+            </defaultValue>
+            <fieldText>Please Describe What&apos;s Wrong:</fieldText>
+            <fieldType>LargeTextArea</fieldType>
+            <isRequired>true</isRequired>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <start>
+        <locationX>1244</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Check_for_User</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <description>Record ID of the training course to register for.</description>
+        <name>recordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>Salesforce ID of the currently logged in user.</description>
+        <name>vCurrentUserId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+        <value>
+            <elementReference>fGetCurrentUserId</elementReference>
+        </value>
+    </variables>
+    <variables>
+        <description>Holds the currently logged-in user.</description>
+        <name>vCurrentUserRecord</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>User</objectType>
+    </variables>
+    <variables>
+        <description>Stores a user&apos;s existing course enrollment, if any.</description>
+        <name>vExistingCourseEnrollment</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>SDO_Community_Course_Enrollment__c</objectType>
+    </variables>
+    <variables>
+        <description>Holds the new course enrollment created.</description>
+        <name>vNewCourseEnrollment</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+        <objectType>SDO_Community_Course_Enrollment__c</objectType>
+    </variables>
+    <variables>
+        <description>Record for the training course to be enrolled in.</description>
+        <name>vTrainingCourse</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+        <objectType>SDO_Community_Training_Course__c</objectType>
+    </variables>
+</Flow>

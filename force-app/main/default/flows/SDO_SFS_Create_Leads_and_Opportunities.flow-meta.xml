@@ -1,0 +1,765 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <assignments>
+        <description>Sets the contactCompanyName to the value that the flow user entered for CompanyText on CollectLeadDetailsScreen.</description>
+        <name>SetCompanyVariableToCompany</name>
+        <label>Set Company Variable</label>
+        <locationX>50</locationX>
+        <locationY>566</locationY>
+        <assignmentItems>
+            <assignToReference>contactCompanyName</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>contactFirstName</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>contactCompanyName</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <stringValue> </stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>contactCompanyName</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>contactLastName</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>EnterCustomerRequestScreen</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Sets contactCompanyName to contactFirstName, a space, and contactLastName.</description>
+        <name>SetCompanyVariableToLeadName</name>
+        <label>Set Company Variable</label>
+        <locationX>314</locationX>
+        <locationY>890</locationY>
+        <assignmentItems>
+            <assignToReference>contactCompanyName</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>CompanyText</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>EnterCustomerRequestScreen</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Sets ErrorMessage to &quot;create a lead record&quot;.</description>
+        <name>SetErrorMessageCreateLeadError</name>
+        <label>Set ErrorMessage</label>
+        <locationX>468</locationX>
+        <locationY>1706</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>create a lead record</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <isGoTo>true</isGoTo>
+            <targetReference>ReviewOpportunityErrorScreen</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Sets ErrorMessage to &quot;create an opportunity record&quot;.</description>
+        <name>SetErrorMessageCreateOpportunityError</name>
+        <label>Set ErrorMessage</label>
+        <locationX>908</locationX>
+        <locationY>2180</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>create an opportunity record</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>ReviewOpportunityErrorScreen</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Sets ErrorMessage to &quot;retrieve a contact record associated with the specified service agreement&quot;.</description>
+        <name>SetErrorMessageNoContactRecord</name>
+        <label>Set ErrorMessage</label>
+        <locationX>1436</locationX>
+        <locationY>350</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>retrieve a contact record associated with the specified service agreement</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <isGoTo>true</isGoTo>
+            <targetReference>ReviewOpportunityErrorScreen</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Sets ErrorMessage to &quot;retrieve an existing lead record matching the specified information&quot;.</description>
+        <name>SetErrorMessageNoLeadRecord</name>
+        <label>Set ErrorMessage</label>
+        <locationX>1172</locationX>
+        <locationY>1382</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>retrieve an existing lead record matching the specified information</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <isGoTo>true</isGoTo>
+            <targetReference>ReviewOpportunityErrorScreen</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Sets ErrorMessage to &quot;retrieve the service appointment record&quot;.</description>
+        <name>SetErrorMessageNoServiceAppointment</name>
+        <label>Set ErrorMessage</label>
+        <locationX>1700</locationX>
+        <locationY>242</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>retrieve the service appointment record</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <isGoTo>true</isGoTo>
+            <targetReference>ReviewOpportunityErrorScreen</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Sets the contactFirstName and contactLastName to the values passed into FirstNameText and LastNameText on CollectLeadDetailsScreen.</description>
+        <name>SetVariablesLeadName</name>
+        <label>Set Variables</label>
+        <locationX>446</locationX>
+        <locationY>674</locationY>
+        <assignmentItems>
+            <assignToReference>contactFirstName</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>FirstNameText</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>contactLastName</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>LastNameText</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>HaveCompany</targetReference>
+        </connector>
+    </assignments>
+    <choices>
+        <description>Stores the current customer choice label and choice value for RadioButtonsSelectCustomerType on SelectCustomerOrLeadScreen.</description>
+        <name>CustomerTypeCurrentCustomerChoice</name>
+        <choiceText>&lt;strong&gt;Current customer: {!contactFirstName} {!contactLastName}&lt;/strong&gt;</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <elementReference>contactFullName</elementReference>
+        </value>
+    </choices>
+    <choices>
+        <description>Stores the new lead choice label and choice value for RadioButtonsSelectCustomerType on SelectCustomerOrLeadScreen.</description>
+        <name>CustomerTypeNewLeadChoice</name>
+        <choiceText>&lt;strong&gt;New lead&lt;/strong&gt;</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>true</stringValue>
+        </value>
+    </choices>
+    <decisions>
+        <description>Determines whether the flow user specified a value for CompanyText in CollectLeadDetailsScreen</description>
+        <name>HaveCompany</name>
+        <label>Have Company?</label>
+        <locationX>446</locationX>
+        <locationY>782</locationY>
+        <defaultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>SetCompanyVariableToCompany</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>HasCompany</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>CompanyText</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue></stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>SetCompanyVariableToLeadName</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Determines whether GetLead returned an existing lead record ID.</description>
+        <name>HaveExistingLead</name>
+        <label>Have Existing Lead?</label>
+        <locationX>248</locationX>
+        <locationY>1382</locationY>
+        <defaultConnector>
+            <targetReference>IsNewCustomer</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>IsExistingLead</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>leadId</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue></stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>CreateOpportunity</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Determines whether the flow user selected CustomerTypeNewLeadChoice for RadioButtonsSelectCustomerType on SelectCustomerOrLeadScreen.</description>
+        <name>IsNewCustomer</name>
+        <label>Is New Customer?</label>
+        <locationX>468</locationX>
+        <locationY>1490</locationY>
+        <defaultConnector>
+            <targetReference>CreateOpportunity</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>IsNewLead</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>CustomerTypeNewLeadChoice</leftValueReference>
+                <operator>WasSelected</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>CreateLead</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Determines whether the flow user selected current customer in SelectCustomerOrLeadScreen.</description>
+        <name>WasCurrentCustomerSelected</name>
+        <label>Was Current Customer Selected?</label>
+        <locationX>248</locationX>
+        <locationY>458</locationY>
+        <defaultConnector>
+            <targetReference>CollectLeadDetailsScreen</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>IsCurrentCustomer</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>CustomerTypeCurrentCustomerChoice</leftValueReference>
+                <operator>WasSelected</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>SetCompanyVariableToCompany</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <description>Lets a flow user indicate customer interest in an upsell opportunity and creates any necessary lead and opportunity records.</description>
+    <environments>Default</environments>
+    <formulas>
+        <description>Calculates a date that&apos;s 30 days after the flow is run to use for the opportunity close date. To use a different number of days for the opportunity close date, change 30 to the number of days in the future you want.</description>
+        <name>OpportunityCloseDateFormula</name>
+        <dataType>Date</dataType>
+        <expression>{!$Flow.CurrentDate} + 30</expression>
+    </formulas>
+    <interviewLabel>Field Service Mobile: Create Leads and Opportunities {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>SDO SFS Create Leads and Opportunities</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>FieldServiceMobile</processType>
+    <recordCreates>
+        <description>Creates a new lead with the contact information that the flow user entered in CollectLeadDetailsScreen and EnterCustomerRequestScreen. Stores the ID of the result in leadId.</description>
+        <name>CreateLead</name>
+        <label>Create Lead</label>
+        <locationX>204</locationX>
+        <locationY>1598</locationY>
+        <assignRecordIdToReference>leadId</assignRecordIdToReference>
+        <connector>
+            <targetReference>CreateOpportunity</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>SetErrorMessageCreateLeadError</targetReference>
+        </faultConnector>
+        <inputAssignments>
+            <field>Company</field>
+            <value>
+                <elementReference>contactCompanyName</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Description</field>
+            <value>
+                <elementReference>CustomerRequestDescriptionLongText</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Email</field>
+            <value>
+                <elementReference>EmailText</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>FirstName</field>
+            <value>
+                <elementReference>contactFirstName</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>LastName</field>
+            <value>
+                <elementReference>contactLastName</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>MobilePhone</field>
+            <value>
+                <elementReference>PhoneNumberText</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Lead</object>
+    </recordCreates>
+    <recordCreates>
+        <description>Creates an opportunity record in the prospecting stage with a close date 30 days in the future, setting LeadSource to leadId, Description to CustomerRequestDescriptionLongText from EnterCustomerRequestScreen, and Name to contactCompanyName. Stores the ID of the result in the opportunityId variable.</description>
+        <name>CreateOpportunity</name>
+        <label>Create Opportunity</label>
+        <locationX>248</locationX>
+        <locationY>2072</locationY>
+        <assignRecordIdToReference>opportunityId</assignRecordIdToReference>
+        <faultConnector>
+            <targetReference>SetErrorMessageCreateOpportunityError</targetReference>
+        </faultConnector>
+        <inputAssignments>
+            <field>CloseDate</field>
+            <value>
+                <elementReference>OpportunityCloseDateFormula</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Description</field>
+            <value>
+                <elementReference>CustomerRequestDescriptionLongText</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>LeadSource</field>
+            <value>
+                <elementReference>leadId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Name</field>
+            <value>
+                <elementReference>contactCompanyName</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>StageName</field>
+            <value>
+                <stringValue>Prospecting</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Opportunity</object>
+    </recordCreates>
+    <recordLookups>
+        <description>Gets the contact record with an ID matching the contact ID of the service agreement record found in GetServiceAppointment. Stores the email, first name, last name, and full name of the results in the contactEmail, contactFirstName, contactLastName, and contactFullname variables.</description>
+        <name>GetContact</name>
+        <label>Get Contact</label>
+        <locationX>248</locationX>
+        <locationY>242</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>SelectCustomerOrLead</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>SetErrorMessageNoContactRecord</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>contactId</elementReference>
+            </value>
+        </filters>
+        <object>Contact</object>
+        <outputAssignments>
+            <assignToReference>contactEmail</assignToReference>
+            <field>Email</field>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>contactFirstName</assignToReference>
+            <field>FirstName</field>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>contactLastName</assignToReference>
+            <field>LastName</field>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>contactFullName</assignToReference>
+            <field>Name</field>
+        </outputAssignments>
+    </recordLookups>
+    <recordLookups>
+        <description>Gets the lead record with a last name that matches LastNameText, a company that matches CompanyText, and an email that matches EmailText and stores the ID of the result in the leadId variable.</description>
+        <name>GetLead</name>
+        <label>Get Lead</label>
+        <locationX>248</locationX>
+        <locationY>1274</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>HaveExistingLead</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>SetErrorMessageNoLeadRecord</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>LastName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>LastNameText</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Company</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>CompanyText</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Email</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>EmailText</elementReference>
+            </value>
+        </filters>
+        <object>Lead</object>
+        <outputAssignments>
+            <assignToReference>leadId</assignToReference>
+            <field>Id</field>
+        </outputAssignments>
+    </recordLookups>
+    <recordLookups>
+        <description>Gets the service appointment record with an ID that matches the recordId passed into the flow. Stores the service appointment’s contact ID in the contactId record variable.</description>
+        <name>GetServiceAppointment</name>
+        <label>Get Service Appointment</label>
+        <locationX>248</locationX>
+        <locationY>134</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>GetContact</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>SetErrorMessageNoServiceAppointment</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Id</elementReference>
+            </value>
+        </filters>
+        <object>ServiceAppointment</object>
+        <outputAssignments>
+            <assignToReference>contactId</assignToReference>
+            <field>ContactId</field>
+        </outputAssignments>
+    </recordLookups>
+    <screens>
+        <description>Allows the flow user to enter the contact details for the new lead.</description>
+        <name>CollectLeadDetailsScreen</name>
+        <label>Collect Lead Details</label>
+        <locationX>446</locationX>
+        <locationY>566</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>SetVariablesLeadName</targetReference>
+        </connector>
+        <fields>
+            <name>DisplayTextLeadDetailsheading</name>
+            <fieldText>&lt;p&gt;&lt;strong style=&quot;background-color: transparent; color: rgb(0, 0, 0); font-family: Arial, sans-serif; font-size: 11pt;&quot;&gt;Lead Details&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <fields>
+            <name>FirstNameText</name>
+            <dataType>String</dataType>
+            <fieldText>First Name</fieldText>
+            <fieldType>InputField</fieldType>
+            <isRequired>true</isRequired>
+        </fields>
+        <fields>
+            <name>LastNameText</name>
+            <dataType>String</dataType>
+            <fieldText>Last Name</fieldText>
+            <fieldType>InputField</fieldType>
+            <isRequired>true</isRequired>
+        </fields>
+        <fields>
+            <name>PhoneNumberText</name>
+            <dataType>String</dataType>
+            <fieldText>Phone Number</fieldText>
+            <fieldType>InputField</fieldType>
+            <isRequired>false</isRequired>
+            <validationRule>
+                <errorMessage>&lt;p&gt;&lt;span style=&quot;font-size: 11pt; font-family: Arial, sans-serif; color: rgb(0, 0, 0); background-color: transparent;&quot;&gt;Enter a valid phone number with country code, but no spaces. For example: +4981789407&lt;/span&gt;&lt;/p&gt;</errorMessage>
+                <formulaExpression>REGEX({!PhoneNumberText}, &quot;\\+{0,1}[0-9]{9,12}&quot;)</formulaExpression>
+            </validationRule>
+        </fields>
+        <fields>
+            <name>EmailText</name>
+            <dataType>String</dataType>
+            <fieldText>Email</fieldText>
+            <fieldType>InputField</fieldType>
+            <isRequired>false</isRequired>
+            <validationRule>
+                <errorMessage>&lt;p&gt;&lt;span style=&quot;font-size: 11pt; font-family: Arial, sans-serif; color: rgb(0, 0, 0); background-color: transparent;&quot;&gt;Enter a valid email address. For example: name@company.com&lt;/span&gt;&lt;/p&gt;</errorMessage>
+                <formulaExpression>REGEX({!EmailText},&quot;[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}&quot;)</formulaExpression>
+            </validationRule>
+        </fields>
+        <fields>
+            <name>CompanyText</name>
+            <dataType>String</dataType>
+            <fieldText>Company</fieldText>
+            <fieldType>InputField</fieldType>
+            <isRequired>true</isRequired>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <description>Allows the flow user to enter the description of the product or service requested by the customer.</description>
+        <name>EnterCustomerRequestScreen</name>
+        <label>Enter Customer Request</label>
+        <locationX>248</locationX>
+        <locationY>1166</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>GetLead</targetReference>
+        </connector>
+        <fields>
+            <name>DisplayTextEnterRequestInstructions</name>
+            <fieldText>&lt;p&gt;&lt;span style=&quot;font-size: 11pt; font-family: Arial, sans-serif; color: rgb(0, 0, 0); background-color: transparent;&quot;&gt;Enter a description of the product or service that the customer requested.&lt;/span&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <fields>
+            <name>CustomerRequestDescriptionLongText</name>
+            <fieldText>Customer Request Description</fieldText>
+            <fieldType>LargeTextArea</fieldType>
+            <isRequired>true</isRequired>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <description>Displays an error to the flow user.</description>
+        <name>ReviewOpportunityErrorScreen</name>
+        <label>Review Error</label>
+        <locationX>908</locationX>
+        <locationY>2288</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <fields>
+            <name>CreateOpportunityErrorDisplayText</name>
+            <fieldText>&lt;p&gt;&lt;strong style=&quot;font-size: 14px; font-family: &amp;quot;Google Sans&amp;quot;, Roboto, sans-serif; color: rgb(68, 71, 70);&quot;&gt;We encountered an error when we tried to {!errorMessage}. Try again or ask your Salesforce admin for help.&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <description>Allows the flow user to indicate whether the prospective customer is the current service appointment customer or a new lead.</description>
+        <name>SelectCustomerOrLead</name>
+        <label>Select Customer or Lead</label>
+        <locationX>248</locationX>
+        <locationY>350</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>WasCurrentCustomerSelected</targetReference>
+        </connector>
+        <fields>
+            <name>DisplayTextSelectCustomerInstructions</name>
+            <fieldText>&lt;p&gt;&lt;span style=&quot;background-color: transparent; color: rgb(0, 0, 0); font-family: Arial, sans-serif; font-size: 11pt;&quot;&gt;Select the type of customer to create a lead or opportunity for.&lt;/span&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <fields>
+            <name>RadioButtonSelectCustomerType</name>
+            <choiceReferences>CustomerTypeCurrentCustomerChoice</choiceReferences>
+            <choiceReferences>CustomerTypeNewLeadChoice</choiceReferences>
+            <dataType>String</dataType>
+            <defaultSelectedChoiceReference>CustomerTypeCurrentCustomerChoice</defaultSelectedChoiceReference>
+            <fieldText>Customer Type</fieldText>
+            <fieldType>RadioButtons</fieldType>
+            <isRequired>true</isRequired>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <sourceTemplate>sfdc_fieldservice__CreateLeadAndOpp</sourceTemplate>
+    <start>
+        <locationX>122</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>GetServiceAppointment</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <description>Stores the name of the company which is either the specified company name (new lead) or the full contact name (new lead or existing customer).</description>
+        <name>contactCompanyName</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+        <value>
+            <stringValue></stringValue>
+        </value>
+    </variables>
+    <variables>
+        <description>Stores the email address of the contact associated with the sales agreement passed into the flow. This variable is available as output from the flow.</description>
+        <name>contactEmail</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+        <value>
+            <stringValue></stringValue>
+        </value>
+    </variables>
+    <variables>
+        <description>Stores the first name of the contact associated with the sales agreement passed into the flow. This variable is available as output from the flow.</description>
+        <name>contactFirstName</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+        <value>
+            <stringValue></stringValue>
+        </value>
+    </variables>
+    <variables>
+        <description>Stores the full name of the contact associated with the sales agreement passed into the flow. This variable is available as output from the flow.</description>
+        <name>contactFullName</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+        <value>
+            <stringValue></stringValue>
+        </value>
+    </variables>
+    <variables>
+        <description>Stores the ID of the contact record associated with the service appointment that was passed into the flow. This variable is available as output from the flow.</description>
+        <name>contactId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+        <value>
+            <stringValue></stringValue>
+        </value>
+    </variables>
+    <variables>
+        <description>Stores the last name of the contact associated with the sales agreement passed into the flow. This variable is available as output from the flow.</description>
+        <name>contactLastName</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+    <variables>
+        <description>Stores text associated with an error to be shown in ReviewErrorScreen.</description>
+        <name>errorMessage</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>Stores the ID of the service appointment record that&apos;s passed into the flow. This variable is also available as output from the flow.</description>
+        <name>Id</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+        <value>
+            <stringValue></stringValue>
+        </value>
+    </variables>
+    <variables>
+        <description>Stores the ID of the new lead or the ID of the existing lead with a last name, company, and email that matches the last name, company, and email entered by the flow user. This variable is available as output from the flow.</description>
+        <name>leadId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+        <value>
+            <stringValue></stringValue>
+        </value>
+    </variables>
+    <variables>
+        <description>Stores the ID of the opportunity record created for either a new lead or an existing customer.</description>
+        <name>opportunityId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+        <value>
+            <stringValue></stringValue>
+        </value>
+    </variables>
+</Flow>

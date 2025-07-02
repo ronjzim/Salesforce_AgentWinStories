@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Create_Demo_Recommendations</name>
+        <label>Create Demo Recommendations</label>
+        <locationX>176</locationX>
+        <locationY>278</locationY>
+        <actionName>SDO_Service_CaseClassificationHelper</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Save_Case</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>c</name>
+            <value>
+                <elementReference>Case</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>helperConfig</name>
+            <value>
+                <elementReference>Get_Einstein_Agent_Helpers</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>SDO_Service_CaseClassificationHelper</nameSegment>
+    </actionCalls>
+    <apiVersion>54.0</apiVersion>
+    <description>Used for demoing Einstein Case Classification due to the complexity and data required to demo it with real data.</description>
+    <interviewLabel>SDO Service - Einstein Case Classification Demo {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>SDO Service - Demo Einstein Case Classification</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_Einstein_Agent_Helpers</name>
+        <label>Get Einstein Agent Helpers</label>
+        <locationX>176</locationX>
+        <locationY>158</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Create_Demo_Recommendations</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Active__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>SDO_Service_Einstein_Agent_Helper__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <name>Save_Case</name>
+        <label>Save Case</label>
+        <locationX>176</locationX>
+        <locationY>398</locationY>
+        <inputReference>Case</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Einstein_Agent_Helpers</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>Case</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Case</objectType>
+    </variables>
+</Flow>

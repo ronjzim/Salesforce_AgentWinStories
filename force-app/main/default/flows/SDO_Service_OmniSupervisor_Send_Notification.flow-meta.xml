@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <description>Note - a Target ID or Reference is required, so clicking this notification will take them to their Home page.</description>
+        <name>Send_Notification</name>
+        <label>Send Notification</label>
+        <locationX>578</locationX>
+        <locationY>566</locationY>
+        <actionName>customNotificationAction</actionName>
+        <actionType>customNotificationAction</actionType>
+        <connector>
+            <targetReference>Show_Success_Toast</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>customNotifTypeId</name>
+            <value>
+                <elementReference>Get_Custom_Notification.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>recipientIds</name>
+            <value>
+                <elementReference>ids</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>title</name>
+            <value>
+                <elementReference>Notification_Subject</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>body</name>
+            <value>
+                <elementReference>Enter_the_body_of_the_notification_that_you_want_sent_to_the_selected_Users</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>targetPageRef</name>
+            <value>
+                <stringValue>{         type: standard__namedPage,     attributes: {         pageName: home         } }</stringValue>
+            </value>
+        </inputParameters>
+        <nameSegment>customNotificationAction</nameSegment>
+    </actionCalls>
+    <actionCalls>
+        <name>Show_Success_Toast</name>
+        <label>Show Success Toast</label>
+        <locationX>578</locationX>
+        <locationY>674</locationY>
+        <actionName>c:SDO_Flow_showToast</actionName>
+        <actionType>component</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>type</name>
+            <value>
+                <stringValue>success</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>message</name>
+            <value>
+                <stringValue>Successfully sent notification to {!NumRecords} user(s)</stringValue>
+            </value>
+        </inputParameters>
+        <nameSegment>c:SDO_Flow_showToast</nameSegment>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </actionCalls>
+    <apiVersion>60.0</apiVersion>
+    <assignments>
+        <name>Get_Num_Records</name>
+        <label>Get Num Records</label>
+        <locationX>314</locationX>
+        <locationY>134</locationY>
+        <assignmentItems>
+            <assignToReference>NumRecords</assignToReference>
+            <operator>AssignCount</operator>
+            <value>
+                <elementReference>ids</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Get_Custom_Notification</targetReference>
+        </connector>
+    </assignments>
+    <choices>
+        <name>No_Go_Back</name>
+        <choiceText>No - Go Back</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>No - Go Back</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>Yes_Reset_the_Password_s</name>
+        <choiceText>Yes - Reset the Password(s)</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Yes - Reset the Password(s)</stringValue>
+        </value>
+    </choices>
+    <decisions>
+        <name>Check_records_passed</name>
+        <label>Check records passed</label>
+        <locationX>314</locationX>
+        <locationY>350</locationY>
+        <defaultConnector>
+            <targetReference>Send_User_Notification</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>IDs present</defaultConnectorLabel>
+        <rules>
+            <name>No_records_passed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>NumRecords</leftValueReference>
+                <operator>LessThanOrEqualTo</operator>
+                <rightValue>
+                    <numberValue>0.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>No_User_Ids_Passed</targetReference>
+            </connector>
+            <label>No records passed</label>
+        </rules>
+        <rules>
+            <name>No_Custom_Notification</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Custom_Notification</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>NoCustomNotificationType</targetReference>
+            </connector>
+            <label>No Custom Notification</label>
+        </rules>
+    </decisions>
+    <description>Sends a Custom Notification to Users with the typed message</description>
+    <environments>Default</environments>
+    <interviewLabel>SDO Service - Send Notification {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>SDO Service - Send Notification</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <recordLookups>
+        <name>Get_Custom_Notification</name>
+        <label>Get Custom Notification</label>
+        <locationX>314</locationX>
+        <locationY>242</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Check_records_passed</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Desktop</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>CustomNotificationType</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <screens>
+        <description>Shouldn&apos;t get here as the UI blocks selecting an action without an ID, but just in case.</description>
+        <name>No_User_Ids_Passed</name>
+        <label>No User Ids Passed</label>
+        <locationX>50</locationX>
+        <locationY>458</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>No_Users_Selected</name>
+            <fieldText>&lt;p&gt;No users were selected. Please try again.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
+        <name>NoCustomNotificationType</name>
+        <label>No Custom Notification Type</label>
+        <locationX>314</locationX>
+        <locationY>458</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>Error</name>
+            <fieldText>&lt;p&gt;&lt;strong style=&quot;color: rgb(0, 0, 0); font-size: 12px;&quot;&gt;Error:&lt;/strong&gt;&lt;span style=&quot;color: rgb(0, 0, 0); font-size: 12px;&quot;&gt; No Custom Notification Type with desktop support is defined. &lt;/span&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;Please contact you admin and ask them to add a Custom Notification Type from the &apos;Custom Notifications&apos; admin screen.&lt;/span&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
+        <name>Send_User_Notification</name>
+        <label>Send User Notification</label>
+        <locationX>578</locationX>
+        <locationY>458</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Send_Notification</targetReference>
+        </connector>
+        <fields>
+            <name>Notification_Subject</name>
+            <dataType>String</dataType>
+            <fieldText>Notification Subject</fieldText>
+            <fieldType>InputField</fieldType>
+            <isRequired>true</isRequired>
+        </fields>
+        <fields>
+            <name>Enter_the_body_of_the_notification_that_you_want_sent_to_the_selected_Users</name>
+            <fieldText>Enter the body of the notification that you want sent to the selected Users</fieldText>
+            <fieldType>LargeTextArea</fieldType>
+            <isRequired>true</isRequired>
+        </fields>
+        <nextOrFinishButtonLabel>Send</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <start>
+        <locationX>188</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Num_Records</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <description>List of record IDs passed in</description>
+        <name>ids</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>NumRecords</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+        <value>
+            <numberValue>0.0</numberValue>
+        </value>
+    </variables>
+</Flow>

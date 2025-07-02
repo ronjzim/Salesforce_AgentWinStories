@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>57.0</apiVersion>
+    <description>Increments the Email Milestone Progress for the Ramping Reps Demo Story</description>
+    <environments>Default</environments>
+    <interviewLabel>OBE - Email Milestone Progress_Ramp {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>OBE - Ramp - Email Milestone Progress_Ramp</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <name>Create_Email_Milestone_Progress_Records</name>
+        <label>Create Email Milestone Progress Records</label>
+        <locationX>898</locationX>
+        <locationY>399</locationY>
+        <inputAssignments>
+            <field>Milestone_and_Exercise__c</field>
+            <value>
+                <elementReference>EmailMilestoneID</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Progress_Value__c</field>
+            <value>
+                <numberValue>1.0</numberValue>
+            </value>
+        </inputAssignments>
+        <object>CGC_Milestone_Progress_V2__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordLookups>
+        <name>Get_Record_ID_of_Email_Milestone</name>
+        <label>Get Record ID of Email Milestone</label>
+        <locationX>739</locationX>
+        <locationY>353</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Create_Email_Milestone_Progress_Records</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Name__c</field>
+            <operator>Contains</operator>
+            <value>
+                <stringValue>Day 15</stringValue>
+            </value>
+        </filters>
+        <object>CGC_Milestone_and_Exercise__c</object>
+        <outputAssignments>
+            <assignToReference>EmailMilestoneID</assignToReference>
+            <field>Id</field>
+        </outputAssignments>
+    </recordLookups>
+    <start>
+        <locationX>650</locationX>
+        <locationY>48</locationY>
+        <connector>
+            <targetReference>Get_Record_ID_of_Email_Milestone</targetReference>
+        </connector>
+        <object>EmailMessage</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Draft</status>
+    <variables>
+        <name>EmailMilestoneID</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+        <value>
+            <stringValue></stringValue>
+        </value>
+    </variables>
+</Flow>

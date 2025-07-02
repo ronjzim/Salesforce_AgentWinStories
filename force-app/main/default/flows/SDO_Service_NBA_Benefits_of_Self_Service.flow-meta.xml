@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>49.0</apiVersion>
+    <choices>
+        <name>No</name>
+        <choiceText>No</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>No</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>Yes</name>
+        <choiceText>Yes</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Yes</stringValue>
+        </value>
+    </choices>
+    <interviewLabel>NBA-Benefits of Self Service {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>NBA-Benefits of Self Service</label>
+    <processType>Flow</processType>
+    <screens>
+        <name>Self_Service_Benefits_Display</name>
+        <label>Self Service Benefits Display</label>
+        <locationX>120</locationX>
+        <locationY>142</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <fields>
+            <name>AgentScript1</name>
+            <extensionName>c:SDO_Service_Flow_scriptDisplayFSC</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>callscript</name>
+                <value>
+                    <stringValue>We have noticed that you have not signed up for our self-service capabilities. This is something that many of our customers are benefitting from so let me quickly walk you through.</stringValue>
+                </value>
+            </inputParameters>
+            <isRequired>true</isRequired>
+        </fields>
+        <fields>
+            <name>SelfServiceBenefitExplenation</name>
+            <fieldText>&lt;DIV ALIGN=&quot;LEFT&quot;&gt;&lt;FONT FACE=&quot;Arial&quot; STYLE=&quot;font-size:16px&quot; COLOR=&quot;#000000&quot; LETTERSPACING=&quot;0&quot; KERNING=&quot;0&quot;&gt;We have implemented our self service capabilities in order to better service our customers. Our Community Portal enables you to access information, look up the status of Cases as well as engage with other customers that may already have asked the same questions as you have.&lt;/FONT&gt;&lt;/DIV&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <fields>
+            <name>Placeholder</name>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <fields>
+            <name>AgentScript2</name>
+            <extensionName>c:SDO_Service_Flow_scriptDisplayFSC</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>callscript</name>
+                <value>
+                    <stringValue>Are you interested in hearing more about this?</stringValue>
+                </value>
+            </inputParameters>
+            <isRequired>true</isRequired>
+        </fields>
+        <fields>
+            <name>Response</name>
+            <choiceReferences>Yes</choiceReferences>
+            <choiceReferences>No</choiceReferences>
+            <dataType>String</dataType>
+            <fieldText>Response</fieldText>
+            <fieldType>RadioButtons</fieldType>
+            <isRequired>false</isRequired>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <startElementReference>Self_Service_Benefits_Display</startElementReference>
+    <status>Active</status>
+</Flow>

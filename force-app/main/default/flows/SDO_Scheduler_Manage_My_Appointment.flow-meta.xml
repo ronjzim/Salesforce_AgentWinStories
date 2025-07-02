@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>53.0</apiVersion>
+    <choices>
+        <name>Cancel</name>
+        <choiceText>Cancel my appointment</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Cancel</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>Nothing</name>
+        <choiceText>Nothing, it all looks great!</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Nothing</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>Reschedule</name>
+        <choiceText>Reschedule my appointment</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Reschedule</stringValue>
+        </value>
+    </choices>
+    <decisions>
+        <name>Status_Ok</name>
+        <label>Status Ok</label>
+        <locationX>908</locationX>
+        <locationY>278</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Status_Open</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>get_Service_Appointment.Status</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Scheduled</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Appointment_Management_Screen</targetReference>
+            </connector>
+            <label>Status Open</label>
+        </rules>
+        <rules>
+            <name>Status_Closed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>get_Service_Appointment.Status</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Canceled</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Appointment_Management_Screen_0</targetReference>
+            </connector>
+            <label>Status Closed</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Which_Direction</name>
+        <label>Which Direction?</label>
+        <locationX>446</locationX>
+        <locationY>518</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>RescheduleChoice</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>What_would_you_like_to_do</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>Reschedule</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Reschedule_my_appointment</targetReference>
+            </connector>
+            <label>Reschedule</label>
+        </rules>
+        <rules>
+            <name>CancelChoice</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>What_would_you_like_to_do</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>Cancel</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Cancel_my_appointment</targetReference>
+            </connector>
+            <label>Cancel</label>
+        </rules>
+        <rules>
+            <name>Do_NothingChoice</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>What_would_you_like_to_do</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>Nothing</elementReference>
+                </rightValue>
+            </conditions>
+            <label>Do Nothing</label>
+        </rules>
+    </decisions>
+    <interviewLabel>SDO Scheduler Manage My Appointment {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Manage My Appointment</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <recordLookups>
+        <name>get_Service_Appointment</name>
+        <label>get Service Appointment</label>
+        <locationX>908</locationX>
+        <locationY>158</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Status_Ok</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>ServiceAppointment</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <screens>
+        <name>Appointment_Management_Screen</name>
+        <label>Appointment Management Screen</label>
+        <locationX>446</locationX>
+        <locationY>398</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <connector>
+            <targetReference>Which_Direction</targetReference>
+        </connector>
+        <fields>
+            <name>intro1</name>
+            <fieldText>&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); font-size: 14px; font-family: Raleway; color: rgba(0, 0, 0, 0.91);&quot;&gt;Please use the reschedule option to select a new time for your appointment or use the cancel option if you no longer need the appointment. Check out the rest of our experience community site when you&apos;re finished! And thank you very much for your business!&lt;/span&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <fields>
+            <name>AppointmentInformation</name>
+            <fieldText>&lt;p&gt;&lt;b&gt;Your Current Appointment:&lt;/b&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;Appointment Number: &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); color: rgb(62, 62, 60);&quot;&gt;{!get_Service_Appointment.AppointmentNumber}&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); color: rgb(62, 62, 60);&quot;&gt;Type: {!get_Service_Appointment.WorkType.Name}&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Start: {!get_Service_Appointment.SchedStartTime}&lt;/p&gt;&lt;p&gt;End: {!get_Service_Appointment.SchedEndTime}&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;Location: {!get_Service_Appointment.ServiceTerritory.Name}&lt;/span&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <fields>
+            <name>What_would_you_like_to_do</name>
+            <choiceReferences>Reschedule</choiceReferences>
+            <choiceReferences>Cancel</choiceReferences>
+            <choiceReferences>Nothing</choiceReferences>
+            <dataType>String</dataType>
+            <fieldText>What would you like to do?</fieldText>
+            <fieldType>RadioButtons</fieldType>
+            <isRequired>false</isRequired>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>Appointment_Management_Screen_0</name>
+        <label>Appointment Management Screen</label>
+        <locationX>1106</locationX>
+        <locationY>398</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <fields>
+            <name>intro1_0</name>
+            <fieldText>&lt;p&gt;&lt;span style=&quot;color: rgba(0, 0, 0, 0.91); font-family: Raleway; font-size: 14px; background-color: rgb(255, 255, 255);&quot;&gt;Your Appointment has been cancelled. Check out the rest of our experience community site when you&apos;re finished! And thank you very much for your business!&lt;/span&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <fields>
+            <name>AppointmentInformation_0</name>
+            <fieldText>&lt;p&gt;&lt;b&gt;Your Cancelled Appointment:&lt;/b&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;Appointment Number: &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); color: rgb(62, 62, 60);&quot;&gt;{!get_Service_Appointment.AppointmentNumber}&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); color: rgb(62, 62, 60);&quot;&gt;Type: {!get_Service_Appointment.WorkType.Name}&lt;/span&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>Thank_YouCancel</name>
+        <label>Thank You</label>
+        <locationX>314</locationX>
+        <locationY>758</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <fields>
+            <name>ThankYouCancel</name>
+            <fieldText>&lt;p&gt;Thank you, your appointment has been cancelled.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>ThankYou1</name>
+        <label>Thank You</label>
+        <locationX>50</locationX>
+        <locationY>758</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <fields>
+            <name>Thanks1</name>
+            <fieldText>&lt;p&gt;Thank you, your appointment has been updated.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <start>
+        <locationX>782</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>get_Service_Appointment</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <subflows>
+        <name>Cancel_my_appointment</name>
+        <label>Cancel my appointment</label>
+        <locationX>314</locationX>
+        <locationY>638</locationY>
+        <connector>
+            <targetReference>Thank_YouCancel</targetReference>
+        </connector>
+        <flowName>SDO_Scheduler_Screen_Flow_Inbound_Cancel_Appointment</flowName>
+        <inputAssignments>
+            <name>recordId</name>
+            <value>
+                <elementReference>get_Service_Appointment.Id</elementReference>
+            </value>
+        </inputAssignments>
+    </subflows>
+    <subflows>
+        <name>Reschedule_my_appointment</name>
+        <label>Reschedule my appointment</label>
+        <locationX>50</locationX>
+        <locationY>638</locationY>
+        <connector>
+            <targetReference>ThankYou1</targetReference>
+        </connector>
+        <flowName>SDO_Scheduler_Screen_Flow_Inbound_Modify_Appointment</flowName>
+        <inputAssignments>
+            <name>recordId</name>
+            <value>
+                <elementReference>get_Service_Appointment.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </subflows>
+    <variables>
+        <name>recordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

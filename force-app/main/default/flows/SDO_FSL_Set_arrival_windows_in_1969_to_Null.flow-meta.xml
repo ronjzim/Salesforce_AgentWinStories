@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>49.0</apiVersion>
+    <description>Flow that will remove the 1969 arrival windows that are set with the SDO Demo tool.  Running this allows &quot;Fill in Schedule&quot; to work again.</description>
+    <interviewLabel>FSL - Set arrival windows in 1969 to Null {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>FSL - Set arrival windows in 1969 to Null</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Set_Arrival_Windows_to_Null</name>
+        <label>Set Arrival Windows to Null</label>
+        <locationX>176</locationX>
+        <locationY>224</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>ArrivalWindowStartTime</field>
+            <operator>LessThanOrEqualTo</operator>
+            <value>
+                <dateTimeValue>1971-01-01T08:00:00.000Z</dateTimeValue>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>ArrivalWindowEndTime</field>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ArrivalWindowStartTime</field>
+        </inputAssignments>
+        <object>ServiceAppointment</object>
+    </recordUpdates>
+    <start>
+        <locationX>50</locationX>
+        <locationY>50</locationY>
+        <connector>
+            <targetReference>Set_Arrival_Windows_to_Null</targetReference>
+        </connector>
+    </start>
+    <status>Draft</status>
+</Flow>

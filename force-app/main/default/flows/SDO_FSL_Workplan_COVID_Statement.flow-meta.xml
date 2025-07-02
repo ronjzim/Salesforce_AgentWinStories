@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <interviewLabel>SFS - Workplan COVID Statement {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>SFS - Workplan COVID Statement</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>FieldServiceMobile</processType>
+    <screens>
+        <name>Covid_Declaration</name>
+        <label>Covid Declaration</label>
+        <locationX>176</locationX>
+        <locationY>158</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <fields>
+            <name>CovidDeclaration</name>
+            <fieldText>&lt;p&gt;In undertaking this Work Order I certify that:&lt;/p&gt;&lt;ol&gt;&lt;li&gt;I have completed, submitted and can evidence a negative COVID-19 PCR Test within the last 48 hours&lt;/li&gt;&lt;li&gt;To the best of my knowledge I have not been in the presence of anyone with COVID-19 symptoms or anyone who has tested positive&lt;/li&gt;&lt;li&gt;I have no COVID-19 symptoms including fever, cough or loss of taste and smell&lt;/li&gt;&lt;li&gt;I am wearing a mask and gloves and have taken steps to sanitise all equipment&lt;/li&gt;&lt;/ol&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <fields>
+            <name>I_do_not_have_a_fever</name>
+            <dataType>Boolean</dataType>
+            <fieldText>I do not have a fever or other COVID-19 Symptoms</fieldText>
+            <fieldType>InputField</fieldType>
+            <isRequired>true</isRequired>
+        </fields>
+        <fields>
+            <name>I_have_a_negative_COVID_19_test_completed_in_the_last_48_hours</name>
+            <dataType>Boolean</dataType>
+            <fieldText>I have a negative COVID-19 test completed in the last 48 hours</fieldText>
+            <fieldType>InputField</fieldType>
+            <isRequired>true</isRequired>
+        </fields>
+        <fields>
+            <name>I_am_wearing_all_mandatory_PPE_mask_and_gloves</name>
+            <dataType>Boolean</dataType>
+            <fieldText>I am wearing all mandatory PPE (mask and gloves)</fieldText>
+            <fieldType>InputField</fieldType>
+            <isRequired>true</isRequired>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Covid_Declaration</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+</Flow>

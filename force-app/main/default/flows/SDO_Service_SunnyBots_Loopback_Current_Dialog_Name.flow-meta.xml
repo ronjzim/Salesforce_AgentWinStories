@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>49.0</apiVersion>
+    <assignments>
+        <name>Loopback_Last_Display_Selection</name>
+        <label>Loopback Last Display Selection</label>
+        <locationX>256</locationX>
+        <locationY>50</locationY>
+        <assignmentItems>
+            <assignToReference>varCurrentDialogName</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>varCurrentDialogName</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <description>What: Simple loopback flow to allow Bot to capture the current dialog name to a variable. Who: Service Team.</description>
+    <interviewLabel>Einstein Bots - Loopback Current Dialog Name {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Einstein Bots - Loopback Current Dialog Name</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <startElementReference>Loopback_Last_Display_Selection</startElementReference>
+    <status>Active</status>
+    <variables>
+        <name>varCurrentDialogName</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+</Flow>

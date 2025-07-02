@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>49.0</apiVersion>
+    <assignments>
+        <name>Status_Closed</name>
+        <label>Status = Closed</label>
+        <locationX>50</locationX>
+        <locationY>278</locationY>
+        <assignmentItems>
+            <assignToReference>rvarCase.Status</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Closed</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_Case</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <name>Check_Case</name>
+        <label>Check Case</label>
+        <locationX>182</locationX>
+        <locationY>158</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Case_Passed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>rvarCase</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Status_Closed</targetReference>
+            </connector>
+            <label>Case Passed</label>
+        </rules>
+    </decisions>
+    <description>What: Updates the specified Case with Status = Closed. Who: Service Team.</description>
+    <interviewLabel>Einstein Bots - Close Case {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Einstein Bots - Close Case</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_Updated_Case</name>
+        <label>Get Updated Case</label>
+        <locationX>50</locationX>
+        <locationY>518</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>rvarCase.Id</elementReference>
+            </value>
+        </filters>
+        <object>Case</object>
+        <outputReference>rvarCase</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>LastModifiedDate</queriedFields>
+        <queriedFields>Status</queriedFields>
+        <queriedFields>Subject</queriedFields>
+        <queriedFields>CaseNumber</queriedFields>
+        <queriedFields>Origin</queriedFields>
+        <queriedFields>Priority</queriedFields>
+    </recordLookups>
+    <recordUpdates>
+        <name>Update_Case</name>
+        <label>Update Case</label>
+        <locationX>50</locationX>
+        <locationY>398</locationY>
+        <connector>
+            <targetReference>Get_Updated_Case</targetReference>
+        </connector>
+        <inputReference>rvarCase</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Check_Case</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>rvarCase</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+        <objectType>Case</objectType>
+    </variables>
+</Flow>

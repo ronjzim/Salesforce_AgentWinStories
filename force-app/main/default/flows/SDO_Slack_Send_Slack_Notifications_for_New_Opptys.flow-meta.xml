@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <description>Calls an invocable action to send notifications to the sales channels when an opportunity is created on an account that’s linked to the channel.</description>
+        <name>SendLinkedRecordNotifications</name>
+        <label>Send Linked Record Notifications</label>
+        <locationX>506</locationX>
+        <locationY>792</locationY>
+        <actionName>new_child_opportunity</actionName>
+        <actionType>sendNotification</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>recordId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>recipientIds</name>
+            <value>
+                <elementReference>ChannelIds</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>new_child_opportunity</nameSegment>
+    </actionCalls>
+    <apiVersion>60.0</apiVersion>
+    <assignments>
+        <description>Adds the ID for the sales channel to receive a notification to the ChannelIds collection variable.</description>
+        <name>AddChannelId</name>
+        <label>Add Sales Channel to Collection</label>
+        <locationX>462</locationX>
+        <locationY>492</locationY>
+        <assignmentItems>
+            <assignToReference>ChannelIds</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>SwarmLoop.CollaborationRoomId</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>SwarmLoop</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <description>Determines whether any sales channels related to swarm records retrieved in GetSwarm were found.</description>
+        <name>DoSalesChannelsExist</name>
+        <label>Sales Channels Exist?</label>
+        <locationX>374</locationX>
+        <locationY>684</locationY>
+        <defaultConnector>
+            <targetReference>SendLinkedRecordNotifications</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Yes (Default)</defaultConnectorLabel>
+        <rules>
+            <name>NoChannelsFound</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>ChannelIds</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <label>No</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <interviewLabel>Send Slack Notifications for New Opptys {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Send Slack Notifications for New Opptys</label>
+    <loops>
+        <description>Iterates through the records in the Swarms from the GetSwarm collection to locate the sales channel related to the triggering opportunity record.</description>
+        <name>SwarmLoop</name>
+        <label>Iterate Through Related Sales Channels</label>
+        <locationX>374</locationX>
+        <locationY>384</locationY>
+        <collectionReference>GetSwarm</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>AddChannelId</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>DoSalesChannelsExist</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <description>Gets swarm records for the sales channel related to the triggering opportunity record and stores them in the Swarms from the GetSwarm record collection variable.</description>
+        <name>GetSwarm</name>
+        <label>Get Related Sales Channels</label>
+        <locationX>374</locationX>
+        <locationY>276</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>SwarmLoop</targetReference>
+        </connector>
+        <filterLogic>1 AND 2 AND (4 OR 5) AND 3 AND 6 AND 7 AND 8</filterLogic>
+        <filters>
+            <field>RelatedRecordId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.AccountId</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>UsageType</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>DealRoom</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>CollaborationTool</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Slack</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>EndedDateTime</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>EndedDateTime</field>
+            <operator>GreaterThanOrEqualTo</operator>
+            <value>
+                <elementReference>$Flow.CurrentDateTime</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>StartedDateTime</field>
+            <operator>LessThanOrEqualTo</operator>
+            <value>
+                <elementReference>$Flow.CurrentDateTime</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Status</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>In Progress</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>CollaborationRoomId</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>Swarm</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <sourceTemplate>sales_channel__OpptyCreateMatchAct</sourceTemplate>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <object>Opportunity</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <scheduledPaths>
+            <connector>
+                <targetReference>GetSwarm</targetReference>
+            </connector>
+            <pathType>AsyncAfterCommit</pathType>
+        </scheduledPaths>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Draft</status>
+    <variables>
+        <description>Stores the sales channel IDs to receive  notifications.</description>
+        <name>ChannelIds</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>
