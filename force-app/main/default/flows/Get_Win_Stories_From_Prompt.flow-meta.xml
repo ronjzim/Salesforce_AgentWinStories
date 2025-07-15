@@ -30,6 +30,7 @@ Do not add any text before or after the JSON array.</stringValue>
             </value>
         </inputParameters>
         <nameSegment>Agentforce_Highspot_Agent</nameSegment>
+        <offset>0</offset>
         <outputParameters>
             <assignToReference>promptResponse</assignToReference>
             <name>agentResponse</name>
@@ -55,12 +56,14 @@ Based on the provided text, what is a more accurate, single business category? F
             </value>
         </inputParameters>
         <nameSegment>Agentforce_Highspot_Agent</nameSegment>
+        <offset>0</offset>
         <outputParameters>
             <assignToReference>inferredIndustry</assignToReference>
             <name>agentResponse</name>
         </outputParameters>
     </actionCalls>
     <apiVersion>64.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <description>Win stories from prompt template flow.</description>
     <environments>Default</environments>
     <interviewLabel>Get Win Stories From Prompt {!$Flow.CurrentDateTime}</interviewLabel>

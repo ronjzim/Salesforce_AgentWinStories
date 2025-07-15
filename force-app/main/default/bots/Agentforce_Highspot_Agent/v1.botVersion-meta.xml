@@ -39,38 +39,57 @@
         <showInFooterMenu>false</showInFooterMenu>
     </botDialogs>
     <citationsEnabled>false</citationsEnabled>
+    <company>Salesforce is a global CRM leader, offering cloud-based solutions to connect businesses with customers. Our Agentforce initiative introduces intelligent agents to automate workflows and boost productivity.</company>
     <conversationDefinitionPlanners>
         <genAiPlannerName>Agentforce_Highspot_Agent</genAiPlannerName>
     </conversationDefinitionPlanners>
     <conversationVariables>
         <dataType>Text</dataType>
+        <description>Salesforce Application Name.</description>
         <developerName>currentAppName</developerName>
+        <includeInPrompt>true</includeInPrompt>
         <label>currentAppName</label>
+        <visibility>External</visibility>
     </conversationVariables>
     <conversationVariables>
         <dataType>Text</dataType>
+        <description>The API name of the Salesforce object (such as Account or Opportunity) associated with the record the user wants to interact with. Do not use this if the user is already talking about another object in the conversation.</description>
         <developerName>currentObjectApiName</developerName>
+        <includeInPrompt>true</includeInPrompt>
         <label>currentObjectApiName</label>
+        <visibility>External</visibility>
     </conversationVariables>
     <conversationVariables>
         <dataType>Text</dataType>
+        <description>Type of Salesforce Page.</description>
         <developerName>currentPageType</developerName>
+        <includeInPrompt>true</includeInPrompt>
         <label>currentPageType</label>
+        <visibility>External</visibility>
     </conversationVariables>
     <conversationVariables>
         <dataType>Text</dataType>
+        <description>The ID of the record on the user&apos;s screen. It may not relate to the user&apos;s input. Only use this if the user input mentions &apos;this&apos;, &apos;current&apos;, &apos;the record&apos;, etc. If in doubt, don&apos;t use it.</description>
         <developerName>currentRecordId</developerName>
+        <includeInPrompt>true</includeInPrompt>
         <label>currentRecordId</label>
+        <visibility>External</visibility>
     </conversationVariables>
     <conversationVariables>
         <dataType>Text</dataType>
+        <description>This variable may also be referred to as VerifiedCustomerId</description>
         <developerName>VerifiedCustomerId</developerName>
+        <includeInPrompt>false</includeInPrompt>
         <label>VerifiedCustomerId</label>
+        <visibility>Internal</visibility>
     </conversationVariables>
     <entryDialog>Welcome</entryDialog>
     <intentDisambiguationEnabled>false</intentDisambiguationEnabled>
     <intentV3Enabled>false</intentV3Enabled>
+    <knowledgeActionEnabled>false</knowledgeActionEnabled>
     <knowledgeFallbackEnabled>false</knowledgeFallbackEnabled>
+    <role>You are an Agentforce Win Story Workflow Automation Agent.</role>
     <smallTalkEnabled>false</smallTalkEnabled>
+    <surfacesEnabled>false</surfacesEnabled>
     <toneType>Casual</toneType>
 </BotVersion>
