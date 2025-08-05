@@ -1,65 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionCalls>
-        <name>Agent_Get_win_stories</name>
-        <label>Agent Get win stories</label>
+        <name>Find_2_Relevant_Win_Stories</name>
+        <label>Find 2 Relevant Win Stories</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <actionName>Agentforce_Highspot_Agent</actionName>
-        <actionType>generateAiAgentResponse</actionType>
+        <actionName>Relevant_Win_Stories_Prompt</actionName>
+        <actionType>generatePromptResponse</actionType>
         <connector>
             <targetReference>Update_JSON_Response</targetReference>
         </connector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
-            <name>userMessage</name>
+            <name>Input:Opportunity</name>
             <value>
-                <stringValue>Using the industry {!inferredIndustry}, perform a semantic search through all slides in the &apos;Agentforce Highspot Agent Library&apos; to find the 2 most similar customer win stories.
-
-Your entire response must be ONLY a raw JSON array of objects. Each object must have these four keys:
-
-&quot;id&quot;
-
-&quot;customerName&quot;
-
-&quot;relevanceScore&quot;
-
-&quot;summary&quot; (must be in the past tense and include quantitative/qualitative metrics)
-
-Do not add any text before or after the JSON array.</stringValue>
+                <elementReference>Get_Opportunity_Record</elementReference>
             </value>
         </inputParameters>
-        <nameSegment>Agentforce_Highspot_Agent</nameSegment>
+        <nameSegment>Relevant_Win_Stories_Prompt</nameSegment>
         <offset>0</offset>
         <outputParameters>
             <assignToReference>promptResponse</assignToReference>
-            <name>agentResponse</name>
-        </outputParameters>
-    </actionCalls>
-    <actionCalls>
-        <name>Infer_True_Industry</name>
-        <label>Infer True Industry</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <actionName>Agentforce_Highspot_Agent</actionName>
-        <actionType>generateAiAgentResponse</actionType>
-        <connector>
-            <targetReference>Agent_Get_win_stories</targetReference>
-        </connector>
-        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
-        <inputParameters>
-            <name>userMessage</name>
-            <value>
-                <stringValue>The account is named {!opportunityAccountName} and is in the {!opportunityIndustry} industry. 
-
-Based on the provided text, what is a more accurate, single business category? For example, if the text is &quot;The account is named Adaptive Sports Center and is in the Communications industry&quot;, a good answer would be &quot;Sports and Recreation&quot;. Respond with ONLY the new category name and nothing else.</stringValue>
-            </value>
-        </inputParameters>
-        <nameSegment>Agentforce_Highspot_Agent</nameSegment>
-        <offset>0</offset>
-        <outputParameters>
-            <assignToReference>inferredIndustry</assignToReference>
-            <name>agentResponse</name>
+            <name>promptResponse</name>
         </outputParameters>
     </actionCalls>
     <apiVersion>64.0</apiVersion>
@@ -94,7 +56,7 @@ Based on the provided text, what is a more accurate, single business category? F
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Infer_True_Industry</targetReference>
+            <targetReference>Find_2_Relevant_Win_Stories</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>

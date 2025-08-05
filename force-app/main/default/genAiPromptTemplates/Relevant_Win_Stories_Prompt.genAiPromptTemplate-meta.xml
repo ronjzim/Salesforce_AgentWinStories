@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenAiPromptTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <activeVersionIdentifier>hEZgd44nDsthb6Qnlslk5qsGxlAezbAbk+OkLgAw0z0=_4</activeVersionIdentifier>
+    <developerName>Relevant_Win_Stories_Prompt</developerName>
+    <masterLabel>Relevant Win Stories Prompt</masterLabel>
+    <templateVersions>
+        <content>You are an expert system that analyzes sales win stories. Review the following win stories from the {!$Input:Opportunity.Account.Industry} industry, which are provided in the {!$EinsteinSearch:File_Agentforce_Highspot_Agent_Library_1_1Cx_Sit98ad3e8a.results} resource from our data library. 
+
+Your task is to identify the 2 most relevant stories for an opportunity with the following ID: {!$Input:Opportunity.Id}. 
+
+Analyze the provided stories and generate a relevance score from 0.0 to 1.0 for each, where 1.0 is most relevant. 
+
+Your output MUST be a valid JSON array containing exactly two objects. Each object must have the following keys: &quot;id&quot;, &quot;customerName&quot;, &quot;relevanceScore&quot;, and &quot;summary&quot;. 
+
+- The &quot;id&quot; value must be the unique identifier of the win story from the data library.
+- The &quot;customerName&quot; must be the name of the customer from the win story. 
+- The &quot;summary&quot; value must be a 1-2 sentence overview of the win story, written in the past tense, and it must include the key quantitative or qualitative metrics of the success. 
+
+Your response must only contain the JSON array. Do not include any introductory text, explanations, or markdown formatting like ```json. 
+
+Here is an example of the required output format: 
+[ 
+    { 
+        &quot;id&quot;: &quot;doc_12345&quot;, 
+        &quot;customerName&quot;: &quot;ExampleCorp&quot;, 
+        &quot;relevanceScore&quot;: 0.95, 
+        &quot;summary&quot;: &quot;We successfully migrated ExampleCorp&apos;s legacy system to the cloud, which resulted in a 40% reduction in operational costs and improved system uptime by 99.9%.&quot; 
+    }, 
+    { 
+        &quot;id&quot;: &quot;doc_67890&quot;, 
+        &quot;customerName&quot;: &quot;Innovate Inc.&quot;, 
+        &quot;relevanceScore&quot;: 0.88, 
+        &quot;summary&quot;: &quot;Innovate Inc. implemented our platform, leading to a 25% increase in user engagement and a 15-point lift in their customer satisfaction scores.&quot;
+    }
+]
+</content>
+        <inputs>
+            <apiName>Opportunity</apiName>
+            <definition>SOBJECT://Opportunity</definition>
+            <masterLabel>Opportunity</masterLabel>
+            <referenceName>Input:Opportunity</referenceName>
+            <required>true</required>
+        </inputs>
+        <primaryModel>sfdc_ai__DefaultOpenAIGPT4OmniMini</primaryModel>
+        <status>Published</status>
+        <templateDataProviders>
+            <definition>invocable://getEinsteinRetrieverResults/File_Agentforce_Highspot_Agent_Library_1_1Cx_Sit98ad3e8a</definition>
+            <parameters>
+                <definition>primitive://String</definition>
+                <isRequired>true</isRequired>
+                <parameterName>searchText</parameterName>
+                <valueExpression>{!$Input:Opportunity.Account.Industry}</valueExpression>
+            </parameters>
+            <parameters>
+                <definition>primitive://Integer</definition>
+                <isRequired>false</isRequired>
+                <parameterName>resultCount</parameterName>
+                <valueExpression>10</valueExpression>
+            </parameters>
+            <referenceName>EinsteinSearch:File_Agentforce_Highspot_Agent_Library_1_1Cx_Sit98ad3e8a</referenceName>
+        </templateDataProviders>
+        <versionIdentifier>hEZgd44nDsthb6Qnlslk5qsGxlAezbAbk+OkLgAw0z0=_1</versionIdentifier>
+    </templateVersions>
+    <templateVersions>
+        <content>You are an expert system that analyzes sales win stories. Review the following win stories from the {!$Input:Opportunity.Account.Industry} industry, which are provided in the {!$EinsteinSearch:File_Agentforce_Highspot_Agent_Library_1_1Cx_Sit98ad3e8a.results} resource from our data library. 
+
+Your task is to identify the 2 most relevant stories for an opportunity with the following ID: {!$Input:Opportunity.Id}. 
+
+Analyze the provided stories and generate a relevance score from 0.0 to 1.0 for each, where 1.0 is most relevant. 
+
+Your output MUST be a valid JSON array containing exactly two objects. Each object must have the following keys: &quot;id&quot;, &quot;customerName&quot;, &quot;relevanceScore&quot;, and &quot;summary&quot;. 
+
+- The &quot;id&quot; value must be the unique identifier of the win story from the data library.
+- The &quot;customerName&quot; must be the name of the customer from the win story. 
+- The &quot;summary&quot; value must be a 1-2 sentence overview of the win story, written in the past tense, and it must include the key quantitative or qualitative metrics of the success. 
+
+Your response must only contain the JSON array. Do not include any introductory text, explanations, or markdown formatting like ```json. 
+
+Here is an example of the required output format: 
+[ 
+    { 
+        &quot;id&quot;: &quot;doc_12345&quot;, 
+        &quot;customerName&quot;: &quot;ExampleCorp&quot;, 
+        &quot;relevanceScore&quot;: 0.95, 
+        &quot;summary&quot;: &quot;We successfully migrated ExampleCorp&apos;s legacy system to the cloud, which resulted in a 40% reduction in operational costs and improved system uptime by 99.9%.&quot; 
+    }, 
+    { 
+        &quot;id&quot;: &quot;doc_67890&quot;, 
+        &quot;customerName&quot;: &quot;Innovate Inc.&quot;, 
+        &quot;relevanceScore&quot;: 0.88, 
+        &quot;summary&quot;: &quot;Innovate Inc. implemented our platform, leading to a 25% increase in user engagement and a 15-point lift in their customer satisfaction scores.&quot;
+    }
+]
+</content>
+        <inputs>
+            <apiName>Opportunity</apiName>
+            <definition>SOBJECT://Opportunity</definition>
+            <masterLabel>Opportunity</masterLabel>
+            <referenceName>Input:Opportunity</referenceName>
+            <required>true</required>
+        </inputs>
+        <primaryModel>sfdc_ai__DefaultOpenAIGPT4OmniMini</primaryModel>
+        <status>Published</status>
+        <templateDataProviders>
+            <definition>invocable://getEinsteinRetrieverResults/File_Agentforce_Highspot_Agent_Library_1_1Cx_Sit98ad3e8a</definition>
+            <parameters>
+                <definition>primitive://String</definition>
+                <isRequired>true</isRequired>
+                <parameterName>searchText</parameterName>
+                <valueExpression>{!$Input:Opportunity.Account.Industry}</valueExpression>
+            </parameters>
+            <parameters>
+                <definition>primitive://Integer</definition>
+                <isRequired>false</isRequired>
+                <parameterName>resultCount</parameterName>
+                <valueExpression>10</valueExpression>
+            </parameters>
+            <referenceName>EinsteinSearch:File_Agentforce_Highspot_Agent_Library_1_1Cx_Sit98ad3e8a</referenceName>
+        </templateDataProviders>
+        <versionIdentifier>hEZgd44nDsthb6Qnlslk5qsGxlAezbAbk+OkLgAw0z0=_2</versionIdentifier>
+    </templateVersions>
+    <templateVersions>
+        <content>You are an expert system that analyzes sales win stories. Using the following business Industry: {!$Input:Opportunity.Account.Industry}, Search for relevant win stories also contained in the {!$Input:Opportunity.Account.Industry} category from the data library: {!$EinsteinSearch:File_Agentforce_Highspot_Agent_Library_1_1Cx_Sit98ad3e8a.results}.
+
+Your task is to identify the 2 most relevant stories for an opportunity with the following ID: {!$Input:Opportunity.Id}. 
+
+Analyze the provided stories and generate a relevance score from 0.0 to 1.0 for each, where 1.0 is most relevant. 
+
+Your output MUST be a valid JSON array containing exactly two objects. Each object must have the following keys: &quot;id&quot;, &quot;customerName&quot;, &quot;relevanceScore&quot;, and &quot;summary&quot;. 
+
+- The &quot;id&quot; value must be the unique identifier of the win story from the data library.
+- The &quot;customerName&quot; must be the name of the customer from the win story. 
+- The &quot;summary&quot; value must be a 1-2 sentence overview of the win story, written in the past tense, and it must include the key quantitative or qualitative metrics of the success. 
+
+Your response must only contain the JSON array. Do not include any introductory text, explanations, or markdown formatting like ```json. 
+
+Here is an example of the required output format: 
+[ 
+    { 
+        &quot;id&quot;: &quot;doc_12345&quot;, 
+        &quot;customerName&quot;: &quot;ExampleCorp&quot;, 
+        &quot;relevanceScore&quot;: 0.95, 
+        &quot;summary&quot;: &quot;We successfully migrated ExampleCorp&apos;s legacy system to the cloud, which resulted in a 40% reduction in operational costs and improved system uptime by 99.9%.&quot; 
+    }, 
+    { 
+        &quot;id&quot;: &quot;doc_67890&quot;, 
+        &quot;customerName&quot;: &quot;Innovate Inc.&quot;, 
+        &quot;relevanceScore&quot;: 0.88, 
+        &quot;summary&quot;: &quot;Innovate Inc. implemented our platform, leading to a 25% increase in user engagement and a 15-point lift in their customer satisfaction scores.&quot;
+    }
+]
+</content>
+        <inputs>
+            <apiName>Opportunity</apiName>
+            <definition>SOBJECT://Opportunity</definition>
+            <masterLabel>Opportunity</masterLabel>
+            <referenceName>Input:Opportunity</referenceName>
+            <required>true</required>
+        </inputs>
+        <primaryModel>sfdc_ai__DefaultOpenAIGPT4OmniMini</primaryModel>
+        <status>Published</status>
+        <templateDataProviders>
+            <definition>invocable://getEinsteinRetrieverResults/File_Agentforce_Highspot_Agent_Library_1_1Cx_Sit98ad3e8a</definition>
+            <parameters>
+                <definition>primitive://String</definition>
+                <isRequired>true</isRequired>
+                <parameterName>searchText</parameterName>
+                <valueExpression>{!$Input:Opportunity.Account.Industry}</valueExpression>
+            </parameters>
+            <parameters>
+                <definition>primitive://Integer</definition>
+                <isRequired>false</isRequired>
+                <parameterName>resultCount</parameterName>
+                <valueExpression>10</valueExpression>
+            </parameters>
+            <referenceName>EinsteinSearch:File_Agentforce_Highspot_Agent_Library_1_1Cx_Sit98ad3e8a</referenceName>
+        </templateDataProviders>
+        <versionIdentifier>hEZgd44nDsthb6Qnlslk5qsGxlAezbAbk+OkLgAw0z0=_3</versionIdentifier>
+    </templateVersions>
+    <templateVersions>
+        <content>You are an expert system that analyzes sales win stories based on business industry categories. Using the following business Industry: {!$Input:Opportunity.Account.Industry}, Search for relevant win stories where the customer is also contained in the {!$Input:Opportunity.Account.Industry} category. Use the data library: {!$EinsteinSearch:File_Agentforce_Highspot_Agent_Library_1_1Cx_Sit98ad3e8a.results}.
+
+Analyze the provided stories and generate a relevance score from 0.0 to 1.0 for each, where 1.0 is most relevant. 
+
+Your output MUST be a valid JSON array containing exactly two objects. Each object must have the following keys: &quot;id&quot;, &quot;customerName&quot;, &quot;relevanceScore&quot;, and &quot;summary&quot;. 
+
+- The &quot;id&quot; value must be the unique identifier of the win story from the data library.
+- The &quot;customerName&quot; must be the name of the customer from the win story. 
+- The &quot;summary&quot; value must be a 1-2 sentence overview of the win story, written in the past tense, and it must include the key quantitative or qualitative metrics of the success. 
+
+Your response must only contain the JSON array. Do not include any introductory text, explanations, or markdown formatting like ```json. 
+
+Here is an example of the required output format: 
+[ 
+    { 
+        &quot;id&quot;: &quot;doc_12345&quot;, 
+        &quot;customerName&quot;: &quot;ExampleCorp&quot;, 
+        &quot;relevanceScore&quot;: 0.95, 
+        &quot;summary&quot;: &quot;We successfully migrated ExampleCorp&apos;s legacy system to the cloud, which resulted in a 40% reduction in operational costs and improved system uptime by 99.9%.&quot; 
+    }, 
+    { 
+        &quot;id&quot;: &quot;doc_67890&quot;, 
+        &quot;customerName&quot;: &quot;Innovate Inc.&quot;, 
+        &quot;relevanceScore&quot;: 0.88, 
+        &quot;summary&quot;: &quot;Innovate Inc. implemented our platform, leading to a 25% increase in user engagement and a 15-point lift in their customer satisfaction scores.&quot;
+    }
+]
+</content>
+        <inputs>
+            <apiName>Opportunity</apiName>
+            <definition>SOBJECT://Opportunity</definition>
+            <masterLabel>Opportunity</masterLabel>
+            <referenceName>Input:Opportunity</referenceName>
+            <required>true</required>
+        </inputs>
+        <primaryModel>sfdc_ai__DefaultOpenAIGPT4OmniMini</primaryModel>
+        <status>Published</status>
+        <templateDataProviders>
+            <definition>invocable://getEinsteinRetrieverResults/File_Agentforce_Highspot_Agent_Library_1_1Cx_Sit98ad3e8a</definition>
+            <parameters>
+                <definition>primitive://String</definition>
+                <isRequired>true</isRequired>
+                <parameterName>searchText</parameterName>
+                <valueExpression>{!$Input:Opportunity.Account.Industry}</valueExpression>
+            </parameters>
+            <parameters>
+                <definition>primitive://Integer</definition>
+                <isRequired>false</isRequired>
+                <parameterName>resultCount</parameterName>
+                <valueExpression>10</valueExpression>
+            </parameters>
+            <referenceName>EinsteinSearch:File_Agentforce_Highspot_Agent_Library_1_1Cx_Sit98ad3e8a</referenceName>
+        </templateDataProviders>
+        <versionIdentifier>hEZgd44nDsthb6Qnlslk5qsGxlAezbAbk+OkLgAw0z0=_4</versionIdentifier>
+    </templateVersions>
+    <type>einstein_gpt__flex</type>
+    <visibility>Global</visibility>
+</GenAiPromptTemplate>

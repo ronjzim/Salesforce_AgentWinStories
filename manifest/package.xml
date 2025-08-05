@@ -13,6 +13,10 @@
 		<name>Flow</name>
 	</types>
 	<types>
+		<members>Relevant_Win_Stories_Prompt</members>
+		<name>GenAiPromptTemplate</name>
+	</types>
+	<types>
 		<members>relevantWinStories</members>
 		<name>LightningComponentBundle</name>
 	</types>
