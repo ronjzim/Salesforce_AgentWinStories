@@ -1,5 +1,48 @@
 public without sharing class WinStoryController {
 
+    // This is the NEW method for the Prompt Template.
+    // It's designed to be called by backend automation.
+    @InvocableMethod(label='Get Win Stories for Prompt')
+    public static List<List<String>> getStoriesForPrompt(List<String> opportunityIds) {
+        String opportunityId = opportunityIds[0];
+
+        // Your existing logic to call the Flow.
+        // The Flow should be configured to accept 'opportunityId' as an input variable.
+        Map<String, Object> flowInputs = new Map<String, Object>();
+        flowInputs.put('opportunityId', opportunityId);
+
+        try {
+            Flow.Interview storyFlow = Flow.Interview.createInterview('Get_Win_Stories_From_Prompt', flowInputs);
+            storyFlow.start();
+
+            // IMPORTANT: Your Flow must have a Collection Text Variable marked as "Available for Output"
+            // that contains the text of the retrieved win stories.
+            // Let's assume that output variable is named 'retrievedWinStoryTexts'.
+            List<String> storyTexts = (List<String>) storyFlow.getVariableValue('retrievedWinStoryTexts');
+
+            if (storyTexts != null && !storyTexts.isEmpty()) {
+                // Invocable Methods must return a List of Lists.
+                // We wrap our list of stories in another list.
+                return new List<List<String>>{storyTexts};
+            }
+        } catch (Exception e) {
+            System.debug('An exception occurred when running the flow for the prompt: ' + e.getMessage());
+            // If there's an error, return a list containing a single error message.
+            return new List<List<String>>{new List<String>{'Error: Could not retrieve win stories. ' + e.getMessage()}};
+        }
+
+        // Fallback if the flow returns nothing.
+        return new List<List<String>>{new List<String>{'No win stories were found by the flow.'}};
+    }
+
+
+    /*
+    ================================================================
+    YOUR EXISTING METHODS CAN REMAIN UNCHANGED BELOW
+    They can still be used by your Lightning Web Components or for debugging.
+    ================================================================
+    */
+
     public class WinStory {
         @AuraEnabled public String id { get; set; }
         @AuraEnabled public String customerName { get; set; }
@@ -24,10 +67,7 @@ public without sharing class WinStoryController {
             Flow.Interview storyFlow = Flow.Interview.createInterview('Get_Win_Stories_From_Prompt', flowInputs);
             storyFlow.start();
 
-            // Get the output variable from the FIRST step of your Flow
             Object inferredIndustryObject = storyFlow.getVariableValue('inferredIndustry');
-
-            // Log the result to the Apex Debug Log
             System.debug('Raw Inferred Industry Object: ' + inferredIndustryObject);
 
         } catch (Exception e) {
@@ -35,7 +75,6 @@ public without sharing class WinStoryController {
         }
 
         System.debug('--- FINISHED INFERENCE DEBUG ---');
-        // Always return the fallback data during this test
         return getTestStories();
     }
     

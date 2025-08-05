@@ -1,100 +1,86 @@
 import { LightningElement, api, wire } from 'lwc';
 import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
-import { refreshApex } from '@salesforce/apex'; // Import refreshApex to refresh the wire service
+import { refreshApex } from '@salesforce/apex';
 
-// Import the new custom field
+// Import the custom field we need to read from the Opportunity
 import WIN_STORY_JSON_FIELD from '@salesforce/schema/Opportunity.Win_Story_JSON_Response__c';
 
-// The fields to load, including the standard Industry and our new field
-const fields = ['Opportunity.Account.Industry', WIN_STORY_JSON_FIELD];
+// Define the fields to be loaded by the wire service
+const fields = [WIN_STORY_JSON_FIELD];
 
 export default class RelevantWinStoriesLWC extends LightningElement {
     @api recordId;
     @api cardTitle = 'Relevant Win Stories';
     @api maxStories = 3;
 
-    @api winStories = [];
-    @api hasStories = false;
+    winStories = [];
+    error;
+    wiredOpportunityResult; // Property to hold the wired result for refreshApex
 
-    wiredOpportunityResult; // Store the wire result for refreshApex
-
+    // Wire service to get the record data automatically
     @wire(getRecord, { recordId: '$recordId', fields })
     wiredOpportunity(result) {
-        this.wiredOpportunityResult = result; // Capture the wire result for refreshApex
+        this.wiredOpportunityResult = result; // Store the result for the refresh function
         const { error, data } = result;
 
-        console.log('--- Wire Service Called ---');
-        console.log('Record ID:', this.recordId);
-        console.log('Fields being queried:', fields);
+        console.log('--- LWC wiredOpportunity Fired ---');
 
         if (data) {
-            console.log('1. Data received from Salesforce:', JSON.stringify(data, null, 2));
+            // Use getFieldValue to safely extract the data from the record
             const jsonString = getFieldValue(data, WIN_STORY_JSON_FIELD);
+            console.log('1. Raw JSON Response from Field:', jsonString);
+
 
             if (jsonString) {
-                console.log('2. JSON string from field:', jsonString);
                 try {
-                    // 1. Clean the string by removing all newline characters.
-                    const cleanJsonString = jsonString.replace(/\r?\n|\r/g, '');
-                    console.log('3. Cleaned JSON string:', cleanJsonString);
+                    // The string from the field is a direct JSON array.
+                    // We can parse it directly.
+                    const parsedArray = JSON.parse(jsonString);
+                    console.log('2. Successfully Parsed JSON:', parsedArray);
 
-                    // 2. Parse the clean string.
-                    const parsedData = JSON.parse(cleanJsonString);
 
-                    // 3. Parse the "value" field if it exists and is a string.
-                    if (typeof parsedData.value === 'string') {
-                        parsedData.value = JSON.parse(parsedData.value);
-                    }
-
-                    // 4. Validate and filter the parsed data.
-                    if (Array.isArray(parsedData.value)) {
-                        this.winStories = parsedData.value.filter(
-                            story => story.id && story.customerName && story.summary
-                        );
-                        this.hasStories = this.winStories.length > 0;
+                    // Best practice: ensure the parsed data is actually an array
+                    if (Array.isArray(parsedArray)) {
+                        this.winStories = parsedArray;
+                        this.error = undefined; // Clear any previous errors
                     } else {
-                        console.warn('Parsed data is not an array:', parsedData.value);
-                        this.winStories = [];
-                        this.hasStories = false;
+                        // Handle cases where the JSON is valid but not an array
+                        throw new Error('Data format is invalid; expected an array.');
                     }
-
-                    console.log('4. Validated and filtered stories:', this.winStories);
-                    console.log('5. hasStories is now:', this.hasStories);
                 } catch (e) {
                     console.error('Error parsing Win Story JSON:', e);
+                    this.error = 'Could not display win stories. The data format is invalid.';
                     this.winStories = [];
-                    this.hasStories = false;
                 }
             } else {
-                console.warn('Result: the Win_Story_JSON_Response__c field is empty.');
+                // This is a normal case where the field is empty. Reset the stories.
+                console.log('Result: The Win_Story_JSON_Response__c field is currently empty.');
                 this.winStories = [];
-                this.hasStories = false;
+                this.error = undefined;
             }
         } else if (error) {
-            console.error('Error loading opportunity:', error);
+            console.error('Error loading opportunity data:', error);
+            this.error = 'An error occurred while loading data from Salesforce.';
+            this.winStories = [];
         }
     }
 
-    @api showLoadingSpinner = false;
+    /**
+     * @description Exposes a getter to the template to easily check if stories exist.
+     */
+    get hasStories() {
+        return this.winStories && this.winStories.length > 0;
+    }
 
+    /**
+     * @description Public method to allow parent components or flows to trigger a refresh.
+     * This calls the refreshApex function to re-invoke the wire service.
+     */
+    @api
     handleRefresh() {
-        console.log('Refresh button clicked. Refreshing wire service...');
-        this.showLoadingSpinner = true; // Show spinner
         if (this.wiredOpportunityResult) {
-            refreshApex(this.wiredOpportunityResult)
-                .then(() => {
-                    console.log('Wire service refreshed successfully.');
-                    console.log('Updated wiredOpportunityResult:', this.wiredOpportunityResult);
-                })
-                .catch(error => {
-                    console.error('Error refreshing wire service:', error);
-                })
-                .finally(() => {
-                    this.showLoadingSpinner = false; // Hide spinner
-                });
-        } else {
-            console.warn('No wire result available to refresh.');
-            this.showLoadingSpinner = false; // Hide spinner
+            return refreshApex(this.wiredOpportunityResult);
         }
+        return undefined;
     }
 }
