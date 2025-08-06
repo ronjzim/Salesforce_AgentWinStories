@@ -21,7 +21,10 @@
                 <template if:true={hasStories}>
                     <template for:each={winStories} for:item="story">
                         <div key={story.id} class="story-card slds-box slds-m-bottom_small">
-                            <p class="slds-text-heading_small slds-m-bottom_small">{story.customerName}</p>
+                            <div class="slds-grid slds-grid_align-spread slds-m-bottom_x-small">
+                                <p class="slds-text-heading_small">{story.customerName}</p>
+                                <lightning-badge label={story.relevanceScore} variant="success"></lightning-badge>
+                            </div>
                             <lightning-formatted-rich-text value={story.summary}></lightning-formatted-rich-text>
                         </div>
                     </template>
